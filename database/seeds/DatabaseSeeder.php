@@ -15,20 +15,21 @@ class DatabaseSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
 
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             $user = User::create([
                 'name' => $faker->name,
                 'email' => $faker->unique()->safeEmail,
                 'password' => bcrypt(123456)
             ]);
+            $posts = [];
             for ($k = 0; $k < 30; $k++) {
-                Post::create([
+                array_push($posts, [
                     'title' => $faker->realText($maxNbChars = 30, $indexSize = 2),
                     'content' => $faker->realText($maxNbChars = 5000, $indexSize = 2),
-                    'main_photo' => $faker->imageUrl($width = 640, $height = 480),
-                    'user_id' => $user->id
+                    'main_photo' => $faker->imageUrl($width = 640, $height = 480)
                 ]);
             }
+            $user->posts()->createMany($posts);
         }
 
     }
