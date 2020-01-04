@@ -46,8 +46,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return \App\Models\Category::with('posts')->find(1);
-        // return $post->load(['user', 'comments.user', 'categories']);
+        return $post->load(['user', 'comments.user', 'categories']);
     }
 
     /**

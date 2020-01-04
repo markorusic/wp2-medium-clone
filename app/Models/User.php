@@ -48,4 +48,8 @@ class User extends Authenticatable
     public function categories() {
         return $this->belongsToMany('App\Models\Category');
     }
+
+    public function followers() {
+        return $this->belongsToMany('App\Models\User', 'followers', 'follower_id', 'followed_id');
+    }
 }

@@ -46,7 +46,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return $user->load(['posts', 'categories', 'comments']);
+        return $user->load(['posts', 'categories', 'comments', 'followers']);
     }
 
     /**
