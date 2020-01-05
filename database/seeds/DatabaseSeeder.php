@@ -59,7 +59,7 @@ class DatabaseSeeder extends Seeder
                     self::randomIds($categories)
                 );
 
-                $user->posts->each(function ($post) use($user, $categories) {
+                $user->posts->each(function ($post) use ($user, $categories) {
                     // Post categories
                     $post->categories()->sync(
                         self::randomIds($categories)
