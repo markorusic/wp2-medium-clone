@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\Comment;
+use App\Enums\UserActivityType;
 
 class DatabaseSeeder extends Seeder
 {
@@ -38,6 +39,14 @@ class DatabaseSeeder extends Seeder
         factory(User::class, self::NUMBER_OF_USERS)
             ->create()
             ->each(function ($user) use ($categories) {
+                // User activities
+                $user->track([
+                    UserActivityType::USER_REGISTER_SUCCESS,
+                    UserActivityType::USER_LOGIN_FAIL,
+                    UserActivityType::USER_LOGIN_SUCCESS,
+                    UserActivityType::USER_LOGOUT_SUCCESS
+                ]);
+
                 // User posts
                 $user->posts()->saveMany(
                     factory(Post::class, self::NUMBER_OF_POSTS_PER_USER)->make()

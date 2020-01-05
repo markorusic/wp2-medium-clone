@@ -52,4 +52,21 @@ class User extends Authenticatable
     public function followers() {
         return $this->belongsToMany('App\Models\User', 'followers', 'follower_id', 'followed_id');
     }
+
+    public function activities() {
+        return $this->hasMany('App\Models\UserActivity');
+    }
+
+    public function track($activity) {
+        if (is_array($activity)) {
+            $activities = collect($activity)
+                ->map(function ($activity) {
+                    return compact('activity');
+                })
+                ->toArray();
+            return $this->activities()->createMany($activities);
+        } else {
+            return $this->activities()->create(compact('activity'));
+        }
+    }
 }

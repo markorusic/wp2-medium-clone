@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return auth()->user();
+    return auth()->user()->load('activities');
 });
 
 Route::resource('posts', 'PostController');
