@@ -17,3 +17,15 @@ Route::get('/', function () {
 
 Route::resource('posts', 'PostController');
 Route::resource('users', 'UserController');
+
+Route::group(
+	[
+		// 'middleware' => ['auth'],
+		'prefix' => 'admin',
+		'namespace' => 'Admin',
+		'as' => 'admin.'
+    ],
+    function () {
+        Route::get('', 'PageController@index');
+    }
+);
