@@ -8,6 +8,18 @@ use App\Models\Comment;
 
 class DatabaseSeeder extends Seeder
 {
+    const NUMBER_OF_CATEGORIES = 15;
+
+    const NUMBER_OF_USERS = 10;
+
+    const NUMBER_OF_CATEGORIES_PER_USER = 5;
+
+    const NUMBER_OF_POSTS_PER_USER = 5;
+
+    const NUMBER_OF_COMMENTS_PER_POST = 3;
+
+    const NUMBER_OF_CATEGORIES_PER_POST = 5;
+
     /**
      * Seed the application's database.
      *
@@ -16,32 +28,38 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-        $categories = factory(Category::class, 15)->create();
+        $categories = factory(Category::class, self::NUMBER_OF_CATEGORIES)->create();
 
-        factory(User::class, 10)->create()->each(function ($user) use ($categories) {
-            // User posts
-            $user->posts()->saveMany(
-                factory(Post::class, 3)->make()
-            );
-
-            // User categories
-            $categoryIds = $categories
-                ->random(5)
-                ->map(function ($category) { return $category->id; })
-                ->toArray();
-            $user->categories()->sync($categoryIds);
-
-            $user->posts->each(function ($post) use($user, $categoryIds) {
-                // Post categories
-                $post->categories()->sync($categoryIds);
-
-                // Post comments
-                $post->comments()->saveMany(
-                    factory(Comment::class, 2)->make([
-                        'user_id' => $user->id
-                    ])
+        factory(User::class, self::NUMBER_OF_USERS)
+            ->create()
+            ->each(function ($user) use ($categories) {
+                // User posts
+                $user->posts()->saveMany(
+                    factory(Post::class, self::NUMBER_OF_POSTS_PER_USER)->make()
                 );
-            });
+
+                // User categories
+                $categoryIds = $categories
+                    ->random(self::NUMBER_OF_CATEGORIES_PER_USER)
+                    ->map(function ($category) { return $category->id; })
+                    ->toArray();
+                $user->categories()->sync($categoryIds);
+
+                $user->posts->each(function ($post) use($user, $categories) {
+                    // Post categories
+                    $categoryIds = $categories
+                        ->random(self::NUMBER_OF_CATEGORIES_PER_POST)
+                        ->map(function ($category) { return $category->id; })
+                        ->toArray();
+                    $post->categories()->sync($categoryIds);
+
+                    // Post comments
+                    $post->comments()->saveMany(
+                        factory(Comment::class, self::NUMBER_OF_COMMENTS_PER_POST)->make([
+                            'user_id' => $user->id
+                        ])
+                    );
+                });
         });
 
     }
