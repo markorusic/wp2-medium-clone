@@ -45,6 +45,10 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Comment');
     }
 
+    public function likes() {
+        return $this->hasMany('App\Models\Like');
+    }
+
     public function categories() {
         return $this->belongsToMany('App\Models\Category');
     }
@@ -65,8 +69,7 @@ class User extends Authenticatable
                 })
                 ->toArray();
             return $this->activities()->createMany($activities);
-        } else {
-            return $this->activities()->create(compact('activity'));
         }
+        return $this->activities()->create(compact('activity'));
     }
 }

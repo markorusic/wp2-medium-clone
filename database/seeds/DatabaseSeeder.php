@@ -39,6 +39,8 @@ class DatabaseSeeder extends Seeder
         factory(User::class, self::NUMBER_OF_USERS)
             ->create()
             ->each(function ($user) use ($categories) {
+                auth()->loginUsingId($user->id, true);
+
                 // User activities
                 $user->track([
                     UserActivityType::USER_REGISTER_SUCCESS,
@@ -62,6 +64,9 @@ class DatabaseSeeder extends Seeder
                     $post->categories()->sync(
                         self::randomIds($categories)
                     );
+
+                    // Post like
+                    $post->like();
 
                     // Post comments
                     $post->comments()->saveMany(

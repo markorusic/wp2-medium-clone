@@ -17,7 +17,28 @@ class Post extends Model
         return $this->hasMany('App\Models\Comment');
     }
 
+    public function likes() {
+        return $this->hasMany('App\Models\Like');
+    }
+
     public function categories() {
         return $this->belongsToMany('App\Models\Category');
+    }
+
+    public function like() {
+        if ($this->isLiked()) {
+            return $this->likes()->where([
+                'user_id' => auth()->id()
+            ])->delete();
+        }
+        return $this->likes()->create([
+            'user_id' => auth()->id()
+        ]);
+    }
+
+    public function isLiked() {
+        return $this->likes()->where([
+            'user_id' => auth()->id()
+        ])->exists();
     }
 }
