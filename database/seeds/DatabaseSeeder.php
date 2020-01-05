@@ -44,13 +44,15 @@ class DatabaseSeeder extends Seeder
                 );
 
                 // User categories
-                $categoryIds = self::randomIds($categories);
-                $user->categories()->sync($categoryIds);
+                $user->categories()->sync(
+                    self::randomIds($categories)
+                );
 
                 $user->posts->each(function ($post) use($user, $categories) {
                     // Post categories
-                    $categoryIds = self::randomIds($categories);
-                    $post->categories()->sync($categoryIds);
+                    $post->categories()->sync(
+                        self::randomIds($categories)
+                    );
 
                     // Post comments
                     $post->comments()->saveMany(
