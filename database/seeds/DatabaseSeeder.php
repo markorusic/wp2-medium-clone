@@ -20,6 +20,13 @@ class DatabaseSeeder extends Seeder
 
     const NUMBER_OF_CATEGORIES_PER_POST = 5;
 
+    private static function randomIds($collection, $length) {
+        return $collection
+            ->random($length)
+            ->map(function ($item) { return $item->id; })
+            ->toArray();
+    }
+
     /**
      * Seed the application's database.
      *
@@ -39,18 +46,12 @@ class DatabaseSeeder extends Seeder
                 );
 
                 // User categories
-                $categoryIds = $categories
-                    ->random(self::NUMBER_OF_CATEGORIES_PER_USER)
-                    ->map(function ($category) { return $category->id; })
-                    ->toArray();
+                $categoryIds = self::randomIds($categories, self::NUMBER_OF_CATEGORIES_PER_USER);
                 $user->categories()->sync($categoryIds);
 
                 $user->posts->each(function ($post) use($user, $categories) {
                     // Post categories
-                    $categoryIds = $categories
-                        ->random(self::NUMBER_OF_CATEGORIES_PER_POST)
-                        ->map(function ($category) { return $category->id; })
-                        ->toArray();
+                    $categoryIds = self::randomIds($categories, self::NUMBER_OF_CATEGORIES_PER_POST);
                     $post->categories()->sync($categoryIds);
 
                     // Post comments
