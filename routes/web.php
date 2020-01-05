@@ -11,8 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return auth()->user()->load('activities');
+Auth::routes([ 'register' => false ]);
+
+Route::get('', function () {
+    return view('welcome');
 });
 
 Route::resource('posts', 'PostController');
@@ -20,12 +22,12 @@ Route::resource('users', 'UserController');
 
 Route::group(
 	[
-		// 'middleware' => ['auth'],
+		'middleware' => ['auth'],
 		'prefix' => 'admin',
 		'namespace' => 'Admin',
 		'as' => 'admin.'
     ],
     function () {
-        Route::get('', 'PageController@index');
+        Route::get('', 'PageController@index')->name('home');
     }
 );
