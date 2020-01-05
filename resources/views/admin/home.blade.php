@@ -1,5 +1,9 @@
-@extends('admin.partials.layout')
+@extends('admin.partials.layout', [
+    'content_title' => 'Home'
+])
 
-@section('content')
-    <div>test 123</div>
+@section('main')
+    <div>
+        Welcome, {{ auth()->user()->name }}
+    </div>
 @endsection
