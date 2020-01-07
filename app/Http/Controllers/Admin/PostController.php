@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\User;
+use App\Http\Controllers\Controller;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::paginate();
+        $posts = Post::paginate();
+        return view('admin.post.index', compact('posts'));
     }
 
     /**
@@ -35,27 +37,27 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        return User::create($request->all());
+        return Post::create($request->all());
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(Post $post)
     {
-        return $user->load(['posts', 'categories', 'comments', 'likes.post', 'followers']);
+        return $post->load(['user', 'comments.user', 'likes.user', 'categories']);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit(Post $post)
     {
         //
     }
@@ -64,22 +66,22 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, Post $post)
     {
-        return $user->update($request->all());
+        return $post->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(Post $post)
     {
-        return $user->delete();
+        return $post->delete();
     }
 }
