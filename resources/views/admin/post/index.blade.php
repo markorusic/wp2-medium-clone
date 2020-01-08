@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.shared.layout')
 
 @section('content')
     @component('admin.shared.card-wrapper', [
