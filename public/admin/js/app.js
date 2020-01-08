@@ -39882,6 +39882,623 @@ return jQuery;
 
 /***/ }),
 
+/***/ "./node_modules/lodash/_Symbol.js":
+/*!****************************************!*\
+  !*** ./node_modules/lodash/_Symbol.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var root = __webpack_require__(/*! ./_root */ "./node_modules/lodash/_root.js");
+
+/** Built-in value references. */
+var Symbol = root.Symbol;
+
+module.exports = Symbol;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_baseGetTag.js":
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_baseGetTag.js ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(/*! ./_Symbol */ "./node_modules/lodash/_Symbol.js"),
+    getRawTag = __webpack_require__(/*! ./_getRawTag */ "./node_modules/lodash/_getRawTag.js"),
+    objectToString = __webpack_require__(/*! ./_objectToString */ "./node_modules/lodash/_objectToString.js");
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (symToStringTag && symToStringTag in Object(value))
+    ? getRawTag(value)
+    : objectToString(value);
+}
+
+module.exports = baseGetTag;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_freeGlobal.js":
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_freeGlobal.js ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
+var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+
+module.exports = freeGlobal;
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_getRawTag.js":
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/_getRawTag.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(/*! ./_Symbol */ "./node_modules/lodash/_Symbol.js");
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the raw `toStringTag`.
+ */
+function getRawTag(value) {
+  var isOwn = hasOwnProperty.call(value, symToStringTag),
+      tag = value[symToStringTag];
+
+  try {
+    value[symToStringTag] = undefined;
+    var unmasked = true;
+  } catch (e) {}
+
+  var result = nativeObjectToString.call(value);
+  if (unmasked) {
+    if (isOwn) {
+      value[symToStringTag] = tag;
+    } else {
+      delete value[symToStringTag];
+    }
+  }
+  return result;
+}
+
+module.exports = getRawTag;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_objectToString.js":
+/*!************************************************!*\
+  !*** ./node_modules/lodash/_objectToString.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/**
+ * Converts `value` to a string using `Object.prototype.toString`.
+ *
+ * @private
+ * @param {*} value The value to convert.
+ * @returns {string} Returns the converted string.
+ */
+function objectToString(value) {
+  return nativeObjectToString.call(value);
+}
+
+module.exports = objectToString;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_root.js":
+/*!**************************************!*\
+  !*** ./node_modules/lodash/_root.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var freeGlobal = __webpack_require__(/*! ./_freeGlobal */ "./node_modules/lodash/_freeGlobal.js");
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+module.exports = root;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/debounce.js":
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/debounce.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(/*! ./isObject */ "./node_modules/lodash/isObject.js"),
+    now = __webpack_require__(/*! ./now */ "./node_modules/lodash/now.js"),
+    toNumber = __webpack_require__(/*! ./toNumber */ "./node_modules/lodash/toNumber.js");
+
+/** Error message constants. */
+var FUNC_ERROR_TEXT = 'Expected a function';
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeMax = Math.max,
+    nativeMin = Math.min;
+
+/**
+ * Creates a debounced function that delays invoking `func` until after `wait`
+ * milliseconds have elapsed since the last time the debounced function was
+ * invoked. The debounced function comes with a `cancel` method to cancel
+ * delayed `func` invocations and a `flush` method to immediately invoke them.
+ * Provide `options` to indicate whether `func` should be invoked on the
+ * leading and/or trailing edge of the `wait` timeout. The `func` is invoked
+ * with the last arguments provided to the debounced function. Subsequent
+ * calls to the debounced function return the result of the last `func`
+ * invocation.
+ *
+ * **Note:** If `leading` and `trailing` options are `true`, `func` is
+ * invoked on the trailing edge of the timeout only if the debounced function
+ * is invoked more than once during the `wait` timeout.
+ *
+ * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
+ * until to the next tick, similar to `setTimeout` with a timeout of `0`.
+ *
+ * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
+ * for details over the differences between `_.debounce` and `_.throttle`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Function
+ * @param {Function} func The function to debounce.
+ * @param {number} [wait=0] The number of milliseconds to delay.
+ * @param {Object} [options={}] The options object.
+ * @param {boolean} [options.leading=false]
+ *  Specify invoking on the leading edge of the timeout.
+ * @param {number} [options.maxWait]
+ *  The maximum time `func` is allowed to be delayed before it's invoked.
+ * @param {boolean} [options.trailing=true]
+ *  Specify invoking on the trailing edge of the timeout.
+ * @returns {Function} Returns the new debounced function.
+ * @example
+ *
+ * // Avoid costly calculations while the window size is in flux.
+ * jQuery(window).on('resize', _.debounce(calculateLayout, 150));
+ *
+ * // Invoke `sendMail` when clicked, debouncing subsequent calls.
+ * jQuery(element).on('click', _.debounce(sendMail, 300, {
+ *   'leading': true,
+ *   'trailing': false
+ * }));
+ *
+ * // Ensure `batchLog` is invoked once after 1 second of debounced calls.
+ * var debounced = _.debounce(batchLog, 250, { 'maxWait': 1000 });
+ * var source = new EventSource('/stream');
+ * jQuery(source).on('message', debounced);
+ *
+ * // Cancel the trailing debounced invocation.
+ * jQuery(window).on('popstate', debounced.cancel);
+ */
+function debounce(func, wait, options) {
+  var lastArgs,
+      lastThis,
+      maxWait,
+      result,
+      timerId,
+      lastCallTime,
+      lastInvokeTime = 0,
+      leading = false,
+      maxing = false,
+      trailing = true;
+
+  if (typeof func != 'function') {
+    throw new TypeError(FUNC_ERROR_TEXT);
+  }
+  wait = toNumber(wait) || 0;
+  if (isObject(options)) {
+    leading = !!options.leading;
+    maxing = 'maxWait' in options;
+    maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
+    trailing = 'trailing' in options ? !!options.trailing : trailing;
+  }
+
+  function invokeFunc(time) {
+    var args = lastArgs,
+        thisArg = lastThis;
+
+    lastArgs = lastThis = undefined;
+    lastInvokeTime = time;
+    result = func.apply(thisArg, args);
+    return result;
+  }
+
+  function leadingEdge(time) {
+    // Reset any `maxWait` timer.
+    lastInvokeTime = time;
+    // Start the timer for the trailing edge.
+    timerId = setTimeout(timerExpired, wait);
+    // Invoke the leading edge.
+    return leading ? invokeFunc(time) : result;
+  }
+
+  function remainingWait(time) {
+    var timeSinceLastCall = time - lastCallTime,
+        timeSinceLastInvoke = time - lastInvokeTime,
+        timeWaiting = wait - timeSinceLastCall;
+
+    return maxing
+      ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke)
+      : timeWaiting;
+  }
+
+  function shouldInvoke(time) {
+    var timeSinceLastCall = time - lastCallTime,
+        timeSinceLastInvoke = time - lastInvokeTime;
+
+    // Either this is the first call, activity has stopped and we're at the
+    // trailing edge, the system time has gone backwards and we're treating
+    // it as the trailing edge, or we've hit the `maxWait` limit.
+    return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
+      (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
+  }
+
+  function timerExpired() {
+    var time = now();
+    if (shouldInvoke(time)) {
+      return trailingEdge(time);
+    }
+    // Restart the timer.
+    timerId = setTimeout(timerExpired, remainingWait(time));
+  }
+
+  function trailingEdge(time) {
+    timerId = undefined;
+
+    // Only invoke if we have `lastArgs` which means `func` has been
+    // debounced at least once.
+    if (trailing && lastArgs) {
+      return invokeFunc(time);
+    }
+    lastArgs = lastThis = undefined;
+    return result;
+  }
+
+  function cancel() {
+    if (timerId !== undefined) {
+      clearTimeout(timerId);
+    }
+    lastInvokeTime = 0;
+    lastArgs = lastCallTime = lastThis = timerId = undefined;
+  }
+
+  function flush() {
+    return timerId === undefined ? result : trailingEdge(now());
+  }
+
+  function debounced() {
+    var time = now(),
+        isInvoking = shouldInvoke(time);
+
+    lastArgs = arguments;
+    lastThis = this;
+    lastCallTime = time;
+
+    if (isInvoking) {
+      if (timerId === undefined) {
+        return leadingEdge(lastCallTime);
+      }
+      if (maxing) {
+        // Handle invocations in a tight loop.
+        clearTimeout(timerId);
+        timerId = setTimeout(timerExpired, wait);
+        return invokeFunc(lastCallTime);
+      }
+    }
+    if (timerId === undefined) {
+      timerId = setTimeout(timerExpired, wait);
+    }
+    return result;
+  }
+  debounced.cancel = cancel;
+  debounced.flush = flush;
+  return debounced;
+}
+
+module.exports = debounce;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/isObject.js":
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/isObject.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject(value) {
+  var type = typeof value;
+  return value != null && (type == 'object' || type == 'function');
+}
+
+module.exports = isObject;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/isObjectLike.js":
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/isObjectLike.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return value != null && typeof value == 'object';
+}
+
+module.exports = isObjectLike;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/isSymbol.js":
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/isSymbol.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseGetTag = __webpack_require__(/*! ./_baseGetTag */ "./node_modules/lodash/_baseGetTag.js"),
+    isObjectLike = __webpack_require__(/*! ./isObjectLike */ "./node_modules/lodash/isObjectLike.js");
+
+/** `Object#toString` result references. */
+var symbolTag = '[object Symbol]';
+
+/**
+ * Checks if `value` is classified as a `Symbol` primitive or object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+ * @example
+ *
+ * _.isSymbol(Symbol.iterator);
+ * // => true
+ *
+ * _.isSymbol('abc');
+ * // => false
+ */
+function isSymbol(value) {
+  return typeof value == 'symbol' ||
+    (isObjectLike(value) && baseGetTag(value) == symbolTag);
+}
+
+module.exports = isSymbol;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/now.js":
+/*!************************************!*\
+  !*** ./node_modules/lodash/now.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var root = __webpack_require__(/*! ./_root */ "./node_modules/lodash/_root.js");
+
+/**
+ * Gets the timestamp of the number of milliseconds that have elapsed since
+ * the Unix epoch (1 January 1970 00:00:00 UTC).
+ *
+ * @static
+ * @memberOf _
+ * @since 2.4.0
+ * @category Date
+ * @returns {number} Returns the timestamp.
+ * @example
+ *
+ * _.defer(function(stamp) {
+ *   console.log(_.now() - stamp);
+ * }, _.now());
+ * // => Logs the number of milliseconds it took for the deferred invocation.
+ */
+var now = function() {
+  return root.Date.now();
+};
+
+module.exports = now;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/toNumber.js":
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/toNumber.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(/*! ./isObject */ "./node_modules/lodash/isObject.js"),
+    isSymbol = __webpack_require__(/*! ./isSymbol */ "./node_modules/lodash/isSymbol.js");
+
+/** Used as references for various `Number` constants. */
+var NAN = 0 / 0;
+
+/** Used to match leading and trailing whitespace. */
+var reTrim = /^\s+|\s+$/g;
+
+/** Used to detect bad signed hexadecimal string values. */
+var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
+
+/** Used to detect binary string values. */
+var reIsBinary = /^0b[01]+$/i;
+
+/** Used to detect octal string values. */
+var reIsOctal = /^0o[0-7]+$/i;
+
+/** Built-in method references without a dependency on `root`. */
+var freeParseInt = parseInt;
+
+/**
+ * Converts `value` to a number.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to process.
+ * @returns {number} Returns the number.
+ * @example
+ *
+ * _.toNumber(3.2);
+ * // => 3.2
+ *
+ * _.toNumber(Number.MIN_VALUE);
+ * // => 5e-324
+ *
+ * _.toNumber(Infinity);
+ * // => Infinity
+ *
+ * _.toNumber('3.2');
+ * // => 3.2
+ */
+function toNumber(value) {
+  if (typeof value == 'number') {
+    return value;
+  }
+  if (isSymbol(value)) {
+    return NAN;
+  }
+  if (isObject(value)) {
+    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
+    value = isObject(other) ? (other + '') : other;
+  }
+  if (typeof value != 'string') {
+    return value === 0 ? value : +value;
+  }
+  value = value.replace(reTrim, '');
+  var isBinary = reIsBinary.test(value);
+  return (isBinary || reIsOctal.test(value))
+    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
+    : (reIsBadHex.test(value) ? NAN : +value);
+}
+
+module.exports = toNumber;
+
+
+/***/ }),
+
 /***/ "./node_modules/moment/locale sync recursive ^\\.\\/.*$":
 /*!**************************************************!*\
   !*** ./node_modules/moment/locale sync ^\.\/.*$ ***!
@@ -60902,6 +61519,7 @@ __webpack_require__.r(__webpack_exports__);
 
 window.Popper = __webpack_require__(/*! popper.js */ "./node_modules/popper.js/dist/esm/popper.js")["default"];
 window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+window.dataTable = __webpack_require__(/*! ./modules/data-table */ "./resources/js/admin/modules/data-table.js")["default"];
 
 __webpack_require__(/*! jquery-ui-bundle */ "./node_modules/jquery-ui-bundle/jquery-ui.js");
 
@@ -60919,6 +61537,245 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
+/***/ "./resources/js/admin/modules/data-table.js":
+/*!**************************************************!*\
+  !*** ./resources/js/admin/modules/data-table.js ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/http-service */ "./resources/js/shared/http-service.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+
+
+var props = {
+  resource: null,
+  searchBy: null,
+  columns: []
+};
+var state = {
+  sort: ''
+};
+var $dom = {
+  root: null,
+  search: null,
+  table: null,
+  pagination: null
+};
+var view = {
+  renderContainer: function renderContainer() {
+    var html = "\n    <div id=\"".concat(props.resource, "-data-table\" class=\"container py-2\">\n        <div class=\"card-header\">\n        <div class=\"flex-sp-between\">\n            <h4 class=\"bold uc-first\">").concat(props.resource, "</h4>\n            <span>\n            <a class=\"btn btn-success btn-sm\" href=\"/admin/").concat(props.resource, "/create\">\n                <i class=\"fa fa-plus\" aria-hidden=\"true\"></i> \n                Create\n            </a>\n            </span>\n        </div>\n        ").concat(function () {
+      if (props.searchBy) {
+        return "\n                <div class=\"mt-1\">\n                <input\n                    type=\"text\"\n                    class=\"resource-table-search form-control\"\n                    placeholder=\"Search\"\n                    data-resource-search\n                >\n                </div>\n            ";
+      }
+
+      return '';
+    }(), "\n        </div>\n    \n    <table class=\"table resource-table\" data-resource-table>\n    </table>\n    <div data-resource-pagination></div>\n    ");
+    $('body main').html(html);
+    return $("#".concat(props.resource, "-data-table"));
+  },
+  renderLoader: function renderLoader() {
+    $dom.table.html("\n    <div style=\"display: flex; height: 620px; justify-content: center; align-items: center; background-color: #428bca12;\">\n    <div class=\"spinner-border text-primary\" role=\"status\">\n        <span class=\"sr-only\">Loading...</span>\n    </div>\n    </div>\n    ");
+  },
+  renderTable: function renderTable(_ref) {
+    var _ref$content = _ref.content,
+        content = _ref$content === void 0 ? [] : _ref$content,
+        _ref$pagination = _ref.pagination,
+        pagination = _ref$pagination === void 0 ? {} : _ref$pagination;
+    var tableHtml = "\n    <thead>\n        <tr>\n        <th>#</th>\n        ".concat(function () {
+      return props.columns.map(function (column) {
+        return "\n            <th class=\"uc-first clickable\" data-sort=\"".concat(column, "\">\n            <span>").concat(column.split('_').join(' '), "<span>\n            <span><i class=\"fa fa-sort\" aria-hidden=\"true\"></i></span>\n            </th>\n        ");
+      }).join('');
+    }(), "\n        <th>Actions</th>\n        </tr>\n    </thead>\n    <tbody>\n        ").concat(function () {
+      return content.map(function (item, index) {
+        return "\n        <tr data-id=\"".concat(item.id, "\">\n            <td>").concat((pagination.page - 1) * pagination.size + index + 1, "</td>\n            ").concat(function () {
+          return props.columns.map(function (column) {
+            switch (column) {
+              case 'main_photo':
+                return "\n                    <td data-name=\"main_photo\">\n                    <img src=\"".concat(item[column], "\" alt=\"Photo not found\" class=\"table-img\">\n                    </td>");
+
+              default:
+                return "<td data-name=\"".concat(column, "\">").concat(item[column], "</td>");
+            }
+          }).join('');
+        }(), "\n            \n            <td class=\"flex resource-actions\">\n                <a class=\"btn btn-primary white-txt mr-2 btn-sm\"\n                href=\"/admin/").concat(props.resource, "/edit?id=").concat(item.id, "\" \n                >\n                <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                </a>\n                <a class=\"btn btn-danger white-txt btn-sm\"\n                data-delete=\"/admin/").concat(props.resource, "/delete?id=").concat(item.id, "\"\n                >\n                <i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i>\n                </a>\n            </td>\n        </tr>\n        ");
+      });
+    }(), "\n    </tbody>\n    ");
+
+    var pages = _toConsumableArray(Array(Math.ceil(pagination.totalElements / pagination.size)).keys()).map(function (page) {
+      return page + 1;
+    });
+
+    var paginationHtml = "\n    <ul class=\"pagination\">\n        <li class=\"page-item".concat(pagination.page > 1 ? '' : ' disabled', "\" data-page=\"").concat(pagination.page - 1, "\">\n        <a class=\"page-link\" href=\"#\">\n            <span aria-hidden=\"true\">&laquo;</span>\n        </a>\n        </li>\n        ").concat(pages.map(function (page) {
+      return "<li class=\"page-item".concat(pagination.page === page ? ' active' : '', "\" data-page=\"").concat(page, "\"><a class=\"page-link\" href=\"#\">").concat(page, "</a></li>");
+    }).join(''), "\n        <li class=\"page-item").concat(pagination.page < pages.length - 1 ? '' : ' disabled', "\" data-page=\"").concat(pagination.page + 1, "\">\n            <a class=\"page-link\" href=\"#\">\n            <span aria-hidden=\"true\">&raquo;</span>\n            </a>\n        </li>\n    </ul>");
+    $dom.table.html(tableHtml);
+    $dom.pagination.html(paginationHtml);
+  },
+  renderErrorTable: function renderErrorTable() {
+    $dom.pagination.html('');
+    $dom.table.html("\n    <div class=\"alert alert-warning mt-3 text-center\" role=\"alert\">\n    Error happend while loading ".concat(props.resource, ".\n    </div>\n    "));
+  }
+};
+
+var cacheDom = function cacheDom() {
+  $dom.root = view.renderContainer();
+  $dom.search = $dom.root.find('[data-resource-search]');
+  $dom.table = $dom.root.find('[data-resource-table]');
+  $dom.pagination = $dom.root.find('[data-resource-pagination]');
+};
+
+var bindSearchEvent = function bindSearchEvent() {
+  $dom.search.on('keyup', lodash_debounce__WEBPACK_IMPORTED_MODULE_0___default()(handleSearch, 400));
+};
+
+var bindTableEvents = function bindTableEvents() {
+  $dom.table.find('[data-sort]').on('click', handleSort);
+  $dom.table.find('[data-delete]').on('click', handleRecordDelete);
+  $dom.pagination.find('[data-page]').on('click', handlePageChange);
+}; // Fetch logic
+
+
+var fetchContent = function fetchContent() {
+  var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  var _ref2$page = _ref2.page,
+      page = _ref2$page === void 0 ? 0 : _ref2$page,
+      _ref2$size = _ref2.size,
+      size = _ref2$size === void 0 ? 10 : _ref2$size,
+      rest = _objectWithoutProperties(_ref2, ["page", "size"]);
+
+  var restString = Object.entries(rest).filter(function (_ref3) {
+    var _ref4 = _slicedToArray(_ref3, 2),
+        value = _ref4[1];
+
+    return !!value;
+  }).map(function (item) {
+    return item.join('=');
+  }).join('&');
+  var url = "/admin/".concat(props.resource, "?page=").concat(page, "&size=").concat(size).concat(restString ? '&' + restString : '');
+  return _shared_http_service__WEBPACK_IMPORTED_MODULE_1__["default"].get(url).then(function (res) {
+    return res.data;
+  });
+}; // Load data procedure
+
+
+var loadData = function loadData(options) {
+  view.renderLoader();
+  return fetchContent(options).then(function (_ref5) {
+    var data = _ref5.data,
+        current_page = _ref5.current_page,
+        per_page = _ref5.per_page,
+        total = _ref5.total;
+    view.renderTable({
+      content: data,
+      pagination: {
+        page: current_page,
+        size: per_page,
+        totalElements: total
+      }
+    });
+    bindTableEvents();
+  })["catch"](function (err) {
+    view.renderErrorTable(err);
+  });
+}; // Event handlers
+
+
+var handleSearch = function handleSearch(event) {
+  loadData(_defineProperty({
+    sort: state.sort
+  }, props.searchBy, event.target.value));
+};
+
+var handleSort = function handleSort(event) {
+  var _$$data = $(event.currentTarget).data(),
+      sort = _$$data.sort;
+
+  var _state$sort$split = state.sort.split(','),
+      _state$sort$split2 = _slicedToArray(_state$sort$split, 2),
+      sortParam = _state$sort$split2[0],
+      sortOrder = _state$sort$split2[1];
+
+  var order = sortParam !== sort ? 'desc' : sortOrder === 'desc' ? 'asc' : 'desc';
+  state.sort = "".concat(sort, ",").concat(order);
+  loadData(_defineProperty({
+    sort: state.sort,
+    page: $dom.pagination.find('.active').data().page
+  }, props.searchBy, $dom.search.val()));
+};
+
+var handleRecordDelete = function handleRecordDelete(event) {
+  var $el = $(event.currentTarget);
+  var $resourceEl = $el.parent().parent();
+  var endpoint = $el.data()["delete"];
+
+  if (!endpoint || !confirm('Are you sure?')) {
+    return null;
+  }
+
+  _shared_http_service__WEBPACK_IMPORTED_MODULE_1__["default"]["delete"](endpoint).then(function () {
+    $resourceEl.fadeOut();
+  })["catch"](function (error) {
+    alert('error');
+    console.log(error);
+  });
+};
+
+var handlePageChange = function handlePageChange(event) {
+  event.preventDefault();
+
+  var _$$data2 = $(event.currentTarget).data(),
+      page = _$$data2.page;
+
+  loadData(_defineProperty({
+    page: page,
+    sort: state.sort
+  }, props.searchBy, $dom.search.val()));
+};
+
+var dataTable = {
+  init: function init(configProps) {
+    props = _objectSpread({}, props, {}, configProps);
+    $(function () {
+      cacheDom();
+      loadData().then(bindSearchEvent);
+    });
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (dataTable);
+
+/***/ }),
+
 /***/ "./resources/js/admin/modules/formModule.js":
 /*!**************************************************!*\
   !*** ./resources/js/admin/modules/formModule.js ***!
@@ -60930,7 +61787,9 @@ document.addEventListener('DOMContentLoaded', function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/http-service */ "./resources/js/shared/http-service.js");
+/* harmony import */ var _shared_form_validation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/form-validation */ "./resources/js/shared/form-validation.js");
+/* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../shared/http-service */ "./resources/js/shared/http-service.js");
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ((function () {
@@ -60945,10 +61804,9 @@ __webpack_require__.r(__webpack_exports__);
 
     var formData = _collectData($form);
 
-    var validation = _validateData(formData.data);
+    var validator = new _shared_form_validation__WEBPACK_IMPORTED_MODULE_1__["default"]($form);
 
-    if (!validation.value) {
-      alert(validation.error);
+    if (!validator.validate()) {
       return;
     }
 
@@ -60962,7 +61820,7 @@ __webpack_require__.r(__webpack_exports__);
         data = _ref.data;
     var method = config.method,
         endpoint = config.endpoint;
-    return _shared_http_service__WEBPACK_IMPORTED_MODULE_1__["default"][method](endpoint, data);
+    return _shared_http_service__WEBPACK_IMPORTED_MODULE_2__["default"][method](endpoint, data);
   }
 
   function _collectData($form) {
@@ -60973,15 +61831,6 @@ __webpack_require__.r(__webpack_exports__);
         parseBooleans: true,
         parseNumbers: true
       })
-    };
-  }
-
-  function _validateData(data) {
-    // all main_photo are requried by default
-    var isValid = !(data.hasOwnProperty('main_photo') && !data.main_photo);
-    return {
-      value: isValid,
-      error: 'Main photo is required!'
     };
   }
 
@@ -61050,7 +61899,7 @@ __webpack_require__.r(__webpack_exports__);
       return;
     }
 
-    _shared_http_service__WEBPACK_IMPORTED_MODULE_1__["default"]["delete"](endpoint).then(function (response) {
+    _shared_http_service__WEBPACK_IMPORTED_MODULE_2__["default"]["delete"](endpoint).then(function (response) {
       $element.parent().parent().fadeOut(function () {
         $element.remove();
       });
@@ -61250,6 +62099,169 @@ __webpack_require__.r(__webpack_exports__);
     _deleteApi__WEBPACK_IMPORTED_MODULE_0__["default"].init();
   }
 });
+
+/***/ }),
+
+/***/ "./resources/js/shared/form-validation.js":
+/*!************************************************!*\
+  !*** ./resources/js/shared/form-validation.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return FormValidation; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+var selector = {
+  form: '[data-validate-form]',
+  field: '[data-validate]',
+  errorPlaceholder: '.invalid-feedback'
+};
+var defaultRules = {
+  required: null,
+  pattern: '(.*?)',
+  patternMessage: ''
+};
+
+var extractField = function extractField(field) {
+  var $field = $(field);
+
+  var _$field$data = $field.data(),
+      validate = _$field$data.validate,
+      rules = _objectWithoutProperties(_$field$data, ["validate"]);
+
+  return {
+    name: $field.attr('name'),
+    rules: _objectSpread({}, defaultRules, {}, rules),
+    $el: $field
+  };
+};
+
+var FormValidation =
+/*#__PURE__*/
+function () {
+  _createClass(FormValidation, null, [{
+    key: "init",
+    value: function init() {
+      $(selector.form).on('submit', function (event) {
+        var $form = $(event.target);
+        var validator = new FormValidation({
+          $form: $form
+        });
+        return validator.validate();
+      });
+    }
+  }]);
+
+  function FormValidation(_ref) {
+    var _this = this;
+
+    var $form = _ref.$form,
+        _ref$validateOnChange = _ref.validateOnChange,
+        validateOnChange = _ref$validateOnChange === void 0 ? true : _ref$validateOnChange;
+
+    _classCallCheck(this, FormValidation);
+
+    if (!$form) {
+      throw new Error('FormValidation constructor - Invalid $form');
+    }
+
+    this.$form = $form;
+    this.fields = this.$form.find(selector.field).toArray().map(extractField);
+
+    if (validateOnChange) {
+      this.fields.forEach(function (field) {
+        field.$el.on('change', function () {
+          _this.validateField(field);
+        });
+      });
+    }
+  }
+
+  _createClass(FormValidation, [{
+    key: "validate",
+    value: function validate() {
+      var fieldValidities = this.fields.map(this.validateField.bind(this));
+      return fieldValidities.every(function (v) {
+        return v;
+      });
+    }
+  }, {
+    key: "validateField",
+    value: function validateField(field) {
+      var errorMessages = [];
+      var rules = field.rules,
+          $el = field.$el;
+      var value = $el.val();
+
+      if (rules.required && !value) {
+        errorMessages.push(rules.required);
+      }
+
+      if (rules.pattern && !new RegExp(rules.pattern).test(value)) {
+        errorMessages.push(rules.patternMessage);
+      }
+
+      if (rules.sameAs) {
+        var cmpFieldName = rules.sameAs;
+        var cmpField = this.fields.find(function (f) {
+          return f.name === cmpFieldName;
+        });
+
+        if (cmpField && value !== cmpField.$el.val()) {
+          errorMessages.push(rules.sameAsMessage);
+        }
+      }
+
+      if (errorMessages.length > 0) {
+        this.showErrorMessage($el, errorMessages.join('<br />'));
+        return false;
+      }
+
+      this.removeErrorMessage($el);
+      return true;
+    }
+  }, {
+    key: "showErrorMessage",
+    value: function showErrorMessage($field, message) {
+      var $placeholder = $field.siblings(selector.errorPlaceholder).first();
+
+      if ($placeholder.length === 0) {
+        $field.after("<span class=\"".concat(selector.errorPlaceholder.slice(1), "\"></span>"));
+        $placeholder = $field.next();
+      }
+
+      $field.addClass('is-invalid');
+      $placeholder.html("<strong>".concat(message, "</strong>"));
+    }
+  }, {
+    key: "removeErrorMessage",
+    value: function removeErrorMessage($field) {
+      $field.removeClass('is-invalid');
+      $field.siblings(selector.errorPlaceholder).remove();
+    }
+  }]);
+
+  return FormValidation;
+}();
+
+
 
 /***/ }),
 

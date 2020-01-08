@@ -1,24 +1,24 @@
 // Fonts
-@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,600');
 
 // Variables
-@import "variables";
+@import 'variables';
 
 // Bootstrap
-@import "~bootstrap/scss/bootstrap";
+@import '~bootstrap/scss/bootstrap';
 
 .navbar-laravel {
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
-@import url("https://fonts.googleapis.com/css?family=Noto+Sans:400,700&subset=latin-ext");
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400&subset=latin-ext");
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans:400,700&subset=latin-ext');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400&subset=latin-ext');
 
 /*========================================================================
                              General Styles
 ==========================================================================*/
 body {
-    font-family: "Noto Sans", sans-serif;
+    font-family: 'Noto Sans', sans-serif;
     font-size: 14px;
     color: #231f20;
     -webkit-font-smoothing: antialiased;
@@ -47,6 +47,10 @@ h6,
     font-weight: 400;
 }
 
+.disabled {
+    pointer-events: none;
+}
+
 /*========================================================================
                                 Layout
 ==========================================================================*/
@@ -56,7 +60,7 @@ h6,
 
 .heading-wrap:before {
     background-color: #231f20;
-    content: "";
+    content: '';
     display: block;
     height: 1px;
     margin-top: -1px;
@@ -262,7 +266,7 @@ img.table-img {
     display: none;
 }
 .loading-btn::after {
-    content: "Please wait..." !important;
+    content: 'Please wait...' !important;
     font-weight: bold;
     color: black;
 }

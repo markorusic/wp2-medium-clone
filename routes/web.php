@@ -30,7 +30,8 @@ Route::group(
 		'as' => 'admin.'
 	],
 	function () {
-        Route::get('', 'PageController@index')->name('home');
+		Route::get('', 'PageController@index')->name('home');
+		Route::get('posts/show-all', 'PostController@showAll');
         
         Route::resource('posts', 'PostController');
         Route::resource('users', 'UserController');

@@ -1,4 +1,5 @@
 import moment from 'moment'
+import FormValidation from '../../shared/form-validation'
 import http from '../../shared/http-service'
 
 export default (() => {
@@ -11,9 +12,8 @@ export default (() => {
         event.preventDefault()
         const $form = $(event.target)
         const formData = _collectData($form)
-        const validation = _validateData(formData.data)
-        if (!validation.value) {
-            alert(validation.error)
+        const validator = new FormValidation($form)
+        if (!validator.validate()) {
             return
         }
         $form.find('button[type="submit"]').addClass('loading-btn')
@@ -47,15 +47,6 @@ export default (() => {
                 parseBooleans: true,
                 parseNumbers: true
             })
-        }
-    }
-
-    function _validateData(data) {
-        // all main_photo are requried by default
-        const isValid = !(data.hasOwnProperty('main_photo') && !data.main_photo)
-        return {
-            value: isValid,
-            error: 'Main photo is required!'
         }
     }
 
