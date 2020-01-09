@@ -61519,7 +61519,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-window.dataTable = _modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"];
 window.Popper = __webpack_require__(/*! popper.js */ "./node_modules/popper.js/dist/esm/popper.js")["default"];
 window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
@@ -61531,6 +61530,7 @@ __webpack_require__(/*! jquery-serializejson */ "./node_modules/jquery-serialize
 
 __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
 
+window.dataTable = _modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"];
 document.addEventListener('DOMContentLoaded', function () {
   _utils__WEBPACK_IMPORTED_MODULE_0__["default"].init();
   _modules_formModule__WEBPACK_IMPORTED_MODULE_1__["default"].init();
