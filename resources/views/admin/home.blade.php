@@ -1,9 +1,9 @@
-@extends('admin.partials.layout', [
-    'content_title' => 'Home'
-])
+@extends('admin.shared.layout')
 
-@section('main')
-    <div>
-        Welcome, {{ auth()->user()->name }}
+@section('content')
+    <div class="container py-2">
+        <div class="d-flex justify-content-center">
+            <h2>Welcome back, {{ auth()->user()->name }}</h2>
+        </div>
     </div>
 @endsection

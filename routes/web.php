@@ -11,23 +11,29 @@
 |
 */
 
-Auth::routes([ 'register' => false ]);
-
-Route::get('', function () {
-    return view('welcome');
+Route::get('/', function () {
+    return 123; //auth()->user()->load('activities');
 });
 
-Route::resource('posts', 'PostController');
-Route::resource('users', 'UserController');
 
+// Route::get('/home', 'HomeController@index')->name('home');
+
+Auth::routes([ 'register' => false ]);
+
+
+// Admin routes
 Route::group(
 	[
 		'middleware' => ['auth'],
 		'prefix' => 'admin',
 		'namespace' => 'Admin',
 		'as' => 'admin.'
-    ],
-    function () {
-        Route::get('', 'PageController@index')->name('home');
-    }
+	],
+	function () {
+		Route::get('', 'PageController@index')->name('home');
+		Route::get('posts/show-all', 'PostController@showAll');
+        
+        Route::resource('posts', 'PostController');
+        Route::resource('users', 'UserController');
+	}
 );

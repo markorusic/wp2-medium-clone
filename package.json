@@ -11,18 +11,21 @@
     },
     "devDependencies": {
         "axios": "^0.19",
+        "bootstrap": "^4.0.0",
         "cross-env": "^5.1",
+        "jquery": "^3.2",
         "laravel-mix": "^4.0.7",
         "lodash": "^4.17.13",
+        "popper.js": "^1.12",
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.15.2",
         "sass-loader": "^7.1.0",
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
-        "@fortawesome/fontawesome-free": "^5.12.0",
-        "icheck-bootstrap": "^3.0.1",
-        "jquery": "^3.4.1",
-        "overlayscrollbars": "^1.10.2"
+        "dropzone": "^5.5.1",
+        "font-awesome": "^4.7.0",
+        "jquery-serializejson": "^2.9.0",
+        "moment": "^2.24.0"
     }
 }

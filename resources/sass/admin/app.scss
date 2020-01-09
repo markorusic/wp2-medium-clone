@@ -1,0 +1,334 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,600');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+// Font Awesome
+@import '~font-awesome/scss/font-awesome';
+
+.navbar-laravel {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans:400,700&subset=latin-ext');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400&subset=latin-ext');
+
+/*========================================================================
+                             General Styles
+==========================================================================*/
+body {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 14px;
+    color: #231f20;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+.h1 {
+    font-size: 20px;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+h3,
+.h3,
+h4,
+.h4,
+h6,
+.h6 {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+h6,
+.h6 {
+    font-weight: 400;
+}
+
+.disabled {
+    pointer-events: none;
+}
+
+/*========================================================================
+                                Layout
+==========================================================================*/
+.heading-wrap {
+    position: relative;
+}
+
+.heading-wrap:before {
+    background-color: #231f20;
+    content: '';
+    display: block;
+    height: 1px;
+    margin-top: -1px;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    z-index: -1;
+}
+
+.heading-wrap h1,
+.heading-wrap h2,
+.heading-wrap h3,
+.heading-wrap h4,
+.heading-wrap h5,
+.heading-wrap h6 {
+    margin: 0;
+    background: #fff;
+}
+
+/*========================================================================
+                           Specific Styles
+==========================================================================*/
+
+header {
+    border-bottom: 2px solid #8d7d0a;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    text-transform: uppercase;
+    color: #231f20;
+    padding: 0;
+    font-size: 14px;
+}
+
+.nav-item {
+    padding: 0 25px;
+}
+
+.nav-item:first-of-type {
+    padding: 0 25px 0 0;
+}
+
+.nav-item:last-of-type {
+    padding: 0 0 0 25px;
+}
+
+.navbar-brand {
+    margin-right: 100px;
+}
+
+.navbar {
+    min-height: 85px;
+}
+
+.navbar-light .navbar-nav .nav-link:focus,
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #838088;
+}
+
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+    vertical-align: middle;
+}
+
+@media screen and (max-width: 600px) {
+    table#cart tbody td .form-control {
+        display: inline !important;
+    }
+
+    .actions .btn {
+        width: 36%;
+        margin: 1.5em 0;
+    }
+
+    .actions .btn-info {
+        float: left;
+    }
+
+    .actions .btn-danger {
+        float: right;
+    }
+}
+
+.table thead {
+    background-color: #8080801c;
+    border: none;
+}
+
+.table thead th {
+    border-top: none;
+    border-color: #cdcfd0;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.table td,
+.table th {
+    border-color: #cdcfd0;
+    border-width: 2px;
+}
+
+.table tbody tr:last-of-type {
+    border-bottom: 1px solid #cdcfd0;
+}
+
+/*========================================================================
+                              Responsive
+==========================================================================*/
+
+@media only screen and (max-width: 991px) {
+    .nav-item,
+    .nav-item:last-of-type,
+    .nav-item:first-of-type {
+        padding: 10px 0 !important;
+    }
+}
+
+.navbar-light .navbar-toggler {
+    padding: 0;
+    border: none;
+}
+
+@media (min-width: 992px) and (max-width: 1200px) {
+    .navbar-expand-lg .navbar-nav {
+        align-items: center;
+    }
+
+    .nav-item {
+        padding: 0 20px;
+    }
+
+    .nav-item:first-of-type {
+        padding: 0 20px 0 0;
+    }
+
+    .nav-item:last-of-type {
+        padding: 0 0 0 20px;
+    }
+}
+
+.navbar-light .navbar-toggler {
+    padding: 0;
+    border: none;
+}
+.about-us-tet {
+    margin-top: 30px;
+}
+
+/*========================================================================
+                                Helper
+==========================================================================*/
+
+.list-reset {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.table > tbody > tr > td {
+    border-top: none;
+}
+.uc {
+    text-transform: uppercase;
+}
+.pointer {
+    cursor: pointer;
+}
+
+.btn:focus,
+.btn:active {
+    outline: none !important;
+    box-shadow: none;
+}
+a {
+    color: black;
+}
+a:hover {
+    text-decoration: none;
+    cursor: pointer;
+    opacity: 0.9;
+    color: black;
+}
+.img-fluid {
+    max-width: auto;
+    height: 100%;
+}
+img.table-img {
+    width: auto;
+    max-height: 100px;
+}
+.mp-0 {
+    padding: 0;
+    margin: 0;
+}
+.full-width {
+    width: 100%;
+}
+.loading-btn {
+    pointer-events: none;
+    background-color: #c9c9c9;
+    border: none;
+}
+.loading-btn span.content {
+    display: none;
+}
+.loading-btn::after {
+    content: 'Please wait...' !important;
+    font-weight: bold;
+    color: black;
+}
+label {
+    cursor: pointer;
+}
+.bold {
+    font-weight: bold;
+}
+.hidden {
+    display: none !important;
+}
+.white-txt {
+    color: white !important;
+}
+.black-txt {
+    color: black !important;
+}
+.uc-first {
+    text-transform: capitalize;
+}
+ul.flex-list {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+ul.flex-list li:not(:last-child) {
+    margin-right: 15px;
+}
+ul.flex-list.nice-list li:not(:last-child) {
+    margin-right: 0;
+    padding-right: 7px;
+    border-right: 1px solid;
+}
+ul.flex-list.nice-list li:not(:first-child) {
+    padding-left: 7px;
+}
+/* fleksovi */
+.flex-list,
+.flex,
+.flex-sp-between,
+.flex-center {
+    display: flex;
+}
+.flex-sp-between {
+    justify-content: space-between;
+}
+.flex-center,
+ul.flex-list.center {
+    justify-content: center;
+    align-items: center;
+}
+ul.navbar-nav li {
+    margin: 0 !important;
+    padding: 0 0 0 25px !important;
+}
+.navbar-nav li a {
+    font-size: 14px !important;
+}
+.resource-table tr {
+    border-top: 1px solid #cdcfd0;
+}
