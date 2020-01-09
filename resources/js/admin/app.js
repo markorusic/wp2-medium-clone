@@ -1,19 +1,15 @@
-import utils from './utils'
-import formModule from './modules/formModule'
-import photoUploadModule from './modules/photoUploadModule'
+import dataForm from './modules/data-form'
 import dataTable from './modules/data-table'
+import photoUpload from './modules/photo-upload'
 
 window.Popper = require('popper.js').default
 window.$ = window.jQuery = require('jquery')
-require('jquery-ui-bundle')
-require('jquery-ui-bundle/jquery-ui.css')
 require('jquery-serializejson')
 require('bootstrap')
 
 window.dataTable = dataTable
+window.dataForm = dataForm
 
 document.addEventListener('DOMContentLoaded', () => {
-    utils.init()
-    formModule.init()
-    photoUploadModule.init()
+    photoUpload.init()
 })

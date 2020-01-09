@@ -16,6 +16,7 @@ let props = {
 }
 
 let state = {
+    pageSize: 10,
     sort: ''
 }
 
@@ -63,13 +64,14 @@ const view = {
         return $(`#${props.resource}-data-table`)
     },
     renderLoader() {
+        const height = 53 * (state.pageSize + 1)
         $dom.table.html(`
-    <div style="display: flex; height: 620px; justify-content: center; align-items: center; background-color: #428bca12;">
-    <div class="spinner-border text-primary" role="status">
-        <span class="sr-only">Loading...</span>
-    </div>
-    </div>
-    `)
+            <div class="flex-center" style="height: ${height}px;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        `)
     },
     renderTable({ content = [], pagination = {} }) {
         const showEdit = props.actions.includes(resourceAction.edit)
@@ -145,39 +147,43 @@ const view = {
         ].map(page => page + 1)
 
         const paginationHtml = `
-    <ul class="pagination">
-        <li class="page-item${
-            pagination.page > 1 ? '' : ' disabled'
-        }" data-page="${pagination.page - 1}">
-        <a class="page-link" href="#">
-            <span aria-hidden="true">&laquo;</span>
-        </a>
-        </li>
-        ${templateRender.list(
-            pages,
-            page =>
-                `<li class="page-item${
-                    pagination.page === page ? ' active' : ''
-                }" data-page="${page}"><a class="page-link" href="#">${page}</a></li>`
-        )}
-        <li class="page-item${
-            pagination.page < pages.length - 1 ? '' : ' disabled'
-        }" data-page="${pagination.page + 1}">
-            <a class="page-link" href="#">
-            <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
-    </ul>`
+        <ul class="pagination">
+            <li class="page-item${templateRender.if(
+                pagination.page < 2,
+                ' disabled'
+            )}"
+                data-page="${pagination.page - 1}"
+            >
+                <a class="page-link" href="#">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            ${templateRender.list(
+                pages,
+                page =>
+                    `<li class="page-item${templateRender.if(
+                        pagination.page === page,
+                        ' acitve'
+                    )}" data-page="${page}"><a class="page-link" href="#">${page}</a></li>`
+            )}
+            <li class="page-item${templateRender.if(
+                pagination.page >= pages.length,
+                ' disabled'
+            )} " data-page="${pagination.page + 1}">
+                <a class="page-link" href="#">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>`
         $dom.table.html(tableHtml)
         $dom.pagination.html(paginationHtml)
     },
     renderErrorTable() {
         $dom.pagination.html('')
         $dom.table.html(`
-    <div class="alert alert-warning mt-3 text-center" role="alert">
-    Error happend while loading ${props.resource}.
-    </div>
-    `)
+            <div class="alert alert-warning mt-3 text-center" role="alert">
+                Error happend while loading ${props.resource}.
+            </div>`)
     }
 }
 

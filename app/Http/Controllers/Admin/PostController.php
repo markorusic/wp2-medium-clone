@@ -31,7 +31,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return 'create';
+        abort(404);
     }
 
     /**
@@ -64,7 +64,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return $post;
+        return view('admin.post.edit', compact('post'));
     }
 
     /**

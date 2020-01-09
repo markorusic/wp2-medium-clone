@@ -6,6 +6,7 @@ trait ModelQuery
 {
     public function scopeQueryDsl($query) {
         $order = request()->input('order');
+        $size = request()->input('size') ?? 10;
         $search = collect(request()->all())->except(['order', 'page', 'size']);
 
         if ($search->count() > 0) {
@@ -22,7 +23,7 @@ trait ModelQuery
             $query->orderBy($orderTuple[0], $orderTuple[1] ?? 'asc');
         }
 
-        return $query->paginate();
+        return $query->paginate($size);
     }
 }
  
