@@ -204,22 +204,13 @@ const bindTableEvents = () => {
     $dom.pagination.find('[data-page]').on('click', handlePageChange)
 }
 
-// Fetch logic
-const fetchContent = ({ page = 0, size = 10, ...rest } = {}) => {
-    const restString = Object.entries(rest)
-        .filter(([, value]) => !!value)
-        .map(item => item.join('='))
-        .join('&')
-    const url = `/admin/${props.resource}?page=${page}&size=${size}${
-        restString ? '&' + restString : ''
-    }`
-    return http.get(url).then(res => res.data)
-}
-
 // Load data procedure
-const loadData = options => {
+const loadData = ({ page = 0, size = 10, ...rest } = {}) => {
+    const baseUrl = '/admin/' + props.resource
     view.renderLoader()
-    return fetchContent(options)
+    return http
+        .get(baseUrl, { params: { page, size, ...rest } })
+        .then(res => res.data)
         .then(({ data, current_page, per_page, total }) => {
             view.renderTable({
                 content: data,

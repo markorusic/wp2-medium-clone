@@ -42809,12 +42809,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _shared_template_render__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/template-render */ "./resources/js/shared/template-render.js");
 /* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../shared/http-service */ "./resources/js/shared/http-service.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -42822,6 +42816,12 @@ function _nonIterableRest() { throw new TypeError("Invalid attempt to destructur
 function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
@@ -42925,10 +42925,10 @@ var bindTableEvents = function bindTableEvents() {
   $dom.table.find('[data-sort]').on('click', handleSort);
   $dom.table.find('[data-delete]').on('click', handleRecordDelete);
   $dom.pagination.find('[data-page]').on('click', handlePageChange);
-}; // Fetch logic
+}; // Load data procedure
 
 
-var fetchContent = function fetchContent() {
+var loadData = function loadData() {
   var _ref4 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   var _ref4$page = _ref4.page,
@@ -42937,28 +42937,20 @@ var fetchContent = function fetchContent() {
       size = _ref4$size === void 0 ? 10 : _ref4$size,
       rest = _objectWithoutProperties(_ref4, ["page", "size"]);
 
-  var restString = Object.entries(rest).filter(function (_ref5) {
-    var _ref6 = _slicedToArray(_ref5, 2),
-        value = _ref6[1];
-
-    return !!value;
-  }).map(function (item) {
-    return item.join('=');
-  }).join('&');
-  var url = "/admin/".concat(props.resource, "?page=").concat(page, "&size=").concat(size).concat(restString ? '&' + restString : '');
-  return _shared_http_service__WEBPACK_IMPORTED_MODULE_2__["default"].get(url).then(function (res) {
-    return res.data;
-  });
-}; // Load data procedure
-
-
-var loadData = function loadData(options) {
+  var baseUrl = '/admin/' + props.resource;
   view.renderLoader();
-  return fetchContent(options).then(function (_ref7) {
-    var data = _ref7.data,
-        current_page = _ref7.current_page,
-        per_page = _ref7.per_page,
-        total = _ref7.total;
+  return _shared_http_service__WEBPACK_IMPORTED_MODULE_2__["default"].get(baseUrl, {
+    params: _objectSpread({
+      page: page,
+      size: size
+    }, rest)
+  }).then(function (res) {
+    return res.data;
+  }).then(function (_ref5) {
+    var data = _ref5.data,
+        current_page = _ref5.current_page,
+        per_page = _ref5.per_page,
+        total = _ref5.total;
     view.renderTable({
       content: data,
       pagination: {
