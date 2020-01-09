@@ -10,7 +10,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('admin/css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('admin-assets/css/app.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -60,7 +60,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('admin/js/app.js') }}"></script>
+    <script src="{{ asset('admin-assets/js/app.js') }}"></script>
 
     @yield('scripts')
 </body>
