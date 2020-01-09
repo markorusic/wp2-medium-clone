@@ -5,6 +5,7 @@
     dataTable.init({
         resource: 'posts',
         searchBy: 'title',
+        actions: [dataTable.resourceAction.edit, dataTable.resourceAction.delete],
         columns: [
             {
                 name: 'title',

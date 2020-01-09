@@ -31,7 +31,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return 'create';
     }
 
     /**
@@ -64,7 +64,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return $post;
     }
 
     /**
@@ -87,6 +87,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        return $post->delete();
+        abort_unless($post->delete(), 404);
+        return response('Success', 200);
     }
 }

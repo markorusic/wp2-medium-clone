@@ -116,7 +116,7 @@ const view = {
                             showEdit,
                             `
                             <a class="btn btn-primary white-txt mr-2 btn-sm"
-                                href="/admin/${props.resource}/edit?id=${item.id}" 
+                                href="/admin/${props.resource}/${item.id}/edit" 
                             >
                                 <i class="fa fa-pencil" aria-hidden="true"></i>
                             </a>
@@ -126,7 +126,7 @@ const view = {
                             showDelete,
                             `
                             <a class="btn btn-danger white-txt btn-sm"
-                                data-delete="/admin/${props.resource}/delete?id=${item.id}"
+                                data-delete="/admin/${props.resource}/${item.id}"
                             >
                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                             </a>
@@ -257,18 +257,21 @@ const handleSort = event => {
 
 const handleRecordDelete = event => {
     const $el = $(event.currentTarget)
-    const $resourceEl = $el.parent().parent()
     const endpoint = $el.data().delete
     if (!endpoint || !confirm('Are you sure?')) {
         return null
     }
     http.delete(endpoint)
         .then(() => {
-            $resourceEl.fadeOut()
+            return loadData({
+                order: state.sort,
+                page: $dom.pagination.find('.active').data().page,
+                [props.searchBy]: $dom.search.val()
+            })
         })
         .catch(error => {
-            alert('error')
             console.log(error)
+            alert('Error occured during delete!')
         })
 }
 

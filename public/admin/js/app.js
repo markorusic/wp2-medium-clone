@@ -61630,7 +61630,7 @@ var view = {
           "default": "<td data-name=\"".concat(name, "\">").concat(item[name], "</td>"),
           photo: "\n                            <td data-name=\"main_photo\">\n                                <img src=\"".concat(item[name], "\" alt=\"Photo not found\" class=\"table-img\">\n                            </td>")
         });
-      }), "\n                ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showEdit || showDelete, "<td class=\"flex resource-actions\">\n                        ".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showEdit, "\n                            <a class=\"btn btn-primary white-txt mr-2 btn-sm\"\n                                href=\"/admin/".concat(props.resource, "/edit?id=").concat(item.id, "\" \n                            >\n                                <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                            </a>\n                            ")), "\n                        ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showDelete, "\n                            <a class=\"btn btn-danger white-txt btn-sm\"\n                                data-delete=\"/admin/".concat(props.resource, "/delete?id=").concat(item.id, "\"\n                            >\n                                <i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i>\n                            </a>\n                            ")), "\n                    </td>")), "\n            </tr>");
+      }), "\n                ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showEdit || showDelete, "<td class=\"flex resource-actions\">\n                        ".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showEdit, "\n                            <a class=\"btn btn-primary white-txt mr-2 btn-sm\"\n                                href=\"/admin/".concat(props.resource, "/").concat(item.id, "/edit\" \n                            >\n                                <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                            </a>\n                            ")), "\n                        ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showDelete, "\n                            <a class=\"btn btn-danger white-txt btn-sm\"\n                                data-delete=\"/admin/".concat(props.resource, "/").concat(item.id, "\"\n                            >\n                                <i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i>\n                            </a>\n                            ")), "\n                    </td>")), "\n            </tr>");
     }), "\n    </tbody>\n    ");
 
     var pages = _toConsumableArray(Array(Math.ceil(pagination.totalElements / pagination.size)).keys()).map(function (page) {
@@ -61740,7 +61740,6 @@ var handleSort = function handleSort(event) {
 
 var handleRecordDelete = function handleRecordDelete(event) {
   var $el = $(event.currentTarget);
-  var $resourceEl = $el.parent().parent();
   var endpoint = $el.data()["delete"];
 
   if (!endpoint || !confirm('Are you sure?')) {
@@ -61748,10 +61747,13 @@ var handleRecordDelete = function handleRecordDelete(event) {
   }
 
   _shared_http_service__WEBPACK_IMPORTED_MODULE_2__["default"]["delete"](endpoint).then(function () {
-    $resourceEl.fadeOut();
+    return loadData(_defineProperty({
+      order: state.sort,
+      page: $dom.pagination.find('.active').data().page
+    }, props.searchBy, $dom.search.val()));
   })["catch"](function (error) {
-    alert('error');
     console.log(error);
+    alert('Error occured during delete!');
   });
 };
 
