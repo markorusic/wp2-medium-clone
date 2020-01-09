@@ -1,10 +1,11 @@
 import utils from './utils'
 import formModule from './modules/formModule'
 import photoUploadModule from './modules/photoUploadModule'
+import dataTable from './modules/data-table'
 
+window.dataTable = dataTable
 window.Popper = require('popper.js').default
 window.$ = window.jQuery = require('jquery')
-window.dataTable = require('./modules/data-table').default
 require('jquery-ui-bundle')
 require('jquery-ui-bundle/jquery-ui.css')
 require('jquery-serializejson')

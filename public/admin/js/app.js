@@ -61514,12 +61514,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ "./resources/js/admin/utils/index.js");
 /* harmony import */ var _modules_formModule__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/formModule */ "./resources/js/admin/modules/formModule.js");
 /* harmony import */ var _modules_photoUploadModule__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/photoUploadModule */ "./resources/js/admin/modules/photoUploadModule.js");
+/* harmony import */ var _modules_data_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/data-table */ "./resources/js/admin/modules/data-table.js");
 
 
 
+
+window.dataTable = _modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"];
 window.Popper = __webpack_require__(/*! popper.js */ "./node_modules/popper.js/dist/esm/popper.js")["default"];
 window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-window.dataTable = __webpack_require__(/*! ./modules/data-table */ "./resources/js/admin/modules/data-table.js")["default"];
 
 __webpack_require__(/*! jquery-ui-bundle */ "./node_modules/jquery-ui-bundle/jquery-ui.js");
 

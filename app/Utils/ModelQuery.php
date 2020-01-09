@@ -4,13 +4,12 @@ namespace App\Utils;
 
 trait ModelQuery
 {
-
     public function scopeQueryDsl($query) {
         $order = request()->input('order');
         $search = collect(request()->all())->except(['order', 'page', 'size']);
 
         if ($search->count() > 0) {
-            $searchArr = $search->keys()->map(function ($key) use ($search){
+            $searchArr = $search->keys()->map(function ($key) use ($search) {
                 return [
                     $key, 'like', '%' . $search->get($key) . '%'
                 ];
@@ -25,6 +24,5 @@ trait ModelQuery
 
         return $query->paginate();
     }
-
 }
  
