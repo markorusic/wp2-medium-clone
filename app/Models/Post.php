@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Utils\ModelFilter;
+use App\Utils\ModelQuery;
 
 class Post extends Model
 {
 
-    use ModelFilter;
+    use ModelQuery;
 
     protected $fillable = ['title', 'content'];
 

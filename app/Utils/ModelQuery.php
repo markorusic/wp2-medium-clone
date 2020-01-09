@@ -2,7 +2,7 @@
 
 namespace App\Utils;
 
-trait ModelFilter
+trait ModelQuery
 {
 
     public function scopeQueryDsl($query) {
