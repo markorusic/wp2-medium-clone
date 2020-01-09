@@ -42899,7 +42899,7 @@ var view = {
     });
 
     var paginationHtml = "\n        <ul class=\"pagination\">\n            <li class=\"page-item".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](pagination.page < 2, ' disabled'), "\"\n                data-page=\"").concat(pagination.page - 1, "\"\n            >\n                <a class=\"page-link\" href=\"#\">\n                    <span aria-hidden=\"true\">&laquo;</span>\n                </a>\n            </li>\n            ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"].list(pages, function (page) {
-      return "<li class=\"page-item".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](pagination.page === page, ' acitve'), "\" data-page=\"").concat(page, "\"><a class=\"page-link\" href=\"#\">").concat(page, "</a></li>");
+      return "<li class=\"page-item".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](pagination.page === page, ' active'), "\" data-page=\"").concat(page, "\"><a class=\"page-link\" href=\"#\">").concat(page, "</a></li>");
     }), "\n            <li class=\"page-item").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](pagination.page >= pages.length, ' disabled'), " \" data-page=\"").concat(pagination.page + 1, "\">\n                <a class=\"page-link\" href=\"#\">\n                    <span aria-hidden=\"true\">&raquo;</span>\n                </a>\n            </li>\n        </ul>");
     $dom.table.html(tableHtml);
     $dom.pagination.html(paginationHtml);

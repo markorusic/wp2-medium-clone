@@ -163,7 +163,7 @@ const view = {
                 page =>
                     `<li class="page-item${templateRender.if(
                         pagination.page === page,
-                        ' acitve'
+                        ' active'
                     )}" data-page="${page}"><a class="page-link" href="#">${page}</a></li>`
             )}
             <li class="page-item${templateRender.if(

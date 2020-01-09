@@ -19,18 +19,18 @@
                     'value' => $post->title
                 ],
                 [
+                    'type' => 'photo',
+                    'name' => 'main_photo',
+                    'label' => 'Post main photo',
+                    'value' => $post->main_photo
+                ],
+                [
                     'type' => 'textarea',
                     'name' => 'content',
                     'label' => 'Post content',
                     'placeholder' => 'Enter post content',
                     'required' => true,
                     'value' => $post->content
-                ],
-                [
-                    'type' => 'photo',
-                    'name' => 'main_photo',
-                    'label' => 'Post main photo',
-                    'value' => $post->main_photo
                 ]
             ]
         ])
