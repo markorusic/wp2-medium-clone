@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Utils\ModelTextSearch;
+use App\Utils\ModelFilter;
 
 class Post extends Model
 {
 
-    use ModelTextSearch;
+    use ModelFilter;
 
     protected $fillable = ['title', 'content'];
 

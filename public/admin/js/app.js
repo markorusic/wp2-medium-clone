@@ -61548,7 +61548,8 @@ document.addEventListener('DOMContentLoaded', function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
 /* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/http-service */ "./resources/js/shared/http-service.js");
+/* harmony import */ var _shared_template_render__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/template-render */ "./resources/js/shared/template-render.js");
+/* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../shared/http-service */ "./resources/js/shared/http-service.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -61577,9 +61578,16 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 
 
+
+var resourceAction = {
+  edit: 'edit',
+  "delete": 'delete',
+  create: 'create'
+};
 var props = {
   resource: null,
   searchBy: null,
+  actions: Object.values(resourceAction),
   columns: []
 };
 var state = {
@@ -61593,13 +61601,7 @@ var $dom = {
 };
 var view = {
   renderContainer: function renderContainer() {
-    var html = "\n    <div id=\"".concat(props.resource, "-data-table\" class=\"container py-2\">\n        <div class=\"card-header\">\n        <div class=\"flex-sp-between\">\n            <h4 class=\"bold uc-first\">").concat(props.resource, "</h4>\n            <span>\n            <a class=\"btn btn-success btn-sm\" href=\"/admin/").concat(props.resource, "/create\">\n                <i class=\"fa fa-plus\" aria-hidden=\"true\"></i> \n                Create\n            </a>\n            </span>\n        </div>\n        ").concat(function () {
-      if (props.searchBy) {
-        return "\n                <div class=\"mt-1\">\n                <input\n                    type=\"text\"\n                    class=\"resource-table-search form-control\"\n                    placeholder=\"Search\"\n                    data-resource-search\n                >\n                </div>\n            ";
-      }
-
-      return '';
-    }(), "\n        </div>\n    \n    <table class=\"table resource-table\" data-resource-table>\n    </table>\n    <div data-resource-pagination></div>\n    ");
+    var html = "\n    <div id=\"".concat(props.resource, "-data-table\" class=\"container py-2\">\n        <div class=\"card-header\">\n        <div class=\"flex-sp-between\">\n            <h4 class=\"bold uc-first\">").concat(props.resource, "</h4>\n            ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](props.actions.includes(resourceAction.create), "<span>\n                    <a class=\"btn btn-success btn-sm\" href=\"/admin/".concat(props.resource, "/create\">\n                        <i class=\"fa fa-plus\" aria-hidden=\"true\"></i> \n                        Create\n                    </a>\n                </span>")), "\n        </div>\n        ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](props.searchBy, "<div class=\"mt-1\">\n                <input\n                    type=\"text\"\n                    class=\"resource-table-search form-control\"\n                    placeholder=\"Search\"\n                    data-resource-search\n                >\n            </div>"), "\n        </div>\n        <table class=\"table resource-table\" data-resource-table>\n        </table>\n        <div data-resource-pagination></div>\n    ");
     $('body main').html(html);
     return $("#".concat(props.resource, "-data-table"));
   },
@@ -61611,33 +61613,33 @@ var view = {
         content = _ref$content === void 0 ? [] : _ref$content,
         _ref$pagination = _ref.pagination,
         pagination = _ref$pagination === void 0 ? {} : _ref$pagination;
-    var tableHtml = "\n    <thead>\n        <tr>\n        <th>#</th>\n        ".concat(function () {
-      return props.columns.map(function (column) {
-        return "\n            <th class=\"uc-first clickable\" data-sort=\"".concat(column, "\">\n            <span>").concat(column.split('_').join(' '), "<span>\n            <span><i class=\"fa fa-sort\" aria-hidden=\"true\"></i></span>\n            </th>\n        ");
-      }).join('');
-    }(), "\n        <th>Actions</th>\n        </tr>\n    </thead>\n    <tbody>\n        ").concat(function () {
-      return content.map(function (item, index) {
-        return "\n        <tr data-id=\"".concat(item.id, "\">\n            <td>").concat((pagination.page - 1) * pagination.size + index + 1, "</td>\n            ").concat(function () {
-          return props.columns.map(function (column) {
-            switch (column) {
-              case 'main_photo':
-                return "\n                    <td data-name=\"main_photo\">\n                    <img src=\"".concat(item[column], "\" alt=\"Photo not found\" class=\"table-img\">\n                    </td>");
-
-              default:
-                return "<td data-name=\"".concat(column, "\">").concat(item[column], "</td>");
-            }
-          }).join('');
-        }(), "\n            \n            <td class=\"flex resource-actions\">\n                <a class=\"btn btn-primary white-txt mr-2 btn-sm\"\n                href=\"/admin/").concat(props.resource, "/edit?id=").concat(item.id, "\" \n                >\n                <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                </a>\n                <a class=\"btn btn-danger white-txt btn-sm\"\n                data-delete=\"/admin/").concat(props.resource, "/delete?id=").concat(item.id, "\"\n                >\n                <i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i>\n                </a>\n            </td>\n        </tr>\n        ");
-      });
-    }(), "\n    </tbody>\n    ");
+    var showEdit = props.actions.includes(resourceAction.edit);
+    var showDelete = props.actions.includes(resourceAction["delete"]);
+    var tableHtml = "\n    <thead>\n        <tr>\n        <th>#</th>\n        ".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"].list(props.columns, function (_ref2) {
+      var name = _ref2.name,
+          _ref2$displayName = _ref2.displayName,
+          displayName = _ref2$displayName === void 0 ? name : _ref2$displayName,
+          _ref2$sortable = _ref2.sortable,
+          sortable = _ref2$sortable === void 0 ? false : _ref2$sortable;
+      return "\n                <th class=\"uc-first clickable\" data-sort=\"".concat(name, "\">\n                <span>").concat(displayName, "<span>\n                ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](sortable, '<span><i class="fa fa-sort" aria-hidden="true"></i></span>'), "\n                </th>\n            ");
+    }), "\n        ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showEdit || showDelete, '<th>Actions</th>'), "\n        </tr>\n    </thead>\n    <tbody>\n        ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"].list(content, function (item, index) {
+      return "\n            <tr data-id=\"".concat(item.id, "\">\n                <td>").concat((pagination.page - 1) * pagination.size + index + 1, "</td>\n                ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"].list(props.columns, function (_ref3) {
+        var name = _ref3.name,
+            type = _ref3.type;
+        return _shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["switch"](type, {
+          "default": "<td data-name=\"".concat(name, "\">").concat(item[name], "</td>"),
+          photo: "\n                            <td data-name=\"main_photo\">\n                                <img src=\"".concat(item[name], "\" alt=\"Photo not found\" class=\"table-img\">\n                            </td>")
+        });
+      }), "\n                ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showEdit || showDelete, "<td class=\"flex resource-actions\">\n                        ".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showEdit, "\n                            <a class=\"btn btn-primary white-txt mr-2 btn-sm\"\n                                href=\"/admin/".concat(props.resource, "/edit?id=").concat(item.id, "\" \n                            >\n                                <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                            </a>\n                            ")), "\n                        ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showDelete, "\n                            <a class=\"btn btn-danger white-txt btn-sm\"\n                                data-delete=\"/admin/".concat(props.resource, "/delete?id=").concat(item.id, "\"\n                            >\n                                <i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i>\n                            </a>\n                            ")), "\n                    </td>")), "\n            </tr>");
+    }), "\n    </tbody>\n    ");
 
     var pages = _toConsumableArray(Array(Math.ceil(pagination.totalElements / pagination.size)).keys()).map(function (page) {
       return page + 1;
     });
 
-    var paginationHtml = "\n    <ul class=\"pagination\">\n        <li class=\"page-item".concat(pagination.page > 1 ? '' : ' disabled', "\" data-page=\"").concat(pagination.page - 1, "\">\n        <a class=\"page-link\" href=\"#\">\n            <span aria-hidden=\"true\">&laquo;</span>\n        </a>\n        </li>\n        ").concat(pages.map(function (page) {
+    var paginationHtml = "\n    <ul class=\"pagination\">\n        <li class=\"page-item".concat(pagination.page > 1 ? '' : ' disabled', "\" data-page=\"").concat(pagination.page - 1, "\">\n        <a class=\"page-link\" href=\"#\">\n            <span aria-hidden=\"true\">&laquo;</span>\n        </a>\n        </li>\n        ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"].list(pages, function (page) {
       return "<li class=\"page-item".concat(pagination.page === page ? ' active' : '', "\" data-page=\"").concat(page, "\"><a class=\"page-link\" href=\"#\">").concat(page, "</a></li>");
-    }).join(''), "\n        <li class=\"page-item").concat(pagination.page < pages.length - 1 ? '' : ' disabled', "\" data-page=\"").concat(pagination.page + 1, "\">\n            <a class=\"page-link\" href=\"#\">\n            <span aria-hidden=\"true\">&raquo;</span>\n            </a>\n        </li>\n    </ul>");
+    }), "\n        <li class=\"page-item").concat(pagination.page < pages.length - 1 ? '' : ' disabled', "\" data-page=\"").concat(pagination.page + 1, "\">\n            <a class=\"page-link\" href=\"#\">\n            <span aria-hidden=\"true\">&raquo;</span>\n            </a>\n        </li>\n    </ul>");
     $dom.table.html(tableHtml);
     $dom.pagination.html(paginationHtml);
   },
@@ -61666,24 +61668,24 @@ var bindTableEvents = function bindTableEvents() {
 
 
 var fetchContent = function fetchContent() {
-  var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var _ref4 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-  var _ref2$page = _ref2.page,
-      page = _ref2$page === void 0 ? 0 : _ref2$page,
-      _ref2$size = _ref2.size,
-      size = _ref2$size === void 0 ? 10 : _ref2$size,
-      rest = _objectWithoutProperties(_ref2, ["page", "size"]);
+  var _ref4$page = _ref4.page,
+      page = _ref4$page === void 0 ? 0 : _ref4$page,
+      _ref4$size = _ref4.size,
+      size = _ref4$size === void 0 ? 10 : _ref4$size,
+      rest = _objectWithoutProperties(_ref4, ["page", "size"]);
 
-  var restString = Object.entries(rest).filter(function (_ref3) {
-    var _ref4 = _slicedToArray(_ref3, 2),
-        value = _ref4[1];
+  var restString = Object.entries(rest).filter(function (_ref5) {
+    var _ref6 = _slicedToArray(_ref5, 2),
+        value = _ref6[1];
 
     return !!value;
   }).map(function (item) {
     return item.join('=');
   }).join('&');
   var url = "/admin/".concat(props.resource, "?page=").concat(page, "&size=").concat(size).concat(restString ? '&' + restString : '');
-  return _shared_http_service__WEBPACK_IMPORTED_MODULE_1__["default"].get(url).then(function (res) {
+  return _shared_http_service__WEBPACK_IMPORTED_MODULE_2__["default"].get(url).then(function (res) {
     return res.data;
   });
 }; // Load data procedure
@@ -61691,11 +61693,11 @@ var fetchContent = function fetchContent() {
 
 var loadData = function loadData(options) {
   view.renderLoader();
-  return fetchContent(options).then(function (_ref5) {
-    var data = _ref5.data,
-        current_page = _ref5.current_page,
-        per_page = _ref5.per_page,
-        total = _ref5.total;
+  return fetchContent(options).then(function (_ref7) {
+    var data = _ref7.data,
+        current_page = _ref7.current_page,
+        per_page = _ref7.per_page,
+        total = _ref7.total;
     view.renderTable({
       content: data,
       pagination: {
@@ -61706,15 +61708,17 @@ var loadData = function loadData(options) {
     });
     bindTableEvents();
   })["catch"](function (err) {
+    console.log(err);
     view.renderErrorTable(err);
   });
 }; // Event handlers
 
 
 var handleSearch = function handleSearch(event) {
+  var value = event.target.value;
   loadData(_defineProperty({
-    sort: state.sort
-  }, props.searchBy, event.target.value));
+    order: state.sort
+  }, props.searchBy, value));
 };
 
 var handleSort = function handleSort(event) {
@@ -61729,7 +61733,7 @@ var handleSort = function handleSort(event) {
   var order = sortParam !== sort ? 'desc' : sortOrder === 'desc' ? 'asc' : 'desc';
   state.sort = "".concat(sort, ",").concat(order);
   loadData(_defineProperty({
-    sort: state.sort,
+    order: state.sort,
     page: $dom.pagination.find('.active').data().page
   }, props.searchBy, $dom.search.val()));
 };
@@ -61743,7 +61747,7 @@ var handleRecordDelete = function handleRecordDelete(event) {
     return null;
   }
 
-  _shared_http_service__WEBPACK_IMPORTED_MODULE_1__["default"]["delete"](endpoint).then(function () {
+  _shared_http_service__WEBPACK_IMPORTED_MODULE_2__["default"]["delete"](endpoint).then(function () {
     $resourceEl.fadeOut();
   })["catch"](function (error) {
     alert('error');
@@ -61759,11 +61763,12 @@ var handlePageChange = function handlePageChange(event) {
 
   loadData(_defineProperty({
     page: page,
-    sort: state.sort
+    order: state.sort
   }, props.searchBy, $dom.search.val()));
 };
 
 var dataTable = {
+  resourceAction: resourceAction,
   init: function init(configProps) {
     props = _objectSpread({}, props, {}, configProps);
     $(function () {
@@ -62293,6 +62298,42 @@ if (token) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (_objectSpread({}, axios__WEBPACK_IMPORTED_MODULE_0___default.a));
+
+/***/ }),
+
+/***/ "./resources/js/shared/template-render.js":
+/*!************************************************!*\
+  !*** ./resources/js/shared/template-render.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var templateRender = {
+  "if": function _if(cond, value) {
+    return cond ? value : '';
+  },
+  "switch": function _switch(value, views) {
+    var view = views[value];
+
+    if (view) {
+      return view;
+    }
+
+    if (views["default"]) {
+      return views["default"];
+    }
+
+    return '';
+  },
+  list: function list() {
+    var items = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var mapFn = arguments.length > 1 ? arguments[1] : undefined;
+    return items.map(mapFn).join('');
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (templateRender);
 
 /***/ }),
 

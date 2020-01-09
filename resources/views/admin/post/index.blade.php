@@ -4,8 +4,18 @@
 <script>
     dataTable.init({
         resource: 'posts',
-        columns: ['title', 'main_photo'],
         searchBy: 'title',
+        columns: [
+            {
+                name: 'title',
+                sortable: true
+            },
+            {
+                name: 'main_photo',
+                displayName: 'Main photo',
+                type: 'photo'
+            }
+        ],
     })
 </script>
 @endsection

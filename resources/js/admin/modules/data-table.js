@@ -1,9 +1,17 @@
 import debounce from 'lodash/debounce'
+import templateRender from '../../shared/template-render'
 import http from '../../shared/http-service'
+
+const resourceAction = {
+    edit: 'edit',
+    delete: 'delete',
+    create: 'create'
+}
 
 let props = {
     resource: null,
     searchBy: null,
+    actions: Object.values(resourceAction),
     columns: []
 }
 
@@ -25,35 +33,31 @@ const view = {
         <div class="card-header">
         <div class="flex-sp-between">
             <h4 class="bold uc-first">${props.resource}</h4>
-            <span>
-            <a class="btn btn-success btn-sm" href="/admin/${
-                props.resource
-            }/create">
-                <i class="fa fa-plus" aria-hidden="true"></i> 
-                Create
-            </a>
-            </span>
+            ${templateRender.if(
+                props.actions.includes(resourceAction.create),
+                `<span>
+                    <a class="btn btn-success btn-sm" href="/admin/${props.resource}/create">
+                        <i class="fa fa-plus" aria-hidden="true"></i> 
+                        Create
+                    </a>
+                </span>`
+            )}
         </div>
-        ${(() => {
-            if (props.searchBy) {
-                return `
-                <div class="mt-1">
+        ${templateRender.if(
+            props.searchBy,
+            `<div class="mt-1">
                 <input
                     type="text"
                     class="resource-table-search form-control"
                     placeholder="Search"
                     data-resource-search
                 >
-                </div>
-            `
-            }
-            return ''
-        })()}
+            </div>`
+        )}
         </div>
-    
-    <table class="table resource-table" data-resource-table>
-    </table>
-    <div data-resource-pagination></div>
+        <table class="table resource-table" data-resource-table>
+        </table>
+        <div data-resource-pagination></div>
     `
         $('body main').html(html)
         return $(`#${props.resource}-data-table`)
@@ -68,60 +72,70 @@ const view = {
     `)
     },
     renderTable({ content = [], pagination = {} }) {
+        const showEdit = props.actions.includes(resourceAction.edit)
+        const showDelete = props.actions.includes(resourceAction.delete)
+
         const tableHtml = `
     <thead>
         <tr>
         <th>#</th>
-        ${(() =>
-            props.columns
-                .map(
-                    column => `
-            <th class="uc-first clickable" data-sort="${column}">
-            <span>${column.split('_').join(' ')}<span>
-            <span><i class="fa fa-sort" aria-hidden="true"></i></span>
-            </th>
-        `
-                )
-                .join(''))()}
-        <th>Actions</th>
+        ${templateRender.list(
+            props.columns,
+            ({ name, displayName = name, sortable = false }) => `
+                <th class="uc-first clickable" data-sort="${name}">
+                <span>${displayName}<span>
+                ${templateRender.if(
+                    sortable,
+                    '<span><i class="fa fa-sort" aria-hidden="true"></i></span>'
+                )}
+                </th>
+            `
+        )}
+        ${templateRender.if(showEdit || showDelete, '<th>Actions</th>')}
         </tr>
     </thead>
     <tbody>
-        ${(() =>
-            content.map(
-                (item, index) => `
-        <tr data-id="${item.id}">
-            <td>${(pagination.page - 1) * pagination.size + index + 1}</td>
-            ${(() =>
-                props.columns
-                    .map(column => {
-                        switch (column) {
-                            case 'main_photo':
-                                return `
-                    <td data-name="main_photo">
-                    <img src="${item[column]}" alt="Photo not found" class="table-img">
-                    </td>`
-                            default:
-                                return `<td data-name="${column}">${item[column]}</td>`
-                        }
+        ${templateRender.list(
+            content,
+            (item, index) => `
+            <tr data-id="${item.id}">
+                <td>${(pagination.page - 1) * pagination.size + index + 1}</td>
+                ${templateRender.list(props.columns, ({ name, type }) =>
+                    templateRender.switch(type, {
+                        default: `<td data-name="${name}">${item[name]}</td>`,
+                        photo: `
+                            <td data-name="main_photo">
+                                <img src="${item[name]}" alt="Photo not found" class="table-img">
+                            </td>`
                     })
-                    .join(''))()}
-            
-            <td class="flex resource-actions">
-                <a class="btn btn-primary white-txt mr-2 btn-sm"
-                href="/admin/${props.resource}/edit?id=${item.id}" 
-                >
-                <i class="fa fa-pencil" aria-hidden="true"></i>
-                </a>
-                <a class="btn btn-danger white-txt btn-sm"
-                data-delete="/admin/${props.resource}/delete?id=${item.id}"
-                >
-                <i class="fa fa-trash-o" aria-hidden="true"></i>
-                </a>
-            </td>
-        </tr>
-        `
-            ))()}
+                )}
+                ${templateRender.if(
+                    showEdit || showDelete,
+                    `<td class="flex resource-actions">
+                        ${templateRender.if(
+                            showEdit,
+                            `
+                            <a class="btn btn-primary white-txt mr-2 btn-sm"
+                                href="/admin/${props.resource}/edit?id=${item.id}" 
+                            >
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </a>
+                            `
+                        )}
+                        ${templateRender.if(
+                            showDelete,
+                            `
+                            <a class="btn btn-danger white-txt btn-sm"
+                                data-delete="/admin/${props.resource}/delete?id=${item.id}"
+                            >
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            </a>
+                            `
+                        )}
+                    </td>`
+                )}
+            </tr>`
+        )}
     </tbody>
     `
         const pages = [
@@ -139,14 +153,13 @@ const view = {
             <span aria-hidden="true">&laquo;</span>
         </a>
         </li>
-        ${pages
-            .map(
-                page =>
-                    `<li class="page-item${
-                        pagination.page === page ? ' active' : ''
-                    }" data-page="${page}"><a class="page-link" href="#">${page}</a></li>`
-            )
-            .join('')}
+        ${templateRender.list(
+            pages,
+            page =>
+                `<li class="page-item${
+                    pagination.page === page ? ' active' : ''
+                }" data-page="${page}"><a class="page-link" href="#">${page}</a></li>`
+        )}
         <li class="page-item${
             pagination.page < pages.length - 1 ? '' : ' disabled'
         }" data-page="${pagination.page + 1}">
@@ -213,15 +226,17 @@ const loadData = options => {
             bindTableEvents()
         })
         .catch(err => {
+            console.log(err)
             view.renderErrorTable(err)
         })
 }
 
 // Event handlers
 const handleSearch = event => {
+    const { value } = event.target
     loadData({
-        sort: state.sort,
-        [props.searchBy]: event.target.value
+        order: state.sort,
+        [props.searchBy]: value
     })
 }
 
@@ -234,7 +249,7 @@ const handleSort = event => {
     state.sort = `${sort},${order}`
 
     loadData({
-        sort: state.sort,
+        order: state.sort,
         page: $dom.pagination.find('.active').data().page,
         [props.searchBy]: $dom.search.val()
     })
@@ -262,12 +277,13 @@ const handlePageChange = event => {
     const { page } = $(event.currentTarget).data()
     loadData({
         page,
-        sort: state.sort,
+        order: state.sort,
         [props.searchBy]: $dom.search.val()
     })
 }
 
 const dataTable = {
+    resourceAction,
     init(configProps) {
         props = { ...props, ...configProps }
         $(() => {
