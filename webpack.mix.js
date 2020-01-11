@@ -15,3 +15,8 @@ mix.js('resources/js/admin/app.js', 'public/admin-assets/js').sass(
     'resources/sass/admin/app.scss',
     'public/admin-assets/css'
 )
+
+mix.js('resources/js/public/app.js', 'public/assets/js').sass(
+    'resources/sass/public/app.scss',
+    'public/assets/css'
+)

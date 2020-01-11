@@ -11,15 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return 123; //auth()->user()->load('activities');
-});
 
-
-// Route::get('/home', 'HomeController@index')->name('home');
+Route::get('', 'PageController@index')->name('home');
 
 Auth::routes([ 'register' => false ]);
-
 
 // Admin routes
 Route::group(
