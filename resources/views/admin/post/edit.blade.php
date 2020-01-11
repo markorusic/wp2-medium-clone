@@ -15,7 +15,6 @@
                     'name' => 'title',
                     'label' => 'Title',
                     'placeholder' => 'Enter post title',
-                    'required' => true,
                     'value' => $post->title
                 ],
                 // [
@@ -29,7 +28,6 @@
                     'name' => 'content',
                     'label' => 'Markdown Content',
                     'placeholder' => 'Enter markdown',
-                    'required' => true,
                     'value' => $post->content
                 ]
             ]

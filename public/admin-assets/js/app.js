@@ -60194,7 +60194,7 @@ _shared_router__WEBPACK_IMPORTED_MODULE_3__["default"].match('/admin/posts/:id/e
 
   new SimpleMDE({
     autoDownloadFontAwesome: false,
-    element: document.getElementById('content')
+    element: document.querySelector('[name="content"]')
   });
 });
 

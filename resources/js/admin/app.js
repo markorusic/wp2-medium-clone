@@ -21,6 +21,6 @@ router.match('/admin/posts/:id/edit', () => {
 
     new SimpleMDE({
         autoDownloadFontAwesome: false,
-        element: document.getElementById('content')
+        element: document.querySelector('[name="content"]')
     })
 })
