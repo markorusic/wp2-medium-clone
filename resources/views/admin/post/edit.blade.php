@@ -28,6 +28,7 @@
                     'name' => 'content',
                     'label' => 'Markdown Content',
                     'placeholder' => 'Enter markdown',
+                    'style' => 'display: none;',
                     'value' => $post->content
                 ]
             ]

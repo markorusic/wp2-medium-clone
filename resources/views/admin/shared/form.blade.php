@@ -26,9 +26,6 @@
 			$type = $field->get('type', 'text');
 			$props = $field->except(['label', 'options', 'containerClass']);
 		@endphp
-		<pre>
-			{{ json_encode(stringifyProps($props)) }}
-		</pre>
 		<div class="form-group col-12 {{ $field->get('containerClass', '') }}">
 			@if ($field->has('label'))
 				<label for="{{ $field->get('id') }}">
