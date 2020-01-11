@@ -13,23 +13,22 @@
             'fields' => [
                 [
                     'name' => 'title',
-                    'label' => 'Post title',
+                    'label' => 'Title',
                     'placeholder' => 'Enter post title',
-                    'required' => true,
                     'value' => $post->title
                 ],
-                [
-                    'type' => 'photo',
-                    'name' => 'main_photo',
-                    'label' => 'Post main photo',
-                    'value' => $post->main_photo
-                ],
+                // [
+                //     'type' => 'photo',
+                //     'name' => 'main_photo',
+                //     'label' => 'Post main photo',
+                //     'value' => $post->main_photo
+                // ],
                 [
                     'type' => 'textarea',
                     'name' => 'content',
-                    'label' => 'Post content',
-                    'placeholder' => 'Enter post content',
-                    'required' => true,
+                    'label' => 'Markdown Content',
+                    'placeholder' => 'Enter markdown',
+                    'style' => 'display: none;',
                     'value' => $post->content
                 ]
             ]
