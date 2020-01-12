@@ -14409,3 +14409,13 @@ a.text-dark:focus {
   clip: auto;
 }
 
+.page-link {
+  color: black;
+}
+
+.page-item.active .page-link {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
