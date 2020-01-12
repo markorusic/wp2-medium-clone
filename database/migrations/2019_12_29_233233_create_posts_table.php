@@ -17,8 +17,10 @@ class CreatePostsTable extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
             $table->string('title', 100);
+            $table->string('description');
             $table->longText('content');
             $table->text('main_photo');
+            $table->bigInteger('read_count')->default(0);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
                 ->references('id')

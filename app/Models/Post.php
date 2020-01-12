@@ -10,7 +10,7 @@ class Post extends Model
 
     use ModelQuery;
 
-    protected $fillable = ['title', 'content'];
+    protected $fillable = ['title', 'content', 'description', 'main_photo'];
 
     public function user() {
         return $this->belongsTo('App\Models\User');

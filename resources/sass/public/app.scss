@@ -1,0 +1,33 @@
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+// Font Awesome
+@import '~font-awesome/scss/font-awesome';
+
+$primary-color: #28a745;
+
+// Overwrites
+.page-link {
+    color: black;
+    &:hover {
+        color: $primary-color;
+    }
+    &:focus {
+        box-shadow: inset 0 -1px 0 #ddd;
+    }
+}
+
+.page-item.active .page-link {
+    color: #fff;
+    background-color: $primary-color;
+    border-color: $primary-color;
+}
+
+.pointer {
+    cursor: pointer;
+    transition: all 0.5s;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
