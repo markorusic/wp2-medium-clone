@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&subset=cyrillic,cyrillic-ext,latin-ext);@charset "UTF-8";
+@charset "UTF-8";
 
 /*!
  * Bootstrap v4.4.1 (https://getbootstrap.com/)
@@ -14413,9 +14413,27 @@ a.text-dark:focus {
   color: black;
 }
 
+.page-link:hover {
+  color: #28a745;
+}
+
+.page-link:focus {
+  box-shadow: inset 0 -1px 0 #ddd;
+}
+
 .page-item.active .page-link {
   color: #fff;
-  background-color: #6c757d;
-  border-color: #6c757d;
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.pointer {
+  cursor: pointer;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+.pointer:hover {
+  opacity: 0.8;
 }
 

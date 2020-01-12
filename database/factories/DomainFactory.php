@@ -34,17 +34,22 @@ $factory->define(Category::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
         'description' => $faker->realText($maxNbChars = 30, $indexSize = 2),
+        'main_photo' => $faker->imageUrl($width = 640, $height = 480),
         'created_at' => now(),
         'updated_at' => now()
     ];
 });
 
 $factory->define(Post::class, function (Faker $faker) {
+    $created_at = now()->subDays(mt_rand(1, 30))->toDateTimeString();
     return [
         'title' => $faker->realText($maxNbChars = 15, $indexSize = 2),
-        'description' => $faker->realText($maxNbChars = 100, $indexSize = 2),
+        'description' => $faker->realText($maxNbChars = 220, $indexSize = 2),
         'content' => $faker->realText($maxNbChars = 5000, $indexSize = 2),
-        'main_photo' => $faker->imageUrl($width = 640, $height = 480)
+        'main_photo' => $faker->imageUrl($width = 640, $height = 480),
+        'read_count' => mt_rand(5, 350),
+        'created_at' => $created_at,
+        'updated_at' => $created_at
     ];
 });
 
