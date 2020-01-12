@@ -33,7 +33,7 @@ $factory->define(User::class, function (Faker $faker) {
 $factory->define(Category::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
-        'description' => $faker->realText($maxNbChars = 25, $indexSize = 2),
+        'description' => $faker->realText($maxNbChars = 30, $indexSize = 2),
         'created_at' => now(),
         'updated_at' => now()
     ];
@@ -42,6 +42,7 @@ $factory->define(Category::class, function (Faker $faker) {
 $factory->define(Post::class, function (Faker $faker) {
     return [
         'title' => $faker->realText($maxNbChars = 15, $indexSize = 2),
+        'description' => $faker->realText($maxNbChars = 100, $indexSize = 2),
         'content' => $faker->realText($maxNbChars = 5000, $indexSize = 2),
         'main_photo' => $faker->imageUrl($width = 640, $height = 480)
     ];

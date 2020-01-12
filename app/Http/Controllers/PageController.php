@@ -10,6 +10,7 @@ class PageController extends Controller
 {
     public function index()
     {
-        return view('public.home');
+        $posts = \App\Models\Post::with('user')->paginate();
+        return view('public.home', compact('posts'));
     }
 }

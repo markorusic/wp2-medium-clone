@@ -50,8 +50,11 @@
                                 </div>
                             </li>
                         @else
-                            <li>
-                                <a href="#">{{ __('Sing In') }}</a>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">{{ __('Login') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">{{ __('Register') }}</a>
                             </li>
                         @endauth
                     </ul>
