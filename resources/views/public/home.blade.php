@@ -3,7 +3,7 @@
 @section('content')
     <div class="container py-2">
         <div class="d-flex justify-content-center">
-            <h2>Welcome back, {{ auth()->user()->name }}</h2>
+            <h2>hello</h2>
         </div>
     </div>
 @endsection
