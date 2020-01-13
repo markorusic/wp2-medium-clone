@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Post, Category, Comment};
+use App\Models\{Post, Comment};
 
 use Illuminate\Http\Request;
 

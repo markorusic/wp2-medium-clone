@@ -54,11 +54,29 @@ class User extends Authenticatable
     }
 
     public function followers() {
-        return $this->belongsToMany('App\Models\User', 'followers', 'follower_id', 'followed_id');
+        return $this->belongsToMany('App\Models\User', 'followers', 'followed_id', 'follower_id')->withTimestamps();
     }
 
     public function activities() {
         return $this->hasMany('App\Models\UserActivity');
+    }
+
+     public function follow() {
+        $follower_id = auth()->id();
+        if (is_null($follower_id)) {
+            return false;
+        }
+        if ($this->isFollowing()) {
+            return $this->followers()->detach($follower_id);
+        }
+        return $this->followers()->attach($follower_id);
+    }
+
+    public function isFollowing() {
+        $follower_id = auth()->id();
+        return $this->followers()
+            ->where(compact('follower_id'))
+            ->exists();
     }
 
     public function track($activity) {

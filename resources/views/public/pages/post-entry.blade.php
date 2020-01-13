@@ -44,9 +44,13 @@
                 </a>
             </div>
             @if (auth()->id() !== $post->user->id)
+                @php $isFollowing = $post->user->isFollowing(); @endphp
                 <div>
-                    <a href="#" class="btn btn-outline-success" data-user-action="like">
-                        Follow
+                    <a href="#" class="btn btn{{ $isFollowing ? '' : '-outline' }}-success"
+                        data-user-action="follow"
+                        data-user-id="{{ $post->user->id }}"
+                    >
+                        {{ $isFollowing ? 'Following' : 'Follow' }}
                     </a>
                 </div>
             @endif

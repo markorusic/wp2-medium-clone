@@ -49,11 +49,8 @@ class Post extends Model
         if ($this->likes) {
             return $this->likes->contains('user_id', $user_id);
         }
-        if ($user_id) {
-            return $this->likes()
-                ->where(compact('user_id'))
-                ->exists();
-        }
-        return false;
+        return $this->likes()
+            ->where(compact('user_id'))
+            ->exists();
     }
 }

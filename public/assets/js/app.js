@@ -81972,6 +81972,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_markdown_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared/markdown-editor */ "./resources/js/shared/markdown-editor.js");
 /* harmony import */ var _post_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./post-actions */ "./resources/js/public/post-actions/index.js");
 /* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth */ "./resources/js/public/auth.js");
+/* harmony import */ var _follow_action__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./follow-action */ "./resources/js/public/follow-action.js");
+
 
 
 
@@ -81989,6 +81991,7 @@ _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/:id', funct
   $content.innerHTML = mde.toHTML(mde.value());
   mde.remove();
   _post_actions__WEBPACK_IMPORTED_MODULE_2__["default"].init(id);
+  _follow_action__WEBPACK_IMPORTED_MODULE_4__["default"].init();
 });
 
 /***/ }),
@@ -82015,6 +82018,111 @@ var auth = {
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (auth);
+
+/***/ }),
+
+/***/ "./resources/js/public/follow-action.js":
+/*!**********************************************!*\
+  !*** ./resources/js/public/follow-action.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var await_to_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! await-to-js */ "./node_modules/await-to-js/dist/await-to-js.es5.js");
+/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(toastr__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth */ "./resources/js/public/auth.js");
+/* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../shared/http-service */ "./resources/js/shared/http-service.js");
+/* harmony import */ var _shared_async_event_handler__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../shared/async-event-handler */ "./resources/js/shared/async-event-handler.js");
+
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+
+
+
+
+var onFollowClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_5__["default"])(
+/*#__PURE__*/
+function () {
+  var _ref = _asyncToGenerator(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(event) {
+    var $follow, _$follow$data, userId, _ref2, _ref3, err, isFollowing;
+
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            if (_auth__WEBPACK_IMPORTED_MODULE_3__["default"].isAuthenticated()) {
+              _context.next = 2;
+              break;
+            }
+
+            return _context.abrupt("return", toastr__WEBPACK_IMPORTED_MODULE_2___default.a.info('Login to complete that action.'));
+
+          case 2:
+            $follow = $(event.currentTarget);
+            _$follow$data = $follow.data(), userId = _$follow$data.userId;
+            _context.next = 6;
+            return Object(await_to_js__WEBPACK_IMPORTED_MODULE_1__["default"])(_shared_http_service__WEBPACK_IMPORTED_MODULE_4__["default"].post("/users/".concat(userId, "/follow")));
+
+          case 6:
+            _ref2 = _context.sent;
+            _ref3 = _slicedToArray(_ref2, 1);
+            err = _ref3[0];
+
+            if (!err) {
+              _context.next = 11;
+              break;
+            }
+
+            return _context.abrupt("return", toastr__WEBPACK_IMPORTED_MODULE_2___default.a.error('Error occured during this action!'));
+
+          case 11:
+            isFollowing = $follow.hasClass('btn-success');
+
+            if (isFollowing) {
+              $follow.removeClass('btn-success').addClass('btn-outline-success');
+              $follow.text('Follow');
+            } else {
+              $follow.removeClass('btn-outline-success').addClass('btn-success');
+              $follow.text('Following');
+            }
+
+          case 13:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+
+  return function (_x) {
+    return _ref.apply(this, arguments);
+  };
+}());
+var followAction = {
+  init: function init() {
+    $('[data-user-action="follow"]').on('click', onFollowClick);
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (followAction);
 
 /***/ }),
 

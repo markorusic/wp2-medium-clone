@@ -19,6 +19,8 @@ Route::group([ 'middleware' => ['auth']], function () {
 	Route::post('/posts/{post}/like', 'PostController@like')->name('post-like');
 	Route::post('/posts/{post}/comment', 'PostController@comment')->name('post-comment');
 	Route::delete('/posts/{post}/comment/{comment}/remove', 'PostController@removeComment')->name('post-remove-comment');
+
+	Route::post('/users/{user}/follow', 'UserController@follow')->name('user-follow');
 });
 
 Auth::routes([ 'register' => false ]);
