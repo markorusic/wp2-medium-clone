@@ -3,13 +3,13 @@ import toastr from 'toastr'
 import auth from '../auth'
 import http from '../../shared/http-service'
 import asyncEventHandler from '../../shared/async-event-handler'
-import userActions from './index'
+import postActions from './index'
 
 const onClick = asyncEventHandler(async event => {
     if (!auth.isAuthenticated()) {
         return toastr.info('Login to complete that action.')
     }
-    const [err] = await to(http.post(`/posts/${userActions.postId}/like`))
+    const [err] = await to(http.post(`/posts/${postActions.id}/like`))
     if (err) {
         return toastr.error('Error occured during this action!')
     }

@@ -1,6 +1,6 @@
 import router from '../shared/router'
 import markdownEditor from '../shared/markdown-editor'
-import userActions from './user-actions'
+import postActions from './post-actions'
 import auth from './auth'
 
 window.Popper = require('popper.js').default
@@ -14,5 +14,5 @@ router.match('/posts/:id', ({ id }) => {
     $content.innerHTML = mde.toHTML(mde.value())
     mde.remove()
 
-    userActions.init({ postId: id })
+    postActions.init(id)
 })

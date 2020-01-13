@@ -81970,7 +81970,7 @@ module.exports = function(module) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shared/router */ "./resources/js/shared/router.js");
 /* harmony import */ var _shared_markdown_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared/markdown-editor */ "./resources/js/shared/markdown-editor.js");
-/* harmony import */ var _user_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./user-actions */ "./resources/js/public/user-actions/index.js");
+/* harmony import */ var _post_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./post-actions */ "./resources/js/public/post-actions/index.js");
 /* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth */ "./resources/js/public/auth.js");
 
 
@@ -81988,9 +81988,7 @@ _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/:id', funct
   var $content = document.querySelector('#content');
   $content.innerHTML = mde.toHTML(mde.value());
   mde.remove();
-  _user_actions__WEBPACK_IMPORTED_MODULE_2__["default"].init({
-    postId: id
-  });
+  _post_actions__WEBPACK_IMPORTED_MODULE_2__["default"].init(id);
 });
 
 /***/ }),
@@ -82020,9 +82018,9 @@ var auth = {
 
 /***/ }),
 
-/***/ "./resources/js/public/user-actions/comment.js":
+/***/ "./resources/js/public/post-actions/comment.js":
 /*!*****************************************************!*\
-  !*** ./resources/js/public/user-actions/comment.js ***!
+  !*** ./resources/js/public/post-actions/comment.js ***!
   \*****************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -82039,7 +82037,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../auth */ "./resources/js/public/auth.js");
 /* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../shared/http-service */ "./resources/js/shared/http-service.js");
 /* harmony import */ var _shared_async_event_handler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../shared/async-event-handler */ "./resources/js/shared/async-event-handler.js");
-/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./index */ "./resources/js/public/user-actions/index.js");
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./index */ "./resources/js/public/post-actions/index.js");
 
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
@@ -82084,7 +82082,7 @@ function () {
             $content = $(event.currentTarget).find('[name="content"]');
             content = $content.val();
             _context.next = 6;
-            return Object(await_to_js__WEBPACK_IMPORTED_MODULE_1__["default"])(_shared_http_service__WEBPACK_IMPORTED_MODULE_5__["default"].post("/posts/".concat(_index__WEBPACK_IMPORTED_MODULE_7__["default"].postId, "/comment"), {
+            return Object(await_to_js__WEBPACK_IMPORTED_MODULE_1__["default"])(_shared_http_service__WEBPACK_IMPORTED_MODULE_5__["default"].post("/posts/".concat(_index__WEBPACK_IMPORTED_MODULE_7__["default"].id, "/comment"), {
               content: content
             }));
 
@@ -82142,7 +82140,7 @@ function () {
 
             _$comment$data = $comment.data(), commentId = _$comment$data.commentId;
             _context2.next = 5;
-            return Object(await_to_js__WEBPACK_IMPORTED_MODULE_1__["default"])(_shared_http_service__WEBPACK_IMPORTED_MODULE_5__["default"]["delete"]("/posts/".concat(_index__WEBPACK_IMPORTED_MODULE_7__["default"].postId, "/comment/").concat(commentId, "/remove")));
+            return Object(await_to_js__WEBPACK_IMPORTED_MODULE_1__["default"])(_shared_http_service__WEBPACK_IMPORTED_MODULE_5__["default"]["delete"]("/posts/".concat(_index__WEBPACK_IMPORTED_MODULE_7__["default"].id, "/comment/").concat(commentId, "/remove")));
 
           case 5:
             _ref5 = _context2.sent;
@@ -82182,35 +82180,34 @@ var comment = {
 
 /***/ }),
 
-/***/ "./resources/js/public/user-actions/index.js":
+/***/ "./resources/js/public/post-actions/index.js":
 /*!***************************************************!*\
-  !*** ./resources/js/public/user-actions/index.js ***!
+  !*** ./resources/js/public/post-actions/index.js ***!
   \***************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _like__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./like */ "./resources/js/public/user-actions/like.js");
-/* harmony import */ var _comment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./comment */ "./resources/js/public/user-actions/comment.js");
+/* harmony import */ var _like__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./like */ "./resources/js/public/post-actions/like.js");
+/* harmony import */ var _comment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./comment */ "./resources/js/public/post-actions/comment.js");
 
 
-var userActions = {
-  postId: null,
-  init: function init(_ref) {
-    var postId = _ref.postId;
-    this.postId = postId;
+var postActions = {
+  id: null,
+  init: function init(id) {
+    this.id = id;
     _like__WEBPACK_IMPORTED_MODULE_0__["default"].init();
     _comment__WEBPACK_IMPORTED_MODULE_1__["default"].init();
   }
 };
-/* harmony default export */ __webpack_exports__["default"] = (userActions);
+/* harmony default export */ __webpack_exports__["default"] = (postActions);
 
 /***/ }),
 
-/***/ "./resources/js/public/user-actions/like.js":
+/***/ "./resources/js/public/post-actions/like.js":
 /*!**************************************************!*\
-  !*** ./resources/js/public/user-actions/like.js ***!
+  !*** ./resources/js/public/post-actions/like.js ***!
   \**************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -82225,7 +82222,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../auth */ "./resources/js/public/auth.js");
 /* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/http-service */ "./resources/js/shared/http-service.js");
 /* harmony import */ var _shared_async_event_handler__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../shared/async-event-handler */ "./resources/js/shared/async-event-handler.js");
-/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./index */ "./resources/js/public/user-actions/index.js");
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./index */ "./resources/js/public/post-actions/index.js");
 
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
@@ -82267,7 +82264,7 @@ function () {
 
           case 2:
             _context.next = 4;
-            return Object(await_to_js__WEBPACK_IMPORTED_MODULE_1__["default"])(_shared_http_service__WEBPACK_IMPORTED_MODULE_4__["default"].post("/posts/".concat(_index__WEBPACK_IMPORTED_MODULE_6__["default"].postId, "/like")));
+            return Object(await_to_js__WEBPACK_IMPORTED_MODULE_1__["default"])(_shared_http_service__WEBPACK_IMPORTED_MODULE_4__["default"].post("/posts/".concat(_index__WEBPACK_IMPORTED_MODULE_6__["default"].id, "/like")));
 
           case 4:
             _ref2 = _context.sent;

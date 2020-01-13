@@ -4,7 +4,7 @@ import moment from 'moment'
 import auth from '../auth'
 import http from '../../shared/http-service'
 import asyncEventHandler from '../../shared/async-event-handler'
-import userActions from './index'
+import postActions from './index'
 
 const onCommentSubmit = asyncEventHandler(async event => {
     if (!auth.isAuthenticated()) {
@@ -13,7 +13,7 @@ const onCommentSubmit = asyncEventHandler(async event => {
     const $content = $(event.currentTarget).find('[name="content"]')
     const content = $content.val()
     const [err, { data }] = await to(
-        http.post(`/posts/${userActions.postId}/comment`, { content })
+        http.post(`/posts/${postActions.id}/comment`, { content })
     )
     if (err) {
         return toastr.error('Error occured during this action!')
@@ -60,9 +60,7 @@ const onCommentRemove = asyncEventHandler(async event => {
     if (confirm('Are you sure that you want to delete this comment?')) {
         const { commentId } = $comment.data()
         const [err] = await to(
-            http.delete(
-                `/posts/${userActions.postId}/comment/${commentId}/remove`
-            )
+            http.delete(`/posts/${postActions.id}/comment/${commentId}/remove`)
         )
         if (err) {
             return toastr.error('Error occured during this action!')
