@@ -70,7 +70,7 @@
     <!-- Scripts -->
     <script src="{{ asset('assets/js/app.js') }}"></script>
     <script>
-        window.auth.init({{ auth()->check() ? 'true': 'false' }})
+        window.auth.init(@json(auth()->user()))
         delete window.auth
     </script>
 

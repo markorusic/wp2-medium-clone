@@ -28,6 +28,11 @@ class Post extends Model
         return $this->belongsToMany('App\Models\Category');
     }
 
+    public function comment($content) {
+        $user_id = auth()->id();
+        return $this->comments()->create(compact('user_id', 'content'));
+    }
+
     public function like() {
         if ($this->isLiked()) {
             return $this->likes()->where([

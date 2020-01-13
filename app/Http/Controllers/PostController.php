@@ -17,4 +17,11 @@ class PostController extends Controller
     public function like(Post $post) {
         return $post->like();
     }
+
+    public function comment(Post $post) {
+        abort_unless(request()->validate([
+            'content' => 'required'
+        ]), 400);
+        return $post->comment(request()->input('content'));
+    }
 }

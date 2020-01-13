@@ -3,11 +3,11 @@
 @section('content')
     <div class="px-5 my-4">
         <h1>{{ $post->title }}</h1>
-        <h3 class="text-secondary font-weight-normal mt-3 mb-5">
+        <h4 class="text-secondary font-weight-normal mt-3 mb-5">
             {{ $post->description }}
-        </h3>
+        </h4>
 
-        <div class="d-flex mb-5">
+        <div class="d-flex mb-4">
             <img
                 class="avatar mr-3"
                 src="{{ $post->user->avatar }}"
@@ -43,14 +43,6 @@
                     </span>
                 </a>
             </div>
-            <div class="mr-4">
-                <a href="#" class="text-dark" data-user-action="comment">
-                    <i class="fa fa-comment-o fa-2x"></i>
-                    <span class="text-dark fs-25 ml-1">
-                        {{ $post->comments->count() }}
-                    </span>
-                </a>
-            </div>
             <div>
                 <a href="#" class="btn btn-outline-success" data-user-action="like">
                     Follow
@@ -58,26 +50,39 @@
             </div>
         </div>
 
-        @if ($post->comments->count() > 0)
-            <h3 class="my-5 pb-3 border-bottom">Comments</h3>
-            @foreach ($post->comments as $comment)
-                <div class="d-flex">
-                    <div class="d-flex mb-2">
-                        <img
-                            class="avatar mr-3"
-                            src="{{ $comment->user->avatar }}"
-                            alt="{{ $comment->user->name }}"
-                        >
-                    </div>
-                    <div class="d-flex flex-column mb-4">
-                        <div class="d-flex flex-column">
-                            <span>{{ $comment->user->name }}</span>
-                            <span class="text-secondary">{{ $comment->created_at->format('M d, Y') }}</span>
-                        </div>
-                        <div>{{ $comment->content }}</div>
+        <div class="my-4">
+            <form id="comment-form">
+                <div class="input-group mb-3">
+                    <input type="text" name="content" required class="form-control" placeholder="Write a comment..." aria-label="Write a comment..." aria-describedby="comment-buttom">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-success input-group-text" id="comment-buttom">Submit</button>
                     </div>
                 </div>
-            @endforeach
+            </form>
+        </div>
+
+        @if ($post->comments->count() > 0)
+            <h3 class="mb-5 pb-3 border-bottom">Comments</h3>
+            <div id="comment-list">
+                @foreach ($post->comments as $comment)
+                    <div class="d-flex">
+                        <div class="d-flex mb-2">
+                            <img
+                                class="avatar mr-3"
+                                src="{{ $comment->user->avatar }}"
+                                alt="{{ $comment->user->name }}"
+                            >
+                        </div>
+                        <div class="d-flex flex-column mb-4">
+                            <div class="d-flex flex-column">
+                                <span>{{ $comment->user->name }}</span>
+                                <span class="text-secondary">{{ $comment->created_at->format('M d, Y') }}</span>
+                            </div>
+                            <div>{{ $comment->content }}</div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
         @endif
     </div>
 @endsection

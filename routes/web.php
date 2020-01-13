@@ -17,6 +17,7 @@ Route::get('/posts/{post}', 'PostController@show')->name('post-entry');
 
 Route::group([ 'middleware' => ['auth']], function () {
 	Route::post('/posts/{post}/like', 'PostController@like')->name('post-like');
+	Route::post('/posts/{post}/comment', 'PostController@comment')->name('post-comment');
 });
 
 Auth::routes([ 'register' => false ]);

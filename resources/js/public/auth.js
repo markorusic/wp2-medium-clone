@@ -1,14 +1,11 @@
-let inited = false
-let isAuthenticated = false
+let user = null
 
 const auth = {
-    init(status = false) {
-        if (!inited) {
-            inited = true
-            isAuthenticated = status
-        }
+    init(_user) {
+        user = _user
     },
-    isAuthenticated: () => isAuthenticated
+    isAuthenticated: () => user !== null,
+    getUser: () => user
 }
 
 export default auth
