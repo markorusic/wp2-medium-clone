@@ -14409,6 +14409,10 @@ a.text-dark:focus {
   clip: auto;
 }
 
+a:hover {
+  text-decoration: none;
+}
+
 .page-link {
   color: black;
 }

@@ -27,9 +27,8 @@
             >
         </div>
 
-        <div class="mb-5">
-            {{ $post->content }}
-        </div>
+        <div id="content" class="mb-5"></div>
+        <textarea id="content-ta" class="d-none">{{ $post->content }}</textarea>
 
         @include('public.category.tag-category-list', [
             'categories' => $post->categories

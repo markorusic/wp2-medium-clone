@@ -13,7 +13,7 @@
 
 
 Route::get('', 'PageController@index')->name('home');
-Route::get('/post/{post}', 'PageController@postEntry')->name('post-entry');
+Route::get('/posts/{post}', 'PageController@postEntry')->name('post-entry');
 
 Auth::routes([ 'register' => false ]);
 
