@@ -25,6 +25,7 @@ $factory->define(User::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
         'password' => bcrypt('123456'),
+        'avatar' => $faker->imageUrl($width = 640, $height = 640),
         'remember_token' => Str::random(10),
     ];
 });
@@ -55,6 +56,6 @@ $factory->define(Post::class, function (Faker $faker) {
 
 $factory->define(Comment::class, function (Faker $faker) {
     return [
-        'content' => $faker->realText($maxNbChars = 20, $indexSize = 2),
+        'content' => $faker->realText($maxNbChars = 350, $indexSize = 2),
     ];
 });

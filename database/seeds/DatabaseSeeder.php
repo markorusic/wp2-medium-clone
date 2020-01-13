@@ -17,11 +17,8 @@ class DatabaseSeeder extends Seeder
 
     const NUMBER_OF_COMMENTS_PER_POST = 3;
 
-
-    private static function randomIds($collection) {
-        $length = mt_rand(0, $collection->count());
+    private static function mapIds($collection) {
         return $collection
-            ->random($length)
             ->map(function ($item) { return $item->id; })
             ->toArray();
     }
@@ -56,13 +53,13 @@ class DatabaseSeeder extends Seeder
 
                 // User categories
                 $user->categories()->sync(
-                    self::randomIds($categories)
+                    self::mapIds($categories->shuffle()->take(5))
                 );
 
                 $user->posts->each(function ($post) use ($user, $categories) {
                     // Post categories
                     $post->categories()->sync(
-                        self::randomIds($categories)
+                        self::mapIds($categories->shuffle()->take(5))
                     );
 
                     // Post like

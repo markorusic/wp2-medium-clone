@@ -14427,6 +14427,12 @@ a.text-dark:focus {
   border-color: #28a745;
 }
 
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
 .pointer {
   cursor: pointer;
   -webkit-transition: all 0.5s;
@@ -14434,6 +14440,15 @@ a.text-dark:focus {
 }
 
 .pointer:hover {
-  opacity: 0.8;
+  text-decoration: none;
+  color: #28a745;
+}
+
+.text-black {
+  color: black;
+}
+
+.fs-25 {
+  font-size: 25px;
 }
 
