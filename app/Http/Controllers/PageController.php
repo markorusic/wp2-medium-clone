@@ -22,9 +22,4 @@ class PageController extends Controller
             ->get();
         return view('public.pages.home', compact('categories', 'posts', 'popular_posts'));
     }
-
-    public function postEntry(Post $post) {
-        $post->load(['user', 'comments.user', 'likes', 'categories']);
-        return view('public.pages.post-entry', compact('post'));
-    }
 }

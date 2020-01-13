@@ -13,7 +13,11 @@
 
 
 Route::get('', 'PageController@index')->name('home');
-Route::get('/posts/{post}', 'PageController@postEntry')->name('post-entry');
+Route::get('/posts/{post}', 'PostController@show')->name('post-entry');
+
+Route::group([ 'middleware' => ['auth']], function () {
+	Route::post('/posts/{post}/like', 'PostController@like')->name('post-like');
+});
 
 Auth::routes([ 'register' => false ]);
 

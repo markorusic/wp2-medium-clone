@@ -36,15 +36,15 @@
 
         <div class="d-flex mt-5">
             <div class="mr-4">
-                <a href="#" class="text-danger">
-                    <i class="fa fa-heart fa-2x"></i>
+                <a href="#" class="text-danger" data-user-action="like">
+                    <i class="fa fa-heart{{ $post->isLiked() ? '' : '-o' }} fa-2x"></i>
                     <span class="text-dark fs-25 ml-1">
                         {{ $post->likes->count() }}
                     </span>
                 </a>
             </div>
             <div class="mr-4">
-                <a href="#" class="text-dark">
+                <a href="#" class="text-dark" data-user-action="comment">
                     <i class="fa fa-comment-o fa-2x"></i>
                     <span class="text-dark fs-25 ml-1">
                         {{ $post->comments->count() }}
@@ -52,7 +52,9 @@
                 </a>
             </div>
             <div>
-                <a href="#" class="btn btn-outline-success">Follow</a>
+                <a href="#" class="btn btn-outline-success" data-user-action="like">
+                    Follow
+                </a>
             </div>
         </div>
 

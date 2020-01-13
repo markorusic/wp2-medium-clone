@@ -23,12 +23,14 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
+        "await-to-js": "^2.1.1",
         "dropzone": "^5.5.1",
         "font-awesome": "^4.7.0",
         "highlight.js": "^9.17.1",
         "jquery-serializejson": "^2.9.0",
         "moment": "^2.24.0",
         "simplemde": "^1.11.2",
+        "toastr": "^2.1.4",
         "url-pattern": "^1.0.3"
     }
 }

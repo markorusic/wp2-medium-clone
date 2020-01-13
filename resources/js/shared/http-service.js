@@ -12,6 +12,4 @@ if (token) {
     )
 }
 
-export default {
-    ...axios
-}
+export default axios

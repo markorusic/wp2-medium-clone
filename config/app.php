@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => 'Hackerlog', // env('APP_NAME', 'Laravel'),
+    'name' => 'Medium Clone', // env('APP_NAME', 'Laravel'),
 
     /*
     |--------------------------------------------------------------------------
