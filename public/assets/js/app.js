@@ -82061,7 +82061,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
-var onSubmit = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_6__["default"])(
+var onCommentSubmit = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_6__["default"])(
 /*#__PURE__*/
 function () {
   var _ref = _asyncToGenerator(
@@ -82104,11 +82104,12 @@ function () {
           case 12:
             user = _auth__WEBPACK_IMPORTED_MODULE_4__["default"].getUser();
             $commentList = $('#comment-list');
-            commentHTML = "\n        <div class=\"d-flex\">\n            <div class=\"d-flex mb-2\">\n                <img\n                    class=\"avatar mr-3\"\n                    src=\"".concat(user.avatar, "\"\n                    alt=\"").concat(user.name, "\"\n                >\n            </div>\n            <div class=\"d-flex flex-column mb-4\">\n                <div class=\"d-flex flex-column\">\n                    <span>").concat(user.name, "</span>\n                    <span class=\"text-secondary\">\n                        ").concat(moment__WEBPACK_IMPORTED_MODULE_3___default()(data.created_at).format('MMM d, Y'), "\n                    </span>\n                </div>\n                <div>").concat(content, "</div>\n            </div>\n        </div>\n    ");
-            $commentList.prepend(commentHTML);
+            commentHTML = "\n        <div class=\"d-flex\" data-comment-id=\"".concat(data.id, "\">\n            <div class=\"d-flex mb-2\">\n                <img\n                    class=\"avatar mr-3\"\n                    src=\"").concat(user.avatar, "\"\n                    alt=\"").concat(user.name, "\"\n                >\n            </div>\n            <div class=\"d-flex flex-column mb-4 w-100\">\n                <div class=\"d-flex flex-column\">\n                    <div class=\"d-flex justify-content-between\">\n                        <span>").concat(user.name, "</span>\n                        <a href=\"#\" class=\"text-dark\" data-user-action=\"remove-comment\">\n                            <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n                        </a>\n                    </div>\n                    <span class=\"text-secondary\">\n                        ").concat(moment__WEBPACK_IMPORTED_MODULE_3___default()(data.created_at).format('MMM D, Y'), "\n                    </span>\n                </div>\n                <div>").concat(content, "</div>\n            </div>\n        </div>\n    ");
             $content.val('');
+            $commentList.prepend(commentHTML);
+            $commentList.children().first().find('[data-user-action="remove-comment"]').on('click', onCommentRemove);
 
-          case 17:
+          case 18:
           case "end":
             return _context.stop();
         }
@@ -82120,9 +82121,61 @@ function () {
     return _ref.apply(this, arguments);
   };
 }());
+var onCommentRemove = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_6__["default"])(
+/*#__PURE__*/
+function () {
+  var _ref4 = _asyncToGenerator(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(event) {
+    var $comment, _$comment$data, commentId, _ref5, _ref6, err;
+
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            $comment = $(event.currentTarget).closest('[data-comment-id]');
+
+            if (!confirm('Are you sure that you want to delete this comment?')) {
+              _context2.next = 12;
+              break;
+            }
+
+            _$comment$data = $comment.data(), commentId = _$comment$data.commentId;
+            _context2.next = 5;
+            return Object(await_to_js__WEBPACK_IMPORTED_MODULE_1__["default"])(_shared_http_service__WEBPACK_IMPORTED_MODULE_5__["default"]["delete"]("/posts/".concat(_index__WEBPACK_IMPORTED_MODULE_7__["default"].postId, "/comment/").concat(commentId, "/remove")));
+
+          case 5:
+            _ref5 = _context2.sent;
+            _ref6 = _slicedToArray(_ref5, 1);
+            err = _ref6[0];
+
+            if (!err) {
+              _context2.next = 10;
+              break;
+            }
+
+            return _context2.abrupt("return", toastr__WEBPACK_IMPORTED_MODULE_2___default.a.error('Error occured during this action!'));
+
+          case 10:
+            toastr__WEBPACK_IMPORTED_MODULE_2___default.a.success('Successfully deleted!');
+            $comment.remove();
+
+          case 12:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+
+  return function (_x2) {
+    return _ref4.apply(this, arguments);
+  };
+}());
 var comment = {
   init: function init() {
-    $('#comment-form').on('submit', onSubmit);
+    $('#comment-form').on('submit', onCommentSubmit);
+    $('#comment-list [data-user-action="remove-comment"]').on('click', onCommentRemove);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (comment);

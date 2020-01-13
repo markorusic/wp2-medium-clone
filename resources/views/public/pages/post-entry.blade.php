@@ -43,11 +43,13 @@
                     </span>
                 </a>
             </div>
-            <div>
-                <a href="#" class="btn btn-outline-success" data-user-action="like">
-                    Follow
-                </a>
-            </div>
+            @if (auth()->id() !== $post->user->id)
+                <div>
+                    <a href="#" class="btn btn-outline-success" data-user-action="like">
+                        Follow
+                    </a>
+                </div>
+            @endif
         </div>
 
         <div class="my-4">
@@ -65,7 +67,7 @@
             <h3 class="mb-5 pb-3 border-bottom">Comments</h3>
             <div id="comment-list">
                 @foreach ($post->comments as $comment)
-                    <div class="d-flex">
+                    <div class="d-flex" data-comment-id="{{ $comment->id }}">
                         <div class="d-flex mb-2">
                             <img
                                 class="avatar mr-3"
@@ -73,9 +75,16 @@
                                 alt="{{ $comment->user->name }}"
                             >
                         </div>
-                        <div class="d-flex flex-column mb-4">
+                        <div class="d-flex flex-column mb-4 w-100">
                             <div class="d-flex flex-column">
-                                <span>{{ $comment->user->name }}</span>
+                                <div class="d-flex justify-content-between">
+                                    <span>{{ $comment->user->name }}</span>
+                                    @if (auth()->id() === $comment->user->id)
+                                        <a href="#" class="text-dark" data-user-action="remove-comment">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </a>
+                                    @endif
+                                </div>
                                 <span class="text-secondary">{{ $comment->created_at->format('M d, Y') }}</span>
                             </div>
                             <div>{{ $comment->content }}</div>
