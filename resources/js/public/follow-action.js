@@ -12,7 +12,6 @@ const onFollowClick = asyncEventHandler(event => {
 
     return http.post(`/users/${userId}/follow`).then(() => {
         const isFollowing = $follow.hasClass('btn-success')
-
         if (isFollowing) {
             $follow.removeClass('btn-success').addClass('btn-outline-success')
             $follow.text('Follow')
