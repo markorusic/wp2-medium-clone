@@ -69,6 +69,10 @@
 
     <!-- Scripts -->
     <script src="{{ asset('assets/js/app.js') }}"></script>
+    <script>
+        window.auth.init(@json(auth()->user()))
+        delete window.auth
+    </script>
 
     @yield('scripts')
 </body>

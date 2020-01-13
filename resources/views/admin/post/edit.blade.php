@@ -6,7 +6,9 @@
     ])
         @include('admin.shared.form', [
             'config' => [
-                'endpoint' => '',
+                'endpoint' => route('admin.posts.update', [
+                    'post' => $post->id
+                ]),
                 'method' => 'put',
                 'resource' => 'post'
             ],

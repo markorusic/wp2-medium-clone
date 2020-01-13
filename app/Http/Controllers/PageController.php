@@ -20,6 +20,6 @@ class PageController extends Controller
             ->orderBy('read_count', 'desc')
             ->take(6)
             ->get();
-        return view('public.home', compact('categories', 'posts', 'popular_posts'));
+        return view('public.pages.home', compact('categories', 'posts', 'popular_posts'));
     }
 }

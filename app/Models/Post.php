@@ -28,6 +28,11 @@ class Post extends Model
         return $this->belongsToMany('App\Models\Category');
     }
 
+    public function comment($content) {
+        $user_id = auth()->id();
+        return $this->comments()->create(compact('user_id', 'content'));
+    }
+
     public function like() {
         if ($this->isLiked()) {
             return $this->likes()->where([
@@ -40,8 +45,12 @@ class Post extends Model
     }
 
     public function isLiked() {
-        return $this->likes()->where([
-            'user_id' => auth()->id()
-        ])->exists();
+        $user_id = auth()->id();
+        if ($this->likes) {
+            return $this->likes->contains('user_id', $user_id);
+        }
+        return $this->likes()
+            ->where(compact('user_id'))
+            ->exists();
     }
 }

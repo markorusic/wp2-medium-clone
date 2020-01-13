@@ -3,11 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Utils\OrderScope;
 
 class Comment extends Model
 {
 
     protected $fillable = ['content', 'user_id', 'post_id'];
+
+    protected static function boot() {
+        parent::boot();
+        static::addGlobalScope(new OrderScope);
+    }
 
     public function user() {
         return $this->belongsTo('App\Models\User');

@@ -10,7 +10,7 @@ const bindEvents = () => {
 const handleFormSubmit = event => {
     event.preventDefault()
     const $form = $(event.target)
-    const validator = new FormValidation($form)
+    const validator = new FormValidation({ $form })
 
     if (validator.validate()) {
         const config = $form.find('.config').data()
