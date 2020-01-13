@@ -60,7 +60,7 @@
         </div>
 
         @if ($post->comments->count() > 0)
-            <h3 class="my-5">Comments</h3>
+            <h3 class="my-5 pb-3 border-bottom">Comments</h3>
             @foreach ($post->comments as $comment)
                 <div class="d-flex">
                     <div class="d-flex mb-2">
