@@ -10,8 +10,7 @@
         <div class="d-flex mb-5">
             <img
                 class="avatar mr-3"
-                {{-- src="{{ $post->user->avatar }}" --}}
-                src="https://miro.medium.com/fit/c/160/160/2*qtsXztfxKoghRmsA-R3qVQ.jpeg"
+                src="{{ $post->user->avatar }}"
                 alt="{{ $post->user->name }}"
             >
             <div class="d-flex flex-column">
@@ -23,8 +22,7 @@
         <div class="d-flex justify-content-center mb-5">
             <img 
                 class="img-fluid"
-                {{-- src="{{ $post->main_photo }}" --}}
-                src="https://miro.medium.com/max/6120/0*qdqEWekIW_KHiu6P"
+                src="{{ $post->main_photo }}"
                 alt="{{ $post->title }}"
             >
         </div>
@@ -66,8 +64,7 @@
                     <div class="d-flex mb-2">
                         <img
                             class="avatar mr-3"
-                            {{-- src="{{ $comment->user->avatar }}" --}}
-                            src="https://miro.medium.com/fit/c/160/160/2*qtsXztfxKoghRmsA-R3qVQ.jpeg"
+                            src="{{ $comment->user->avatar }}"
                             alt="{{ $comment->user->name }}"
                         >
                     </div>

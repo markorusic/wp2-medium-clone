@@ -27,8 +27,7 @@
                         <img
                             class="rounded"
                             style="height: 200px;"
-                            src="https://miro.medium.com/max/6120/0*qdqEWekIW_KHiu6P"
-                            {{-- src="{{ $post->main_photo }}" --}}
+                            src="{{ $post->main_photo }}"
                             alt="{{ $post->title }}"
                         >
                     </a>

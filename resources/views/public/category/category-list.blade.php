@@ -6,8 +6,7 @@
         <div class="pointer d-flex flex-column flex-content-between mb-4" style="width: 32%;">
             <img
                 class="img-fluid rounded"
-                {{-- src="{{ $category->main_photo }}" --}}
-                src="https://miro.medium.com/max/6120/0*qdqEWekIW_KHiu6P"
+                src="{{ $category->main_photo }}"
                 alt="{{ $category->name }}"
             >
             <span class="text-center text-uppercase text-secondary">{{ $category->name }}</span>
