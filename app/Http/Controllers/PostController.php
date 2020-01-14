@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Post, Comment};
+use App\Models\{Post, Comment, Category};
 
 use Illuminate\Http\Request;
 
@@ -19,6 +19,11 @@ class PostController extends Controller
     public function show(Post $post) {
         $post->load(['user', 'comments.user', 'likes', 'categories']);
         return view('public.pages.post-entry', compact('post'));
+    }
+
+    public function categoryPosts(Category $category) {
+        $posts = $category->posts()->paginate(10);
+        return view('public.pages.category-posts', compact('category', 'posts'));
     }
 
     public function like(Post $post) {
