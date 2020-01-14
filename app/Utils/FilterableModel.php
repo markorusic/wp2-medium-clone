@@ -9,8 +9,7 @@ trait FilterableModel
     public function scopeFilter($query, $filters) {
         $filters = collect($filters);
         $order = $filters->get('order');
-        $size = $filters->get('size', 10);
-        $search = $filters->except(['order', 'page', 'size']);
+        $search = $filters->except(['order', 'page']);
 
         $search->keys()->each(function ($key) use ($search, $query) {
             $value = $search->get($key);
@@ -28,7 +27,6 @@ trait FilterableModel
             $query->orderBy($orderTuple[0], $orderTuple[1] ?? 'asc');
         }
 
-        return $query->paginate($size);
+        return $query;
     }
 }
- 

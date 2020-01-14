@@ -21,7 +21,7 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        return Post::filter($request->all());
+        return Post::filter($request->all())->paginate();
     }
     
     /**
