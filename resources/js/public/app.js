@@ -3,7 +3,7 @@ import markdownEditor from '../shared/markdown-editor'
 import postActions from './post-actions'
 import auth from './auth'
 import followAction from './follow-action'
-import navbarPostSearch from './post-navbar-search'
+import navbarSearch from './navbar-search'
 
 window.Popper = require('popper.js').default
 window.$ = window.jQuery = require('jquery')
@@ -11,7 +11,7 @@ require('bootstrap')
 window.auth = auth
 
 document.addEventListener('DOMContentLoaded', () => {
-    navbarPostSearch.init()
+    navbarSearch.init()
 })
 
 router.match('/posts/:id', ({ id }) => {

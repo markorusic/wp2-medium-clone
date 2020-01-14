@@ -81808,7 +81808,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _post_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./post-actions */ "./resources/js/public/post-actions/index.js");
 /* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth */ "./resources/js/public/auth.js");
 /* harmony import */ var _follow_action__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./follow-action */ "./resources/js/public/follow-action.js");
-/* harmony import */ var _post_navbar_search__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./post-navbar-search */ "./resources/js/public/post-navbar-search.js");
+/* harmony import */ var _navbar_search__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./navbar-search */ "./resources/js/public/navbar-search.js");
 
 
 
@@ -81822,7 +81822,7 @@ __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap
 
 window.auth = _auth__WEBPACK_IMPORTED_MODULE_3__["default"];
 document.addEventListener('DOMContentLoaded', function () {
-  _post_navbar_search__WEBPACK_IMPORTED_MODULE_5__["default"].init();
+  _navbar_search__WEBPACK_IMPORTED_MODULE_5__["default"].init();
 });
 _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/:id', function (_ref) {
   var id = _ref.id;
@@ -81907,6 +81907,127 @@ var followAction = {
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (followAction);
+
+/***/ }),
+
+/***/ "./resources/js/public/navbar-search.js":
+/*!**********************************************!*\
+  !*** ./resources/js/public/navbar-search.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared/http-service */ "./resources/js/shared/http-service.js");
+/* harmony import */ var _shared_template_render__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/template-render */ "./resources/js/shared/template-render.js");
+
+
+
+var $search = {
+  button: null,
+  input: null,
+  results: null
+};
+
+var onToggleClick = function onToggleClick(event) {
+  event.preventDefault();
+
+  if ($search.input.hasClass('slide-in')) {
+    $search.input.removeClass('slide-in').addClass('slide-out');
+    $search.results.addClass('d-none');
+    $search.input.blur();
+  } else {
+    $search.input.removeClass('slide-out').addClass('slide-in');
+    $search.input.focus();
+
+    if ($search.results.find('[data-content]').children().length > 0) {
+      $search.results.removeClass('d-none');
+    }
+  }
+};
+
+var searchItemTemplate = function searchItemTemplate(item) {
+  return "\n    <a class=\"d-flex pointer text-dark\" href=\"".concat(item.url, "\">\n        <img class=\"avatar-sm mr-3 mb-2\" src=\"").concat(item.img, "\" alt=\"").concat(item.title, "\" />\n        <span>").concat(item.title, "</span>\n    </a>\n");
+};
+
+var searchItemsTemplate = function searchItemsTemplate(title) {
+  var items = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  return _shared_template_render__WEBPACK_IMPORTED_MODULE_2__["default"]["if"](items.length > 0, "<div>\n            <div class=\"d-flex flex-column justify-content-between pb-2 border-bottom\">\n                <h3 class=\"m-0\">".concat(title, "</h3>\n            </div>\n            <div class=\"d-flex flex-column py-2\" data-content>\n                ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_2__["default"].list(items, searchItemTemplate), "\n            </div>\n        </div>"));
+};
+
+var onSearchPress = function onSearchPress(event) {
+  var term = event.target.value;
+  var isEsc = event.keyCode === 27;
+
+  if (isEsc) {
+    return onToggleClick(event);
+  }
+
+  if (term === '') {
+    return $search.results.html('').addClass('d-none');
+  }
+
+  var config = {
+    params: {
+      term: term,
+      size: 3
+    }
+  };
+  _shared_http_service__WEBPACK_IMPORTED_MODULE_1__["default"].get('/content/search', config).then(function (response) {
+    var _response$data = response.data,
+        posts = _response$data.posts,
+        users = _response$data.users,
+        categories = _response$data.categories;
+    var noData = posts.data.length === 0 && users.data.length === 0 && categories.data.length === 0;
+
+    if (noData) {
+      return $search.results.addClass('d-none').html('');
+    }
+
+    $search.results.removeClass('d-none').html("\n            ".concat(searchItemsTemplate('Posts', posts.data.map(function (_ref) {
+      var id = _ref.id,
+          title = _ref.title,
+          main_photo = _ref.main_photo;
+      return {
+        title: title,
+        url: "/posts/".concat(id),
+        img: main_photo
+      };
+    })), "\n            ").concat(searchItemsTemplate('Users', users.data.map(function (_ref2) {
+      var id = _ref2.id,
+          name = _ref2.name,
+          avatar = _ref2.avatar;
+      return {
+        title: name,
+        url: "/users/".concat(id),
+        img: avatar
+      };
+    })), "\n            ").concat(searchItemsTemplate('Categories', categories.data.map(function (_ref3) {
+      var id = _ref3.id,
+          name = _ref3.name,
+          main_photo = _ref3.main_photo;
+      return {
+        title: name,
+        url: "/posts/category/".concat(id),
+        img: main_photo
+      };
+    })), "\n        "));
+  });
+};
+
+var navbarSearch = {
+  init: function init() {
+    $search.button = $('#navbar-search-toggle');
+    $search.input = $('#navbar-search-input');
+    $search.results = $('#navbar-search-results');
+    $search.button.on('click', onToggleClick);
+    $search.input.on('keyup', lodash_debounce__WEBPACK_IMPORTED_MODULE_0___default()(onSearchPress, 400));
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (navbarSearch);
 
 /***/ }),
 
@@ -82046,127 +82167,6 @@ var like = {
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (like);
-
-/***/ }),
-
-/***/ "./resources/js/public/post-navbar-search.js":
-/*!***************************************************!*\
-  !*** ./resources/js/public/post-navbar-search.js ***!
-  \***************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
-/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared/http-service */ "./resources/js/shared/http-service.js");
-/* harmony import */ var _shared_template_render__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/template-render */ "./resources/js/shared/template-render.js");
-
-
-
-var $search = {
-  button: null,
-  input: null,
-  results: null
-};
-
-var onToggleClick = function onToggleClick(event) {
-  event.preventDefault();
-
-  if ($search.input.hasClass('slide-in')) {
-    $search.input.removeClass('slide-in').addClass('slide-out');
-    $search.results.addClass('d-none');
-    $search.input.blur();
-  } else {
-    $search.input.removeClass('slide-out').addClass('slide-in');
-    $search.input.focus();
-
-    if ($search.results.find('[data-content]').children().length > 0) {
-      $search.results.removeClass('d-none');
-    }
-  }
-};
-
-var searchItemTemplate = function searchItemTemplate(item) {
-  return "\n    <a class=\"d-flex pointer text-dark\" href=\"".concat(item.url, "\">\n        <img class=\"avatar-sm mr-3 mb-2\" src=\"").concat(item.img, "\" alt=\"").concat(item.title, "\" />\n        <span>").concat(item.title, "</span>\n    </a>\n");
-};
-
-var searchItemsTemplate = function searchItemsTemplate(title) {
-  var items = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-  return _shared_template_render__WEBPACK_IMPORTED_MODULE_2__["default"]["if"](items.length > 0, "<div>\n            <div class=\"d-flex flex-column justify-content-between pb-2 border-bottom\">\n                <h3 class=\"m-0\">".concat(title, "</h3>\n            </div>\n            <div class=\"d-flex flex-column py-2\" data-content>\n                ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_2__["default"].list(items, searchItemTemplate), "\n            </div>\n        </div>"));
-};
-
-var onSearchPress = function onSearchPress(event) {
-  var term = event.target.value;
-  var isEsc = event.keyCode === 27;
-
-  if (isEsc) {
-    return onToggleClick(event);
-  }
-
-  if (term === '') {
-    return $search.results.html('').addClass('d-none');
-  }
-
-  var config = {
-    params: {
-      term: term,
-      size: 3
-    }
-  };
-  _shared_http_service__WEBPACK_IMPORTED_MODULE_1__["default"].get('/content/search', config).then(function (response) {
-    var _response$data = response.data,
-        posts = _response$data.posts,
-        users = _response$data.users,
-        categories = _response$data.categories;
-    var noData = posts.data.length === 0 && users.data.length === 0 && categories.data.length === 0;
-
-    if (noData) {
-      return $search.results.addClass('d-none').html('');
-    }
-
-    $search.results.removeClass('d-none').html("\n            ".concat(searchItemsTemplate('Posts', posts.data.map(function (_ref) {
-      var id = _ref.id,
-          title = _ref.title,
-          main_photo = _ref.main_photo;
-      return {
-        title: title,
-        url: "/posts/".concat(id),
-        img: main_photo
-      };
-    })), "\n            ").concat(searchItemsTemplate('Users', users.data.map(function (_ref2) {
-      var id = _ref2.id,
-          name = _ref2.name,
-          avatar = _ref2.avatar;
-      return {
-        title: name,
-        url: "/users/".concat(id),
-        img: avatar
-      };
-    })), "\n            ").concat(searchItemsTemplate('Categories', categories.data.map(function (_ref3) {
-      var id = _ref3.id,
-          name = _ref3.name,
-          main_photo = _ref3.main_photo;
-      return {
-        title: name,
-        url: "/posts/category/".concat(id),
-        img: main_photo
-      };
-    })), "\n        "));
-  });
-};
-
-var navbarPostSearch = {
-  init: function init() {
-    $search.button = $('#navbar-search-toggle');
-    $search.input = $('#navbar-search-input');
-    $search.results = $('#navbar-search-results');
-    $search.button.on('click', onToggleClick);
-    $search.input.on('keyup', lodash_debounce__WEBPACK_IMPORTED_MODULE_0___default()(onSearchPress, 400));
-  }
-};
-/* harmony default export */ __webpack_exports__["default"] = (navbarPostSearch);
 
 /***/ }),
 

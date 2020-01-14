@@ -96,7 +96,7 @@ const onSearchPress = event => {
     })
 }
 
-const navbarPostSearch = {
+const navbarSearch = {
     init() {
         $search.button = $('#navbar-search-toggle')
         $search.input = $('#navbar-search-input')
@@ -107,4 +107,4 @@ const navbarPostSearch = {
     }
 }
 
-export default navbarPostSearch
+export default navbarSearch
