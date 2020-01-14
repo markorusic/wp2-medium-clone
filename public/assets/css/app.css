@@ -14723,6 +14723,12 @@ input[type=number]:active,
   border-radius: 50%;
 }
 
+.avatar-sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
 .pointer {
   cursor: pointer;
   -webkit-transition: all 0.5s;
@@ -14738,7 +14744,75 @@ input[type=number]:active,
   color: black;
 }
 
+.bg-white {
+  background-color: white;
+}
+
 .fs-25 {
   font-size: 25px;
+}
+
+#navbar-search-input {
+  width: 0;
+}
+
+#navbar-search-results {
+  top: 40px;
+  width: 250px;
+  z-index: 9999;
+}
+
+.slide-in {
+  -webkit-animation: slide-in 0.5s;
+          animation: slide-in 0.5s;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+.slide-out {
+  -webkit-animation: slide-out 0.5s;
+          animation: slide-out 0.5s;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes slide-in {
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 150px;
+  }
+}
+
+@keyframes slide-in {
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 150px;
+  }
+}
+
+@-webkit-keyframes slide-out {
+  0% {
+    width: 150px;
+  }
+
+  100% {
+    width: 0;
+  }
+}
+
+@keyframes slide-out {
+  0% {
+    width: 150px;
+  }
+
+  100% {
+    width: 0;
+  }
 }
 

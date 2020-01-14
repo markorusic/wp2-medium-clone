@@ -13,9 +13,9 @@
 
 
 Route::get('', 'PageController@index')->name('home');
-Route::get('/posts', 'PostController@index')->name('posts');
 Route::get('/posts/{post}', 'PostController@show')->name('post-entry');
 Route::get('/posts/category/{category}', 'PostController@categoryPosts')->name('category-posts');
+Route::get('/content/search', 'SearchController@contentSearch')->name('content-search');
 
 Route::group([ 'middleware' => ['auth']], function () {
 	Route::post('/posts/{post}/like', 'PostController@like')->name('post-like');
@@ -25,7 +25,7 @@ Route::group([ 'middleware' => ['auth']], function () {
 	Route::post('/users/{user}/follow', 'UserController@follow')->name('user-follow');
 });
 
-Auth::routes([ 'register' => false ]);
+Auth::routes();
 
 // Admin routes
 Route::group(

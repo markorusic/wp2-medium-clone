@@ -54,6 +54,12 @@ input[type='number'],
     border-radius: 50%;
 }
 
+.avatar-sm {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
 .pointer {
     cursor: pointer;
     transition: all 0.5s;
@@ -68,6 +74,46 @@ input[type='number'],
     color: black;
 }
 
+.bg-white {
+    background-color: white;
+}
+
 .fs-25 {
     font-size: 25px;
+}
+
+#navbar-search-input {
+    width: 0;
+}
+#navbar-search-results {
+    top: 40px;
+    width: 250px;
+    z-index: 9999;
+}
+.slide-in {
+    animation: slide-in 0.5s;
+    animation-fill-mode: forwards;
+}
+
+.slide-out {
+    animation: slide-out 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes slide-in {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 150px;
+    }
+}
+
+@keyframes slide-out {
+    0% {
+        width: 150px;
+    }
+    100% {
+        width: 0;
+    }
 }

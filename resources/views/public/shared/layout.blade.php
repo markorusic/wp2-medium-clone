@@ -31,6 +31,13 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        <li class="nav-item d-flex align-items-center position-relative">
+                            <a id="navbar-search-toggle" class="text-dark mr-2" href="#">
+                                <i class="fa fa-search"></i>
+                            </a>
+                            <input id="navbar-search-input" type="text" class="form-control border-0 p-0" placeholder="Search...">
+                            <div id="navbar-search-results" class="position-absolute border px-3 py-2 bg-white d-none"></div>
+                        </li>
                         @auth
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -51,10 +58,7 @@
                             </li>
                         @else
                             <li class="nav-item">
-                                <a class="nav-link" href="#">{{ __('Login') }}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">{{ __('Register') }}</a>
+                                <a class="nav-link" href="#">{{ __('Sign in') }}</a>
                             </li>
                         @endauth
                     </ul>
