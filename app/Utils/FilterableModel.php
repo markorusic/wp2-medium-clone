@@ -9,7 +9,7 @@ trait FilterableModel
     public function scopeFilter($query, $filters) {
         $filters = collect($filters);
         $order = $filters->get('order');
-        $search = $filters->except(['order', 'page']);
+        $search = $filters->except(['order', 'page', 'size']);
 
         $search->keys()->each(function ($key) use ($search, $query) {
             $value = $search->get($key);
@@ -30,3 +30,4 @@ trait FilterableModel
         return $query;
     }
 }
+ 
