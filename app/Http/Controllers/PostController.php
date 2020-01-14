@@ -22,7 +22,7 @@ class PostController extends Controller
     }
 
     public function categoryPosts(Category $category) {
-        $posts = $category->posts()->paginate(10);
+        $posts = $category->posts()->with('user')->paginate(10);
         return view('public.pages.category-posts', compact('category', 'posts'));
     }
 
