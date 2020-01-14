@@ -26,9 +26,8 @@ class PostController extends Controller
     }
 
     public function removeComment(Post $post, Comment $comment) {
-        $comment->load('user');
         $user_id = auth()->id();
-        if ($comment->user->id !== $user_id) {
+        if ($comment->user_id !== $user_id) {
             return response('Comment does not belong to user!', 403);
         }
         abort_unless($comment->delete(), 404);
