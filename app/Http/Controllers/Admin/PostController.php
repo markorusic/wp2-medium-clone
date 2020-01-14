@@ -21,7 +21,7 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        return Post::queryDsl();
+        return Post::filter($request->all())->paginate();
     }
     
     /**
