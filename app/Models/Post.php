@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Utils\{ModelQuery, OrderScope};
+use App\Utils\{FilterableModel, OrderScope};
 
 class Post extends Model
 {
 
-    use ModelQuery;
+    use FilterableModel;
 
     protected $fillable = ['title', 'content', 'description', 'main_photo'];
 
