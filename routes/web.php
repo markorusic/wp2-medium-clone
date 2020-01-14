@@ -15,6 +15,7 @@
 Route::get('', 'PageController@index')->name('home');
 Route::get('/posts', 'PostController@index')->name('posts');
 Route::get('/posts/{post}', 'PostController@show')->name('post-entry');
+Route::get('/posts/category/{category}', 'PostController@categoryPosts')->name('category-posts');
 
 Route::group([ 'middleware' => ['auth']], function () {
 	Route::post('/posts/{post}/like', 'PostController@like')->name('post-like');
