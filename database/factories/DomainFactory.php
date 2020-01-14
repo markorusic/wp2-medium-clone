@@ -51,7 +51,6 @@ $factory->define(Post::class, function (Faker $faker) {
         'content' => $faker->realText($maxNbChars = 5000, $indexSize = 2),
         // 'main_photo' => $faker->imageUrl($width = 640, $height = 480),
         'main_photo' => 'https://miro.medium.com/max/6120/0*qdqEWekIW_KHiu6P',
-        'read_count' => mt_rand(5, 350),
         'created_at' => $created_at,
         'updated_at' => $created_at
     ];
