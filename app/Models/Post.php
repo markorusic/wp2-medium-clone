@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Utils\ModelQuery;
+use App\Utils\{ModelQuery, OrderScope};
 
 class Post extends Model
 {
@@ -11,6 +11,18 @@ class Post extends Model
     use ModelQuery;
 
     protected $fillable = ['title', 'content', 'description', 'main_photo'];
+
+    protected static function boot() {
+        parent::boot();
+        static::addGlobalScope(new OrderScope);
+    }
+
+    public function scopePopular($query) {
+        $query
+            ->withCount('likes')
+            ->orderBy('likes_count', 'desc')
+            ->where('created_at', '>=', now()->subDays(15)->toDateTimeString());
+    }
 
     public function user() {
         return $this->belongsTo('App\Models\User');
