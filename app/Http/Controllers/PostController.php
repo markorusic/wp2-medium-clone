@@ -9,13 +9,6 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-
-    public function index(Request $request) {
-        return Post::filter($request->all())->paginate(
-            $request->get('size', 10)
-        );
-    }
-
     public function show(Post $post) {
         $post->load(['user', 'comments.user', 'likes', 'categories']);
         return view('public.pages.post-entry', compact('post'));
