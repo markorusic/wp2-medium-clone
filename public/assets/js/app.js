@@ -81398,7 +81398,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var onClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_3__["default"])(function (event) {
+var onLikeClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_3__["default"])(function (event) {
   if (!_auth__WEBPACK_IMPORTED_MODULE_1__["default"].isAuthenticated()) {
     return toastr__WEBPACK_IMPORTED_MODULE_0___default.a.info('Login to complete that action.');
   }
@@ -81420,7 +81420,7 @@ var onClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_3__["d
 });
 var like = {
   init: function init() {
-    $('[data-user-action="like"]').on('click', onClick);
+    $('[data-user-action="like"]').on('click', onLikeClick);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (like);

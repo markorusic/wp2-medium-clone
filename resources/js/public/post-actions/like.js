@@ -4,7 +4,7 @@ import http from '../../shared/http-service'
 import asyncEventHandler from '../../shared/async-event-handler'
 import postActions from './index'
 
-const onClick = asyncEventHandler(event => {
+const onLikeClick = asyncEventHandler(event => {
     if (!auth.isAuthenticated()) {
         return toastr.info('Login to complete that action.')
     }
@@ -26,7 +26,7 @@ const onClick = asyncEventHandler(event => {
 
 const like = {
     init() {
-        $('[data-user-action="like"]').on('click', onClick)
+        $('[data-user-action="like"]').on('click', onLikeClick)
     }
 }
 
