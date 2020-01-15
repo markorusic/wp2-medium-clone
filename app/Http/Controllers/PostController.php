@@ -19,6 +19,11 @@ class PostController extends Controller
         return view('public.pages.category-posts', compact('category', 'posts'));
     }
 
+    public function popularPosts() {
+        $posts = Post::with('user')->popular()->paginate();
+        return view('public.pages.popular-posts', compact('posts'));
+    }
+
     public function like(Post $post) {
         return $post->like();
     }

@@ -13,7 +13,7 @@
     </div>
 @endforeach
 <div class="text-right">
-    <a class="text-success text-uppercase font-weight-bold" href="#">
+    <a href="{{ route('posts.popular') }}" class="text-success text-uppercase font-weight-bold">
         {{ __('See more') }}
         <i class="fa fa-chevron-right" style="font-size: 14px"></i>
     </a>
