@@ -94,31 +94,6 @@
 						</div>
 			        </div>
 			    @break
-				@case('gallery')
-					<div class="row">
-						@foreach($field->get('value') as $photo)
-							<div class="col-3 mb-4">
-								<div class="gallery-item" style="background-image: url({{ $photo['url'] }})">
-									<a class="btn btn-danger delete-gallery-item" href="#"
-										data-endpoint="{{ route('admin.product.photo.delete', [
-											'id' => $photo['id']
-										]) }}"
-									>
-										<i class="fa fa-trash"></i>
-									</a>
-								</div>
-							</div>
-						@endforeach
-					</div>
-					<div class="dz-gallery dropzone" id="{{ $field->get('id') }}_gallery_input" data-name="{{ $name }}">
-						{{-- @foreach($value as $val)
-							<input type="hidden" name="{{ $name }}" value="{{ $val }}">
-						@endforeach --}}
-					</div>
-			    @break
-			    @case('map')
-			    	<h3>Map</h3>
-			    @break
 			@endswitch
 
 		</div>
