@@ -5,7 +5,7 @@
     @foreach ($categories as $category)
         <div class="pointer d-flex flex-column flex-content-between mb-4" style="width: 32%;">
             <a  class="d-block pointer"
-                href="{{ route('category-posts', ['category' => $category->id]) }}">
+                href="{{ route('posts.category', ['category' => $category->id]) }}">
                 <img
                     class="img-fluid rounded"
                     src="{{ $category->main_photo }}"

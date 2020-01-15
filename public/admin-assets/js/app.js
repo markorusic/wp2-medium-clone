@@ -64885,11 +64885,12 @@ var onFormSubmit = Object(_async_event_handler__WEBPACK_IMPORTED_MODULE_4__["def
     return _http_service__WEBPACK_IMPORTED_MODULE_2__["default"][method](endpoint, data);
   }).then(function (response) {
     return responseHandlers[method]($form, response);
-  })["catch"](responseHandlers.error.bind(responseHandlers, $form));
+  })["catch"](function (error) {
+    return responseHandlers.error($form, error);
+  });
 });
 var responseHandlers = {
   error: function error($form, _error) {
-    console.log(_error);
     toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Error occured during this action!');
     $form.find('button[type="submit"]').removeClass('loading-btn');
 

@@ -4,7 +4,7 @@
 <div class="d-flex justify-content-center flex-column">
     @foreach ($posts as $post)
         @php
-            $postEntryUrl = route('post-entry', ['post' => $post->id]);
+            $postEntryUrl = route('posts.index', ['post' => $post->id]);
         @endphp
         <div class="mb-5">
             <div class="d-flex justify-content-between">

@@ -64621,31 +64621,35 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var classType = {
+  follow: 'btn-success',
+  unfollow: 'btn-outline-success'
+};
 var onFollowClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_3__["default"])(function (event) {
   if (!_auth__WEBPACK_IMPORTED_MODULE_1__["default"].isAuthenticated()) {
     return toastr__WEBPACK_IMPORTED_MODULE_0___default.a.info('Login to complete that action.');
   }
 
   var $follow = $(event.currentTarget);
-
-  var _$follow$data = $follow.data(),
-      userId = _$follow$data.userId;
-
+  var $followText = $follow.find('span');
+  var userId = $follow.data().followUser;
   return _shared_http_service__WEBPACK_IMPORTED_MODULE_2__["default"].post("/users/".concat(userId, "/follow")).then(function () {
-    var isFollowing = $follow.hasClass('btn-success');
+    var isFollowing = $follow.hasClass(classType.follow);
 
     if (isFollowing) {
-      $follow.removeClass('btn-success').addClass('btn-outline-success');
-      $follow.text('Follow');
+      $follow.removeClass(classType.follow).addClass(classType.unfollow);
+      $followText.text('Follow');
+      toastr__WEBPACK_IMPORTED_MODULE_0___default.a.info('Unfollowed!');
     } else {
-      $follow.removeClass('btn-outline-success').addClass('btn-success');
-      $follow.text('Following');
+      $follow.removeClass(classType.unfollow).addClass(classType.follow);
+      $followText.text('Following');
+      toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Followed!');
     }
   });
 });
 var followAction = {
   init: function init() {
-    $('[data-user-action="follow"]').on('click', onFollowClick);
+    $('[data-follow-user]').on('click', onFollowClick);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (followAction);
@@ -64809,21 +64813,21 @@ var onCommentSubmit = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODUL
     var data = _ref.data;
     var user = _auth__WEBPACK_IMPORTED_MODULE_2__["default"].getUser();
     var $commentList = $('#comment-list');
-    var commentHTML = "\n            <div class=\"d-flex\" data-comment-id=\"".concat(data.id, "\">\n                <div class=\"d-flex mb-2\">\n                    <img\n                        class=\"avatar mr-3\"\n                        src=\"").concat(user.avatar, "\"\n                        alt=\"").concat(user.name, "\"\n                    >\n                </div>\n                <div class=\"d-flex flex-column mb-4 w-100\">\n                    <div class=\"d-flex flex-column\">\n                        <div class=\"d-flex justify-content-between\">\n                            <span>").concat(user.name, "</span>\n                            <a href=\"#\" class=\"text-dark\" data-user-action=\"remove-comment\">\n                                <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n                            </a>\n                        </div>\n                        <span class=\"text-secondary\">\n                            ").concat(dayjs__WEBPACK_IMPORTED_MODULE_1___default()(data.created_at).format('MMM D, YYYY'), "\n                        </span>\n                    </div>\n                    <div>").concat(content, "</div>\n                </div>\n            </div>\n        ");
+    var commentHTML = "\n                <div class=\"d-flex\" data-comment-id=\"".concat(data.id, "\">\n                    <div class=\"d-flex mb-2\">\n                        <img\n                            class=\"avatar mr-3\"\n                            src=\"").concat(user.avatar, "\"\n                            alt=\"").concat(user.name, "\"\n                        >\n                    </div>\n                    <div class=\"d-flex flex-column mb-4 w-100\">\n                        <div class=\"d-flex flex-column\">\n                            <div class=\"d-flex justify-content-between\">\n                                <span>").concat(user.name, "</span>\n                                <a href=\"#\" class=\"text-dark\" data-remove-comment>\n                                    <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n                                </a>\n                            </div>\n                            <span class=\"text-secondary\">\n                                ").concat(dayjs__WEBPACK_IMPORTED_MODULE_1___default()(data.created_at).format('MMM D, YYYY'), "\n                            </span>\n                        </div>\n                        <div>").concat(content, "</div>\n                    </div>\n                </div>\n            ");
     $content.val('');
     $commentList.prepend(commentHTML);
-    $commentList.children().first().find('[data-user-action="remove-comment"]').on('click', onCommentRemove);
+    $commentList.children().first().find('[data-remove-comment]').on('click', onCommentRemove);
   });
 });
 var onCommentRemove = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_4__["default"])(function (event) {
   var $comment = $(event.currentTarget).closest('[data-comment-id]');
 
-  if (confirm('Are you sure that you want to delete this comment?')) {
+  if (confirm('Are you sure that you want to remove this comment?')) {
     var _$comment$data = $comment.data(),
         commentId = _$comment$data.commentId;
 
     return _shared_http_service__WEBPACK_IMPORTED_MODULE_3__["default"]["delete"]("/posts/".concat(_index__WEBPACK_IMPORTED_MODULE_5__["default"].id, "/comment/").concat(commentId, "/remove")).then(function () {
-      toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Successfully deleted!');
+      toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Successfully removed comment!');
       $comment.remove();
     });
   }
@@ -64831,7 +64835,7 @@ var onCommentRemove = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODUL
 var comment = {
   init: function init() {
     $('#comment-form').on('submit', onCommentSubmit);
-    $('#comment-list [data-user-action="remove-comment"]').on('click', onCommentRemove);
+    $('#comment-list [data-remove-comment]').on('click', onCommentRemove);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (comment);
@@ -64886,29 +64890,34 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var iconType = {
+  like: 'fa-thumbs-o-up',
+  unlike: 'fa-thumbs-up'
+};
 var onLikeClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_3__["default"])(function (event) {
   if (!_auth__WEBPACK_IMPORTED_MODULE_1__["default"].isAuthenticated()) {
     return toastr__WEBPACK_IMPORTED_MODULE_0___default.a.info('Login to complete that action.');
   }
 
   return _shared_http_service__WEBPACK_IMPORTED_MODULE_2__["default"].post("/posts/".concat(_index__WEBPACK_IMPORTED_MODULE_4__["default"].id, "/like")).then(function () {
-    var $like = $(event.currentTarget).find('i');
-    var $likeCount = $like.next();
-    var isLiked = $like.hasClass('fa-heart-o');
+    var $like = $(event.currentTarget);
+    var $likeIcon = $like.find('i');
+    var $likeCount = $like.find('span');
+    var isLiked = $likeIcon.hasClass(iconType.like);
     var likeCount = parseInt($likeCount.text());
 
     if (isLiked) {
-      $like.removeClass('fa-heart-o').addClass('fa-heart');
+      $likeIcon.removeClass(iconType.like).addClass(iconType.unlike);
       $likeCount.text(likeCount + 1);
     } else {
-      $like.removeClass('fa-heart').addClass('fa-heart-o');
+      $likeIcon.removeClass(iconType.unlike).addClass(iconType.like);
       $likeCount.text(likeCount - 1);
     }
   });
 });
 var like = {
   init: function init() {
-    $('[data-user-action="like"]').on('click', onLikeClick);
+    $('#like-action').on('click', onLikeClick);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (like);
@@ -65045,11 +65054,12 @@ var onFormSubmit = Object(_async_event_handler__WEBPACK_IMPORTED_MODULE_4__["def
     return _http_service__WEBPACK_IMPORTED_MODULE_2__["default"][method](endpoint, data);
   }).then(function (response) {
     return responseHandlers[method]($form, response);
-  })["catch"](responseHandlers.error.bind(responseHandlers, $form));
+  })["catch"](function (error) {
+    return responseHandlers.error($form, error);
+  });
 });
 var responseHandlers = {
   error: function error($form, _error) {
-    console.log(_error);
     toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Error occured during this action!');
     $form.find('button[type="submit"]').removeClass('loading-btn');
 

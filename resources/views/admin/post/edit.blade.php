@@ -7,7 +7,7 @@
         @include('shared.form', [
             'config' => [
                 'method' => 'put',
-                'endpoint' => route('post-update', [
+                'endpoint' => route('posts.update', [
                     'post' => $post->id
                 ])
             ],

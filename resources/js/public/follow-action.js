@@ -3,28 +3,36 @@ import auth from './auth'
 import http from '../shared/http-service'
 import asyncEventHandler from '../shared/async-event-handler'
 
+const classType = {
+    follow: 'btn-success',
+    unfollow: 'btn-outline-success'
+}
+
 const onFollowClick = asyncEventHandler(event => {
     if (!auth.isAuthenticated()) {
         return toastr.info('Login to complete that action.')
     }
     const $follow = $(event.currentTarget)
-    const { userId } = $follow.data()
+    const $followText = $follow.find('span')
+    const userId = $follow.data().followUser
 
     return http.post(`/users/${userId}/follow`).then(() => {
-        const isFollowing = $follow.hasClass('btn-success')
+        const isFollowing = $follow.hasClass(classType.follow)
         if (isFollowing) {
-            $follow.removeClass('btn-success').addClass('btn-outline-success')
-            $follow.text('Follow')
+            $follow.removeClass(classType.follow).addClass(classType.unfollow)
+            $followText.text('Follow')
+            toastr.info('Unfollowed!')
         } else {
-            $follow.removeClass('btn-outline-success').addClass('btn-success')
-            $follow.text('Following')
+            $follow.removeClass(classType.unfollow).addClass(classType.follow)
+            $followText.text('Following')
+            toastr.success('Followed!')
         }
     })
 })
 
 const followAction = {
     init() {
-        $('[data-user-action="follow"]').on('click', onFollowClick)
+        $('[data-follow-user]').on('click', onFollowClick)
     }
 }
 

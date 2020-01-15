@@ -10,7 +10,7 @@
             @if ($isUserPost)
                 <div class="d-flex">
                     <div class="mr-2">
-                        <a href="{{ route('post-update-page', ['post' => $post->id]) }}" class="btn btn-primary">
+                        <a href="{{ route('posts.edit', ['post' => $post->id]) }}" class="btn btn-primary">
                             <i class="fa fa-pencil mr-2"></i>
                             {{ __('Edit') }}
                         </a>
@@ -18,7 +18,7 @@
                     <div>
                         <a id="delete-post"
                             class="btn btn-danger"
-                            href="{{ route('post-delete', ['post' => $post->id]) }}"
+                            href="{{ route('posts.destroy', ['post' => $post->id]) }}"
                         >
                             <i class="fa fa-trash mr-2"></i>
                             {{ __('Remove') }}
@@ -28,16 +28,20 @@
             @endif
         </div>
         <h4 class="text-secondary font-weight-normal mt-3 mb-5">{{ $post->description }}</h4>
-        <div class="d-flex mb-4">
-            <img
-                class="avatar mr-3"
-                src="{{ $post->user->avatar }}"
-                alt="{{ $post->user->name }}"
-            >
-            <div class="d-flex flex-column">
-                <span>{{ $post->user->name }}</span>
-                <span class="text-secondary">{{ $post->created_at->format('M d, Y') }}</span>
+        <div class="d-flex justify-content-between mb-4">
+            <div class="d-flex">
+                <img class="avatar mr-3"
+                    src="{{ $post->user->avatar }}"
+                    alt="{{ $post->user->name }}"
+                >
+                <div class="d-flex flex-column">
+                    <span>{{ $post->user->name }}</span>
+                    <span class="text-secondary">{{ $post->created_at->format('M d, Y') }}</span>
+                </div>
             </div>
+            @include('public.shared.follow-button', [
+                'user' => $post->user
+            ])
         </div>
 
         <div class="d-flex justify-content-center mb-5">
@@ -55,30 +59,15 @@
             'categories' => $post->categories
         ])
 
-        <div class="d-flex mt-5">
+        <div class="d-flex justify-content-between mt-5 mb-4">
             <div class="mr-4">
-                <a href="#" class="text-danger" data-user-action="like">
-                    <i class="fa fa-heart{{ $post->isLiked() ? '' : '-o' }} fa-2x"></i>
-                    <span class="text-dark fs-25 ml-1">
-                        {{ $post->likes->count() }}
-                    </span>
+                @php $isLiked = $post->isLiked() @endphp
+                <a id="like-action" href="#" class="d-flex align-items-center text-dark">
+                    <i class="fa fa-thumbs-{{ $isLiked ? '' : 'o-' }}up fa-2x mr-2"></i>
+                    <span class="text-dark fs-25">{{ $post->likes->count() }}</span>
                 </a>
             </div>
-            @if (auth()->id() !== $post->user->id)
-                @php $isFollowing = $post->user->isFollowing(); @endphp
-                <div>
-                    <a href="#" class="btn btn{{ $isFollowing ? '' : '-outline' }}-success"
-                        data-user-action="follow"
-                        data-user-id="{{ $post->user->id }}"
-                    >
-                        {{ $isFollowing ? 'Following' : 'Follow' }}
-                    </a>
-                </div>
-            @endif
-        </div>
-
-        <div class="my-4">
-            <form id="comment-form">
+            <form id="comment-form" class="w-100">
                 <div class="input-group mb-3">
                     <input type="text" name="content" required class="form-control" placeholder="Write a comment..." aria-label="Write a comment..." aria-describedby="comment-buttom">
                     <div class="input-group-append">
@@ -89,12 +78,12 @@
         </div>
 
         <h3 class="mb-5 pb-3 border-bottom">{{$post->comments->count() > 0 ? 'Comments' : 'Be first to comment!'}}</h3>
+
         <div id="comment-list">
             @foreach ($post->comments as $comment)
                 <div class="d-flex" data-comment-id="{{ $comment->id }}">
                     <div class="d-flex mb-2">
-                        <img
-                            class="avatar mr-3"
+                        <img class="avatar mr-3"
                             src="{{ $comment->user->avatar }}"
                             alt="{{ $comment->user->name }}"
                         >
@@ -104,7 +93,7 @@
                             <div class="d-flex justify-content-between">
                                 <span>{{ $comment->user->name }}</span>
                                 @if (auth()->id() === $comment->user->id)
-                                    <a href="#" class="text-dark" data-user-action="remove-comment">
+                                    <a href="#" class="text-dark" data-remove-comment>
                                         <i class="fa fa-times" aria-hidden="true"></i>
                                     </a>
                                 @endif
