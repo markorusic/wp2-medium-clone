@@ -29,6 +29,8 @@ Route::group([ 'middleware' => ['auth']], function () {
 	Route::delete('/posts/{post}', 'PostController@destroy')->name('post-delete');
 
 	Route::post('/users/{user}/follow', 'UserController@follow')->name('user-follow');
+
+	Route::post('upload/photo', 'FileController@upload')->name('photo.upload');
 });
 
 Auth::routes();

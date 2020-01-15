@@ -1,0 +1,17 @@
+.photo-upload-control {
+    min-height: 200px;
+}
+
+.loading-btn {
+    pointer-events: none;
+    background-color: #c9c9c9;
+    border: none;
+}
+.loading-btn span.content {
+    display: none;
+}
+.loading-btn::after {
+    content: 'Please wait...' !important;
+    font-weight: bold;
+    color: white;
+}

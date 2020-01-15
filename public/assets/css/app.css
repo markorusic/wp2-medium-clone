@@ -14667,6 +14667,26 @@ button.toast-close-button {
   }
 }
 
+.photo-upload-control {
+  min-height: 200px;
+}
+
+.loading-btn {
+  pointer-events: none;
+  background-color: #c9c9c9;
+  border: none;
+}
+
+.loading-btn span.content {
+  display: none;
+}
+
+.loading-btn::after {
+  content: "Please wait..." !important;
+  font-weight: bold;
+  color: white;
+}
+
 a:hover {
   text-decoration: none;
 }
@@ -14725,22 +14745,6 @@ input[type=number]:active,
   width: 50px;
   height: 50px;
   border-radius: 50%;
-}
-
-.loading-btn {
-  pointer-events: none;
-  background-color: #c9c9c9;
-  border: none;
-}
-
-.loading-btn span.content {
-  display: none;
-}
-
-.loading-btn::after {
-  content: "Please wait..." !important;
-  font-weight: bold;
-  color: white;
 }
 
 .avatar-sm {

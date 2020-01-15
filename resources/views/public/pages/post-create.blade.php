@@ -21,11 +21,12 @@
                     'label' => 'Description',
                     'placeholder' => 'Enter description',
                 ],
-                // [
-                //     'type' => 'photo',
-                //     'name' => 'main_photo',
-                //     'label' => 'Post main photo'
-                // ],
+                [
+                    'type' => 'photo',
+                    'name' => 'main_photo',
+                    'placeholder' => 'Click to upload main photo',
+                    'label' => 'Main photo'
+                ],
                 [
                     'type' => 'textarea',
                     'name' => 'content',

@@ -76,23 +76,25 @@
 			    	</select>
 			    @break
 
-			    @case('photo')
-			        <div class="form-control flex-center mp-0">
-			        	<input type="hidden"
-			        		name="{{ $field->get('name') }}"
-			        		value="{{ $field->get('value') }}"
-			        	>
-						<div id="{{ $field->get('name') }}_photo_input"
-							class="dz full-width" 
+				@case('photo')
+					<div>
+						<input type="file" accept="image/*" class="d-none" data-photo-file-input />
+						<input
+							data-photo-input
+							type="hidden"
+							name="{{ $field->get('name') }}"
+							value="{{ $field->get('value') }}"
 						>
-							<div class="my-preview">
-								<img style="height: 200px; max-width: 100%;" 
-			        				src="{{ $field->get('value') }}"
-			        				alt="Upload photo"
-				        		>
+						<div class="photo-upload-control d-flex justify-content-center align-items-center border p-3 pointer">
+							<div class="d-flex justify-content-center align-items-center h-100">
+								@if (!$field->get('value'))
+									{{ $field->get('placeholder', 'Click to upload photo') }}
+								@else
+									<img class="img-fluid" src="{{ $field->get('value') }}">
+								@endif
 							</div>
 						</div>
-			        </div>
+					</div>
 			    @break
 			@endswitch
 
