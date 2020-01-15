@@ -64627,6 +64627,7 @@ var onFollowClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_
   }
 
   var $follow = $(event.currentTarget);
+  var $followText = $follow.find('span');
 
   var _$follow$data = $follow.data(),
       userId = _$follow$data.userId;
@@ -64636,10 +64637,10 @@ var onFollowClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_
 
     if (isFollowing) {
       $follow.removeClass('btn-success').addClass('btn-outline-success');
-      $follow.text('Follow');
+      $followText.text('Follow');
     } else {
       $follow.removeClass('btn-outline-success').addClass('btn-success');
-      $follow.text('Following');
+      $followText.text('Following');
     }
   });
 });
@@ -65045,11 +65046,12 @@ var onFormSubmit = Object(_async_event_handler__WEBPACK_IMPORTED_MODULE_4__["def
     return _http_service__WEBPACK_IMPORTED_MODULE_2__["default"][method](endpoint, data);
   }).then(function (response) {
     return responseHandlers[method]($form, response);
-  })["catch"](responseHandlers.error.bind(responseHandlers, $form));
+  })["catch"](function (error) {
+    return responseHandlers.error($form, error);
+  });
 });
 var responseHandlers = {
   error: function error($form, _error) {
-    console.log(_error);
     toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Error occured during this action!');
     $form.find('button[type="submit"]').removeClass('loading-btn');
 

@@ -8,16 +8,17 @@ const onFollowClick = asyncEventHandler(event => {
         return toastr.info('Login to complete that action.')
     }
     const $follow = $(event.currentTarget)
+    const $followText = $follow.find('span')
     const { userId } = $follow.data()
 
     return http.post(`/users/${userId}/follow`).then(() => {
         const isFollowing = $follow.hasClass('btn-success')
         if (isFollowing) {
             $follow.removeClass('btn-success').addClass('btn-outline-success')
-            $follow.text('Follow')
+            $followText.text('Follow')
         } else {
             $follow.removeClass('btn-outline-success').addClass('btn-success')
-            $follow.text('Following')
+            $followText.text('Following')
         }
     })
 })

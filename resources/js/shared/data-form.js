@@ -32,12 +32,11 @@ const onFormSubmit = asyncEventHandler(event => {
             return http[method](endpoint, data)
         })
         .then(response => responseHandlers[method]($form, response))
-        .catch(responseHandlers.error.bind(responseHandlers, $form))
+        .catch(error => responseHandlers.error($form, error))
 })
 
 const responseHandlers = {
     error($form, error) {
-        console.log(error)
         toastr.error('Error occured during this action!')
         $form.find('button[type="submit"]').removeClass('loading-btn')
         if (typeof props.onError === 'function') {
