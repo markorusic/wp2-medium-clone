@@ -30,7 +30,7 @@ Route::group([ 'middleware' => ['auth']], function () {
 
 	Route::post('/users/{user}/follow', 'UserController@follow')->name('user-follow');
 
-	Route::post('upload/photo', 'FileController@upload')->name('photo.upload');
+	Route::post('upload/photo', 'FileController@uploadPhoto')->name('upload.photo');
 });
 
 Auth::routes();

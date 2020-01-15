@@ -59,7 +59,7 @@ const photoUpload = {
         }
         const data = new FormData()
         const config = { headers: { 'content-type': 'multipart/form-data' } }
-        data.append('file', state.file, state.file.name)
+        data.append('photo', state.file, state.file.name)
         return http
             .post('/upload/photo', data, config)
             .then(({ data }) => {

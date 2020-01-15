@@ -66203,7 +66203,7 @@ var photoUpload = {
         'content-type': 'multipart/form-data'
       }
     };
-    data.append('file', state.file, state.file.name);
+    data.append('photo', state.file, state.file.name);
     return _shared_http_service__WEBPACK_IMPORTED_MODULE_1__["default"].post('/upload/photo', data, config).then(function (_ref) {
       var data = _ref.data;
       $upload.input.val(data.url);

@@ -8,7 +8,7 @@ use App\Utils\FileUpload;
 
 class FileController extends Controller
 {
-    public function upload(Request $request) {
-        return FileUpload::upload($request->file('file'));
+    public function uploadPhoto(Request $request) {
+        return FileUpload::uploadPhoto();
     }
 }
