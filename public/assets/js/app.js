@@ -64570,6 +64570,10 @@ _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/create/new'
     }
   });
 });
+_shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/:id/update', function () {
+  _shared_markdown_editor__WEBPACK_IMPORTED_MODULE_1__["default"].init('[name="content"]');
+  _shared_data_form__WEBPACK_IMPORTED_MODULE_2__["default"].init();
+});
 
 /***/ }),
 

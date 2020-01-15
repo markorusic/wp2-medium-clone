@@ -21,8 +21,11 @@ Route::group([ 'middleware' => ['auth']], function () {
 	Route::post('/posts/{post}/like', 'PostController@like')->name('post-like');
 	Route::post('/posts/{post}/comment', 'PostController@comment')->name('post-comment');
 	Route::delete('/posts/{post}/comment/{comment}/remove', 'PostController@removeComment')->name('post-remove-comment');
-	Route::get('/posts/create/new', 'PostController@create')->name('post-create-page');
+	Route::get('/posts/create/_', 'PostController@create')->name('post-create-page');
 	Route::post('/posts', 'PostController@store')->name('post-store');
+	Route::delete('/posts/{post}', 'PostController@destroy')->name('post-destroy');
+	Route::get('/posts/{post}/update', 'PostController@edit')->name('post-update-page');
+	Route::put('/posts/{post}', 'PostController@update')->name('post-update');
 
 	Route::post('/users/{user}/follow', 'UserController@follow')->name('user-follow');
 });

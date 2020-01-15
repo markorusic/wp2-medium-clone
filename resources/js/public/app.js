@@ -29,3 +29,8 @@ router.match('/posts/create/new', () => {
     markdownEditor.init('[name="content"]')
     dataForm.init({ createRedirectUrl: post => `/posts/${post.id}` })
 })
+
+router.match('/posts/:id/update', () => {
+    markdownEditor.init('[name="content"]')
+    dataForm.init()
+})

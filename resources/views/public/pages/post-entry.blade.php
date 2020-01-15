@@ -1,12 +1,22 @@
+@php
+    $isUserPost = $post->user_id === auth()->id();
+@endphp
 @extends('public.shared.layout')
 
 @section('content')
     <div class="px-5 my-4">
-        <h1>{{ $post->title }}</h1>
-        <h4 class="text-secondary font-weight-normal mt-3 mb-5">
-            {{ $post->description }}
-        </h4>
-
+        <div class="d-flex justify-content-between">
+            <h1>{{ $post->title }}</h1>
+            @if ($isUserPost)
+                <div>
+                    <a href="{{ route('post-update-page', ['post' => $post->id]) }}" class="btn btn-primary">
+                        <i class="fa fa-pencil mr-2"></i>
+                        Edit
+                    </a>
+                </div>
+            @endif
+        </div>
+        <h4 class="text-secondary font-weight-normal mt-3 mb-5">{{ $post->description }}</h4>
         <div class="d-flex mb-4">
             <img
                 class="avatar mr-3"
