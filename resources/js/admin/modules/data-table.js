@@ -130,7 +130,7 @@ const view = {
                             <a class="btn btn-danger white-txt btn-sm"
                                 data-delete="/admin/${props.resource}/${item.id}"
                             >
-                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                <i class="fa fa-trash-o text-white" aria-hidden="true"></i>
                             </a>
                             `
                         )}

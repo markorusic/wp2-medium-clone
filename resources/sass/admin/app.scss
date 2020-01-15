@@ -1,15 +1,3 @@
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,600');
-
-// Variables
-@import 'variables';
-
-// Bootstrap
-@import '~bootstrap/scss/bootstrap';
-
-// Font Awesome
-@import '~font-awesome/scss/font-awesome';
-
 @import '../shared';
 
 .navbar-laravel {
@@ -247,10 +235,6 @@ a:hover {
     opacity: 0.9;
     color: black;
 }
-.img-fluid {
-    max-width: auto;
-    height: 100%;
-}
 img.table-img {
     width: auto;
     max-height: 100px;
@@ -261,37 +245,6 @@ img.table-img {
 }
 .full-width {
     width: 100%;
-}
-.loading-btn {
-    pointer-events: none;
-    background-color: #c9c9c9;
-    border: none;
-}
-.loading-btn span.content {
-    display: none;
-}
-.loading-btn::after {
-    content: 'Please wait...' !important;
-    font-weight: bold;
-    color: black;
-}
-label {
-    cursor: pointer;
-}
-.bold {
-    font-weight: bold;
-}
-.hidden {
-    display: none !important;
-}
-.white-txt {
-    color: white !important;
-}
-.black-txt {
-    color: black !important;
-}
-.uc-first {
-    text-transform: capitalize;
 }
 ul.flex-list {
     padding: 0;

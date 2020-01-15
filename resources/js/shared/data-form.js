@@ -2,6 +2,7 @@ import toastr from 'toastr'
 import FormValidation from './form-validation'
 import http from './http-service'
 import photoUpload from './photo-upload'
+import asyncEventHandler from './async-event-handler'
 
 require('jquery-serializejson')
 
@@ -11,28 +12,28 @@ let props = {
     onError: null
 }
 
-const onFormSubmit = async event => {
-    event.preventDefault()
+const onFormSubmit = asyncEventHandler(event => {
     const $form = $(event.target)
     const validator = new FormValidation({ $form })
 
-    if (validator.validate()) {
-        const { method, endpoint } = $form.find('.config').data()
-        $form.find('button[type="submit"]').addClass('loading-btn')
-        photoUpload
-            .upload()
-            .then(() => {
-                const data = $form.serializeJSON({
-                    checkboxUncheckedValue: 'false',
-                    parseBooleans: true,
-                    parseNumbers: true
-                })
-                return http[method](endpoint, data)
-            })
-            .then(response => responseHandlers[method]($form, response))
-            .catch(responseHandlers.error.bind(responseHandlers, $form))
+    if (!validator.validate()) {
+        return Promise.resolve()
     }
-}
+    const { method, endpoint } = $form.find('.config').data()
+    $form.find('button[type="submit"]').addClass('loading-btn')
+    return photoUpload
+        .upload()
+        .then(() => {
+            const data = $form.serializeJSON({
+                checkboxUncheckedValue: 'false',
+                parseBooleans: true,
+                parseNumbers: true
+            })
+            return http[method](endpoint, data)
+        })
+        .then(response => responseHandlers[method]($form, response))
+        .catch(responseHandlers.error.bind(responseHandlers, $form))
+})
 
 const responseHandlers = {
     error($form, error) {

@@ -34,7 +34,7 @@ router.match('/posts/create/_', () => {
     })
 })
 
-router.match('/posts/:id/update', () => {
+router.match('/posts/:id/edit', () => {
     markdownEditor.init('[name="content"]')
     dataForm.init()
 })
