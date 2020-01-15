@@ -35,7 +35,7 @@ const responseHandlers = {
         console.log(response)
         switch (config.method) {
             case 'post':
-                this.successCreate(response)
+                this.successCreate($form, response)
                 break
             case 'put':
                 this.successUpdate($form, config)
@@ -49,8 +49,9 @@ const responseHandlers = {
         toastr.error('Error occured during this action!')
         $form.find('button[type="submit"]').removeClass('loading-btn')
     },
-    successCreate(response) {
+    successCreate($form, response) {
         toastr.success('Successfully created!')
+        $form.find('button[type="submit"]').hide()
         if (typeof createRedirectUrl === 'function') {
             const url =
                 location.protocol +
@@ -58,8 +59,6 @@ const responseHandlers = {
                 location.host +
                 props.createRedirectUrl(response.data)
             $(location).attr('href', url)
-        } else {
-            $form.find('button[type="submit"]').hide()
         }
     },
     successUpdate($form) {

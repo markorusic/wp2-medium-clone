@@ -64989,7 +64989,7 @@ var responseHandlers = {
 
     switch (config.method) {
       case 'post':
-        this.successCreate(response);
+        this.successCreate($form, response);
         break;
 
       case 'put':
@@ -65005,14 +65005,13 @@ var responseHandlers = {
     toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Error occured during this action!');
     $form.find('button[type="submit"]').removeClass('loading-btn');
   },
-  successCreate: function successCreate(response) {
+  successCreate: function successCreate($form, response) {
     toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Successfully created!');
+    $form.find('button[type="submit"]').hide();
 
     if (typeof createRedirectUrl === 'function') {
       var url = location.protocol + '//' + location.host + props.createRedirectUrl(response.data);
       $(location).attr('href', url);
-    } else {
-      $form.find('button[type="submit"]').hide();
     }
   },
   successUpdate: function successUpdate($form) {
