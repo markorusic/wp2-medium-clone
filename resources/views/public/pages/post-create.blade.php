@@ -16,6 +16,14 @@
                     'placeholder' => 'Enter post title'
                 ],
                 [
+                    'type' => 'select',
+                    'options' => $categories,
+                    'displayProperty' => 'name',
+                    'multiple' => true,
+                    'name' => 'categories[]',
+                    'label' => 'Categories'
+                ],
+                [
                     'type' => 'textarea',
                     'name' => 'description',
                     'label' => 'Description',

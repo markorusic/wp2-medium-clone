@@ -11,7 +11,7 @@ class PostController extends Controller
 {
     public function show(Post $post) {
         $post->load(['user', 'comments.user', 'likes', 'categories']);
-        return view('public.pages.post-entry', compact('post'));
+        return view('public.pages.post', compact('post'));
     }
 
     public function categoryPosts(Category $category) {
@@ -37,22 +37,31 @@ class PostController extends Controller
     }
 
     public function create() {
-        return view('public.pages.post-create');
+        $categories = Category::all();
+        return view('public.pages.post-create', compact('categories'));
     }
 
     public function store(Request $request) {
         $data = collect($request->all());
-        return auth()->user()->posts()->create($data->toArray());
+        $categories = $data->get('categories', []);
+        $post = auth()->user()->posts()->create($data->toArray());
+        $post->categories()->sync($categories);
+        return $post;
     }
 
     public function edit(Post $post) {
-        return view('public.pages.post-update', compact('post'));
+        abort_if($post->user_id !== auth()->id(), 403);
+        $post->load('categories');
+        $categories = Category::all();
+        return view('public.pages.post-edit', compact('post', 'categories'));
     }
 
     public function update(Request $request, Post $post) {
         abort_if($post->user_id !== auth()->id(), 403);
         $data = collect($request->all());
-        $post->update($data->toArray());
+        $categories = $data->get('categories', []);
+        $post->update($data->except('categories')->toArray());
+        $post->categories()->sync($categories);
         return $post;
     }
 
