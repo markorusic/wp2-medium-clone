@@ -12,7 +12,7 @@
                             {{ __('Edit profile') }}
                         </a>
                     @else
-                        @include('public.shared.follow-button', compact('user'))
+                        @include('public.user.follow-button', compact('user'))
                     @endif
                 </div>
                 <div class="my-2">
@@ -28,10 +28,10 @@
                 </div>
             </div>
             <div class="ml-5">
-                <img class="avatar-lg mr-3"
-                    src="{{ $user->avatar }}"
-                    alt="{{ $user->name }}"
-                >
+                @include('public.user.user-avatar', [
+                    'size' => 'lg',
+                    'user' => $user
+                ])
             </div>
         </div>
 

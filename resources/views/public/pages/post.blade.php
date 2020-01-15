@@ -33,18 +33,19 @@
                 @php
                     $userProfileUrl = route('users.show', ['user' => $post->user->id])
                 @endphp
-                <a href="{{ $userProfileUrl }}">
-                    <img class="avatar mr-3"
-                        src="{{ $post->user->avatar }}"
-                        alt="{{ $post->user->name }}"
-                    >
-                </a>
+                <div class="mr-3">
+                    @include('public.user.user-avatar', [
+                        'user' => $post->user
+                    ])
+                </div>
                 <div class="d-flex flex-column">
-                    <a class="text-dark" href="{{ $userProfileUrl }}">{{ $post->user->name }}</a>
+                    @include('public.user.user-name', [
+                        'user' => $post->user
+                    ])
                     <span class="text-secondary">{{ $post->created_at->format('M d, Y') }}</span>
                 </div>
             </div>
-            @include('public.shared.follow-button', [
+            @include('public.user.follow-button', [
                 'user' => $post->user
             ])
         </div>
@@ -87,16 +88,17 @@
         <div id="comment-list">
             @foreach ($post->comments as $comment)
                 <div class="d-flex" data-comment-id="{{ $comment->id }}">
-                    <div class="d-flex mb-2">
-                        <img class="avatar mr-3"
-                            src="{{ $comment->user->avatar }}"
-                            alt="{{ $comment->user->name }}"
-                        >
+                    <div class="d-flex mb-2 mr-3">
+                        @include('public.user.user-avatar', [
+                            'user' => $comment->user
+                        ])
                     </div>
                     <div class="d-flex flex-column mb-4 w-100">
                         <div class="d-flex flex-column">
                             <div class="d-flex justify-content-between">
-                                <span>{{ $comment->user->name }}</span>
+                                @include('public.user.user-name', [
+                                    'user' => $comment->user
+                                ])
                                 @if (auth()->id() === $comment->user->id)
                                     <a href="#" class="text-dark" data-remove-comment>
                                         <i class="fa fa-times" aria-hidden="true"></i>

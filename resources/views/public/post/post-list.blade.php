@@ -19,10 +19,9 @@
                     </div>
                     <div class="d-flex flex-column">
                         @if ($post->relationLoaded('user'))
-                            <a class="text-dark pointer"
-                                href="{{ route('users.show', ['user' => $post->user->id]) }}">
-                                {{ $post->user->name }}
-                            </a>
+                            @include('public.user.user-name', [
+                                'user' => $post->user
+                            ])
                         @endif
                         <span class="text-secondary">{{ $post->created_at->format('M d, Y') }}</span>
                     </div>
