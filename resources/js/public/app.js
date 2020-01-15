@@ -36,5 +36,13 @@ router.match('/posts/create/_', () => {
 
 router.match('/posts/:id/edit', () => {
     markdownEditor.init('[name="content"]')
+    dataForm.init({
+        photoUploadProps: {
+            landscapeImg: true
+        }
+    })
+})
+
+router.match('/users/:id/edit', () => {
     dataForm.init()
 })

@@ -30,11 +30,13 @@ Route::group([ 'middleware' => ['auth']], function () {
 	Route::put('/posts/{post}', 'PostController@update')->name('posts.update');
 	Route::delete('/posts/{post}', 'PostController@destroy')->name('posts.destroy');
 	Route::post('/users/{user}/follow', 'UserController@follow')->name('user.follow');
+	Route::put('/users/{user}/update', 'UserController@update')->name('users.update');	
 	Route::post('upload/photo', 'FileController@uploadPhoto')->name('upload.photo');
 
 	// Pages
 	Route::get('/posts/create/_', 'PostController@create')->name('posts.create');
 	Route::get('/posts/{post}/edit', 'PostController@edit')->name('posts.edit');
+	Route::get('/users/{user}/edit', 'UserController@edit')->name('users.edit');
 	
 });
 

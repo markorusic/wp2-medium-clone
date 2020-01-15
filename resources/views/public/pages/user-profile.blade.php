@@ -7,7 +7,7 @@
                 <div class="d-flex align-items-center">
                     <h1 class="mr-3">{{ $user->name }}</h1>
                     @if ($user->id === auth()->id())
-                        <a href="#" class="btn btn-primary">
+                        <a class="btn btn-primary" href="{{ route('users.edit', ['user' => $user->id]) }}">
                             <i class="fa fa-pencil mr-2"></i>
                             {{ __('Edit profile') }}
                         </a>

@@ -64,7 +64,7 @@
                 @php $isLiked = $post->isLiked() @endphp
                 <a id="like-action" href="#" class="d-flex align-items-center text-dark">
                     <i class="fa fa-thumbs-{{ $isLiked ? '' : 'o-' }}up fa-2x mr-2"></i>
-                    <span class="text-dark fs-25">{{ $post->likes->count() }}</span>
+                    <span class="text-dark fs-25">{{ $post->likes_count }}</span>
                 </a>
             </div>
             <form id="comment-form" class="w-100">
