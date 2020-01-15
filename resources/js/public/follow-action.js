@@ -3,6 +3,11 @@ import auth from './auth'
 import http from '../shared/http-service'
 import asyncEventHandler from '../shared/async-event-handler'
 
+const classType = {
+    follow: 'btn-success',
+    unfollow: 'btn-outline-success'
+}
+
 const onFollowClick = asyncEventHandler(event => {
     if (!auth.isAuthenticated()) {
         return toastr.info('Login to complete that action.')
@@ -12,13 +17,15 @@ const onFollowClick = asyncEventHandler(event => {
     const { userId } = $follow.data()
 
     return http.post(`/users/${userId}/follow`).then(() => {
-        const isFollowing = $follow.hasClass('btn-success')
+        const isFollowing = $follow.hasClass(classType.follow)
         if (isFollowing) {
-            $follow.removeClass('btn-success').addClass('btn-outline-success')
+            $follow.removeClass(classType.follow).addClass(classType.unfollow)
             $followText.text('Follow')
+            toastr.info('Unfollowed!')
         } else {
-            $follow.removeClass('btn-outline-success').addClass('btn-success')
+            $follow.removeClass(classType.unfollow).addClass(classType.follow)
             $followText.text('Following')
+            toastr.success('Followed!')
         }
     })
 })

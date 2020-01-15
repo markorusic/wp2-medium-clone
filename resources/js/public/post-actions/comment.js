@@ -14,33 +14,34 @@ const onCommentSubmit = asyncEventHandler(event => {
     return http
         .post(`/posts/${postActions.id}/comment`, { content })
         .then(({ data }) => {
+            toastr.success('Successfully added comment!')
             const user = auth.getUser()
             const $commentList = $('#comment-list')
             const commentHTML = `
-            <div class="d-flex" data-comment-id="${data.id}">
-                <div class="d-flex mb-2">
-                    <img
-                        class="avatar mr-3"
-                        src="${user.avatar}"
-                        alt="${user.name}"
-                    >
-                </div>
-                <div class="d-flex flex-column mb-4 w-100">
-                    <div class="d-flex flex-column">
-                        <div class="d-flex justify-content-between">
-                            <span>${user.name}</span>
-                            <a href="#" class="text-dark" data-user-action="remove-comment">
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </a>
-                        </div>
-                        <span class="text-secondary">
-                            ${dayjs(data.created_at).format('MMM D, YYYY')}
-                        </span>
+                <div class="d-flex" data-comment-id="${data.id}">
+                    <div class="d-flex mb-2">
+                        <img
+                            class="avatar mr-3"
+                            src="${user.avatar}"
+                            alt="${user.name}"
+                        >
                     </div>
-                    <div>${content}</div>
+                    <div class="d-flex flex-column mb-4 w-100">
+                        <div class="d-flex flex-column">
+                            <div class="d-flex justify-content-between">
+                                <span>${user.name}</span>
+                                <a href="#" class="text-dark" data-user-action="remove-comment">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                            <span class="text-secondary">
+                                ${dayjs(data.created_at).format('MMM D, YYYY')}
+                            </span>
+                        </div>
+                        <div>${content}</div>
+                    </div>
                 </div>
-            </div>
-        `
+            `
             $content.val('')
             $commentList.prepend(commentHTML)
             $commentList
@@ -53,12 +54,12 @@ const onCommentSubmit = asyncEventHandler(event => {
 
 const onCommentRemove = asyncEventHandler(event => {
     const $comment = $(event.currentTarget).closest('[data-comment-id]')
-    if (confirm('Are you sure that you want to delete this comment?')) {
+    if (confirm('Are you sure that you want to remove this comment?')) {
         const { commentId } = $comment.data()
         return http
             .delete(`/posts/${postActions.id}/comment/${commentId}/remove`)
             .then(() => {
-                toastr.success('Successfully deleted!')
+                toastr.success('Successfully removed comment!')
                 $comment.remove()
             })
     }
