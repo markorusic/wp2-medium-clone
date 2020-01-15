@@ -14,7 +14,7 @@ const onFollowClick = asyncEventHandler(event => {
     }
     const $follow = $(event.currentTarget)
     const $followText = $follow.find('span')
-    const { userId } = $follow.data()
+    const userId = $follow.data().followUser
 
     return http.post(`/users/${userId}/follow`).then(() => {
         const isFollowing = $follow.hasClass(classType.follow)
@@ -32,7 +32,7 @@ const onFollowClick = asyncEventHandler(event => {
 
 const followAction = {
     init() {
-        $('[data-user-action="follow"]').on('click', onFollowClick)
+        $('[data-follow-user]').on('click', onFollowClick)
     }
 }
 

@@ -62,10 +62,7 @@
         <div class="d-flex justify-content-between mt-5 mb-4">
             <div class="mr-4">
                 @php $isLiked = $post->isLiked() @endphp
-                <a href="#"
-                    class="d-flex align-items-center text-dark"
-                    data-user-action="like"
-                >
+                <a id="like-action" href="#" class="d-flex align-items-center text-dark">
                     <i class="fa fa-thumbs-{{ $isLiked ? '' : 'o-' }}up fa-2x mr-2"></i>
                     <span class="text-dark fs-25">{{ $post->likes->count() }}</span>
                 </a>
@@ -96,7 +93,7 @@
                             <div class="d-flex justify-content-between">
                                 <span>{{ $comment->user->name }}</span>
                                 @if (auth()->id() === $comment->user->id)
-                                    <a href="#" class="text-dark" data-user-action="remove-comment">
+                                    <a href="#" class="text-dark" data-remove-comment>
                                         <i class="fa fa-times" aria-hidden="true"></i>
                                     </a>
                                 @endif

@@ -64632,10 +64632,7 @@ var onFollowClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_
 
   var $follow = $(event.currentTarget);
   var $followText = $follow.find('span');
-
-  var _$follow$data = $follow.data(),
-      userId = _$follow$data.userId;
-
+  var userId = $follow.data().followUser;
   return _shared_http_service__WEBPACK_IMPORTED_MODULE_2__["default"].post("/users/".concat(userId, "/follow")).then(function () {
     var isFollowing = $follow.hasClass(classType.follow);
 
@@ -64652,7 +64649,7 @@ var onFollowClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_
 });
 var followAction = {
   init: function init() {
-    $('[data-user-action="follow"]').on('click', onFollowClick);
+    $('[data-follow-user]').on('click', onFollowClick);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (followAction);
@@ -64814,13 +64811,12 @@ var onCommentSubmit = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODUL
     content: content
   }).then(function (_ref) {
     var data = _ref.data;
-    toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Successfully added comment!');
     var user = _auth__WEBPACK_IMPORTED_MODULE_2__["default"].getUser();
     var $commentList = $('#comment-list');
-    var commentHTML = "\n                <div class=\"d-flex\" data-comment-id=\"".concat(data.id, "\">\n                    <div class=\"d-flex mb-2\">\n                        <img\n                            class=\"avatar mr-3\"\n                            src=\"").concat(user.avatar, "\"\n                            alt=\"").concat(user.name, "\"\n                        >\n                    </div>\n                    <div class=\"d-flex flex-column mb-4 w-100\">\n                        <div class=\"d-flex flex-column\">\n                            <div class=\"d-flex justify-content-between\">\n                                <span>").concat(user.name, "</span>\n                                <a href=\"#\" class=\"text-dark\" data-user-action=\"remove-comment\">\n                                    <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n                                </a>\n                            </div>\n                            <span class=\"text-secondary\">\n                                ").concat(dayjs__WEBPACK_IMPORTED_MODULE_1___default()(data.created_at).format('MMM D, YYYY'), "\n                            </span>\n                        </div>\n                        <div>").concat(content, "</div>\n                    </div>\n                </div>\n            ");
+    var commentHTML = "\n                <div class=\"d-flex\" data-comment-id=\"".concat(data.id, "\">\n                    <div class=\"d-flex mb-2\">\n                        <img\n                            class=\"avatar mr-3\"\n                            src=\"").concat(user.avatar, "\"\n                            alt=\"").concat(user.name, "\"\n                        >\n                    </div>\n                    <div class=\"d-flex flex-column mb-4 w-100\">\n                        <div class=\"d-flex flex-column\">\n                            <div class=\"d-flex justify-content-between\">\n                                <span>").concat(user.name, "</span>\n                                <a href=\"#\" class=\"text-dark\" data-remove-comment>\n                                    <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n                                </a>\n                            </div>\n                            <span class=\"text-secondary\">\n                                ").concat(dayjs__WEBPACK_IMPORTED_MODULE_1___default()(data.created_at).format('MMM D, YYYY'), "\n                            </span>\n                        </div>\n                        <div>").concat(content, "</div>\n                    </div>\n                </div>\n            ");
     $content.val('');
     $commentList.prepend(commentHTML);
-    $commentList.children().first().find('[data-user-action="remove-comment"]').on('click', onCommentRemove);
+    $commentList.children().first().find('[data-remove-comment]').on('click', onCommentRemove);
   });
 });
 var onCommentRemove = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_4__["default"])(function (event) {
@@ -64839,7 +64835,7 @@ var onCommentRemove = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODUL
 var comment = {
   init: function init() {
     $('#comment-form').on('submit', onCommentSubmit);
-    $('#comment-list [data-user-action="remove-comment"]').on('click', onCommentRemove);
+    $('#comment-list [data-remove-comment]').on('click', onCommentRemove);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (comment);
@@ -64913,17 +64909,15 @@ var onLikeClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_3_
     if (isLiked) {
       $likeIcon.removeClass(iconType.like).addClass(iconType.unlike);
       $likeCount.text(likeCount + 1);
-      toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Liked!');
     } else {
       $likeIcon.removeClass(iconType.unlike).addClass(iconType.like);
       $likeCount.text(likeCount - 1);
-      toastr__WEBPACK_IMPORTED_MODULE_0___default.a.info('Unliked!');
     }
   });
 });
 var like = {
   init: function init() {
-    $('[data-user-action="like"]').on('click', onLikeClick);
+    $('#like-action').on('click', onLikeClick);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (like);

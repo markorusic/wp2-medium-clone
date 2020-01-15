@@ -24,18 +24,16 @@ const onLikeClick = asyncEventHandler(event => {
         if (isLiked) {
             $likeIcon.removeClass(iconType.like).addClass(iconType.unlike)
             $likeCount.text(likeCount + 1)
-            toastr.success('Liked!')
         } else {
             $likeIcon.removeClass(iconType.unlike).addClass(iconType.like)
             $likeCount.text(likeCount - 1)
-            toastr.info('Unliked!')
         }
     })
 })
 
 const like = {
     init() {
-        $('[data-user-action="like"]').on('click', onLikeClick)
+        $('#like-action').on('click', onLikeClick)
     }
 }
 

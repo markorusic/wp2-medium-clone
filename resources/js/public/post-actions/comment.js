@@ -14,7 +14,6 @@ const onCommentSubmit = asyncEventHandler(event => {
     return http
         .post(`/posts/${postActions.id}/comment`, { content })
         .then(({ data }) => {
-            toastr.success('Successfully added comment!')
             const user = auth.getUser()
             const $commentList = $('#comment-list')
             const commentHTML = `
@@ -30,7 +29,7 @@ const onCommentSubmit = asyncEventHandler(event => {
                         <div class="d-flex flex-column">
                             <div class="d-flex justify-content-between">
                                 <span>${user.name}</span>
-                                <a href="#" class="text-dark" data-user-action="remove-comment">
+                                <a href="#" class="text-dark" data-remove-comment>
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                 </a>
                             </div>
@@ -47,7 +46,7 @@ const onCommentSubmit = asyncEventHandler(event => {
             $commentList
                 .children()
                 .first()
-                .find('[data-user-action="remove-comment"]')
+                .find('[data-remove-comment]')
                 .on('click', onCommentRemove)
         })
 })
@@ -68,10 +67,7 @@ const onCommentRemove = asyncEventHandler(event => {
 const comment = {
     init() {
         $('#comment-form').on('submit', onCommentSubmit)
-        $('#comment-list [data-user-action="remove-comment"]').on(
-            'click',
-            onCommentRemove
-        )
+        $('#comment-list [data-remove-comment]').on('click', onCommentRemove)
     }
 }
 
