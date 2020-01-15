@@ -5,7 +5,9 @@ import http from './http-service'
 require('jquery-serializejson')
 
 let props = {
-    createRedirectUrl: null
+    onCreateSuccess: null,
+    onUpdateSuccess: null,
+    onError: null
 }
 
 const onFormSubmit = event => {
@@ -26,53 +28,58 @@ const onFormSubmit = event => {
             .then(
                 responseHandlers.success.bind(responseHandlers, $form, config)
             )
-            .catch(responseHandlers.error.bind(responseHandlers, $form, config))
+            .catch(responseHandlers.error.bind(responseHandlers, $form))
     }
 }
 
 const responseHandlers = {
     success($form, config, response) {
-        console.log(response)
         switch (config.method) {
             case 'post':
                 this.successCreate($form, response)
                 break
             case 'put':
-                this.successUpdate($form, config)
+                this.successUpdate($form, response)
                 break
             default:
                 break
         }
     },
-    error($form, _, error) {
-        console.log(error)
+    error($form, error) {
         toastr.error('Error occured during this action!')
         $form.find('button[type="submit"]').removeClass('loading-btn')
+        if (typeof props.onError === 'function') {
+            props.onError({ $form, error })
+        }
     },
     successCreate($form, response) {
         toastr.success('Successfully created!')
         $form.find('button[type="submit"]').hide()
-        if (typeof createRedirectUrl === 'function') {
-            const url =
-                location.protocol +
-                '//' +
-                location.host +
-                props.createRedirectUrl(response.data)
-            $(location).attr('href', url)
+        if (typeof props.onCreateSuccess === 'function') {
+            props.onCreateSuccess({
+                $form,
+                response
+            })
         }
     },
-    successUpdate($form) {
+    successUpdate($form, response) {
         toastr.success('Successfully updated!')
         $form
             .on('submit', event => event.preventDefault())
             .find('button[type="submit"]')
             .removeClass('loading-btn')
+        if (typeof props.onUpdateSuccess === 'function') {
+            props.onUpdateSuccess({
+                $form,
+                response
+            })
+        }
     }
 }
 
 const dataFrom = {
-    init(_props) {
-        props = _props
+    init(_props = {}) {
+        props = { ...props, ..._props }
         $('form').on('submit', onFormSubmit)
     }
 }

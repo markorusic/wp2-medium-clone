@@ -14740,7 +14740,7 @@ input[type=number]:active,
 .loading-btn::after {
   content: "Please wait..." !important;
   font-weight: bold;
-  color: black;
+  color: white;
 }
 
 .avatar-sm {

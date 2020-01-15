@@ -26,6 +26,7 @@ Route::group([ 'middleware' => ['auth']], function () {
 	Route::delete('/posts/{post}', 'PostController@destroy')->name('post-destroy');
 	Route::get('/posts/{post}/update', 'PostController@edit')->name('post-update-page');
 	Route::put('/posts/{post}', 'PostController@update')->name('post-update');
+	Route::delete('/posts/{post}', 'PostController@destroy')->name('post-delete');
 
 	Route::post('/users/{user}/follow', 'UserController@follow')->name('user-follow');
 });

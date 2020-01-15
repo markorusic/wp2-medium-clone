@@ -8,11 +8,22 @@
         <div class="d-flex justify-content-between">
             <h1>{{ $post->title }}</h1>
             @if ($isUserPost)
-                <div>
-                    <a href="{{ route('post-update-page', ['post' => $post->id]) }}" class="btn btn-primary">
-                        <i class="fa fa-pencil mr-2"></i>
-                        Edit
-                    </a>
+                <div class="d-flex">
+                    <div class="mr-2">
+                        <a href="{{ route('post-update-page', ['post' => $post->id]) }}" class="btn btn-primary">
+                            <i class="fa fa-pencil mr-2"></i>
+                            {{ __('Edit') }}
+                        </a>
+                    </div>
+                    <div>
+                        <a id="delete-post"
+                            class="btn btn-danger"
+                            href="{{ route('post-delete', ['post' => $post->id]) }}"
+                        >
+                            <i class="fa fa-trash mr-2"></i>
+                            {{ __('Remove') }}
+                        </a>
+                    </div>
                 </div>
             @endif
         </div>

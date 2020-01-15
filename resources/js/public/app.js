@@ -25,9 +25,13 @@ router.match('/posts/:id', ({ id }) => {
     followAction.init()
 })
 
-router.match('/posts/create/new', () => {
+router.match('/posts/create/_', () => {
     markdownEditor.init('[name="content"]')
-    dataForm.init({ createRedirectUrl: post => `/posts/${post.id}` })
+    dataForm.init({
+        onCreateSuccess: ({ response }) => {
+            router.redirect(`/posts/${response.data.id}`)
+        }
+    })
 })
 
 router.match('/posts/:id/update', () => {

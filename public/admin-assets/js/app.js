@@ -64806,6 +64806,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(toastr__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _form_validation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./form-validation */ "./resources/js/shared/form-validation.js");
 /* harmony import */ var _http_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./http-service */ "./resources/js/shared/http-service.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -64813,7 +64819,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__(/*! jquery-serializejson */ "./node_modules/jquery-serializejson/jquery.serializejson.js");
 
 var props = {
-  createRedirectUrl: null
+  onCreateSuccess: null,
+  onUpdateSuccess: null,
+  onError: null
 };
 
 var onFormSubmit = function onFormSubmit(event) {
@@ -64831,51 +64839,66 @@ var onFormSubmit = function onFormSubmit(event) {
       parseNumbers: true
     });
     $form.find('button[type="submit"]').addClass('loading-btn');
-    _http_service__WEBPACK_IMPORTED_MODULE_2__["default"][config.method](config.endpoint, data).then(responseHandlers.success.bind(responseHandlers, $form, config))["catch"](responseHandlers.error.bind(responseHandlers, $form, config));
+    _http_service__WEBPACK_IMPORTED_MODULE_2__["default"][config.method](config.endpoint, data).then(responseHandlers.success.bind(responseHandlers, $form, config))["catch"](responseHandlers.error.bind(responseHandlers, $form));
   }
 };
 
 var responseHandlers = {
   success: function success($form, config, response) {
-    console.log(response);
-
     switch (config.method) {
       case 'post':
         this.successCreate($form, response);
         break;
 
       case 'put':
-        this.successUpdate($form, config);
+        this.successUpdate($form, response);
         break;
 
       default:
         break;
     }
   },
-  error: function error($form, _, _error) {
-    console.log(_error);
+  error: function error($form, _error) {
     toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Error occured during this action!');
     $form.find('button[type="submit"]').removeClass('loading-btn');
+
+    if (typeof props.onError === 'function') {
+      props.onError({
+        $form: $form,
+        error: _error
+      });
+    }
   },
   successCreate: function successCreate($form, response) {
     toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Successfully created!');
     $form.find('button[type="submit"]').hide();
 
-    if (typeof createRedirectUrl === 'function') {
-      var url = location.protocol + '//' + location.host + props.createRedirectUrl(response.data);
-      $(location).attr('href', url);
+    if (typeof props.onCreateSuccess === 'function') {
+      props.onCreateSuccess({
+        $form: $form,
+        response: response
+      });
     }
   },
-  successUpdate: function successUpdate($form) {
+  successUpdate: function successUpdate($form, response) {
     toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Successfully updated!');
     $form.on('submit', function (event) {
       return event.preventDefault();
     }).find('button[type="submit"]').removeClass('loading-btn');
+
+    if (typeof props.onUpdateSuccess === 'function') {
+      props.onUpdateSuccess({
+        $form: $form,
+        response: response
+      });
+    }
   }
 };
 var dataFrom = {
-  init: function init(_props) {
-    props = _props;
+  init: function init() {
+    var _props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    props = _objectSpread({}, props, {}, _props);
     $('form').on('submit', onFormSubmit);
   }
 };
@@ -65145,6 +65168,10 @@ var router = {
     if (params) {
       cb(params);
     }
+  },
+  redirect: function redirect(path) {
+    var url = location.protocol + '//' + location.host + path;
+    $(location).attr('href', url);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (router);

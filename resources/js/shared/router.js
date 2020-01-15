@@ -8,6 +8,10 @@ const router = {
         if (params) {
             cb(params)
         }
+    },
+    redirect: path => {
+        const url = location.protocol + '//' + location.host + path
+        $(location).attr('href', url)
     }
 }
 

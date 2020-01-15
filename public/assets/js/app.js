@@ -64562,11 +64562,12 @@ _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/:id', funct
   _post_actions__WEBPACK_IMPORTED_MODULE_3__["default"].init(id);
   _follow_action__WEBPACK_IMPORTED_MODULE_5__["default"].init();
 });
-_shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/create/new', function () {
+_shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/create/_', function () {
   _shared_markdown_editor__WEBPACK_IMPORTED_MODULE_1__["default"].init('[name="content"]');
   _shared_data_form__WEBPACK_IMPORTED_MODULE_2__["default"].init({
-    createRedirectUrl: function createRedirectUrl(post) {
-      return "/posts/".concat(post.id);
+    onCreateSuccess: function onCreateSuccess(_ref2) {
+      var response = _ref2.response;
+      _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].redirect("/posts/".concat(response.data.id));
     }
   });
 });
@@ -64848,6 +64849,8 @@ var comment = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _like__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./like */ "./resources/js/public/post-actions/like.js");
 /* harmony import */ var _comment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./comment */ "./resources/js/public/post-actions/comment.js");
+/* harmony import */ var _post_delete__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./post-delete */ "./resources/js/public/post-actions/post-delete.js");
+
 
 
 var postActions = {
@@ -64856,6 +64859,7 @@ var postActions = {
     this.id = id;
     _like__WEBPACK_IMPORTED_MODULE_0__["default"].init();
     _comment__WEBPACK_IMPORTED_MODULE_1__["default"].init();
+    _post_delete__WEBPACK_IMPORTED_MODULE_2__["default"].init();
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (postActions);
@@ -64911,6 +64915,44 @@ var like = {
 
 /***/ }),
 
+/***/ "./resources/js/public/post-actions/post-delete.js":
+/*!*********************************************************!*\
+  !*** ./resources/js/public/post-actions/post-delete.js ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(toastr__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shared_async_event_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/async-event-handler */ "./resources/js/shared/async-event-handler.js");
+/* harmony import */ var _shared_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../shared/router */ "./resources/js/shared/router.js");
+/* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/http-service */ "./resources/js/shared/http-service.js");
+
+
+
+
+var onDeleteClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"])(function (event) {
+  if (confirm('Are you sure that you want to delete this post?')) {
+    var url = $(event.currentTarget).attr('href');
+    return _shared_http_service__WEBPACK_IMPORTED_MODULE_3__["default"]["delete"](url).then(function () {
+      toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Successfully deleted!');
+      _shared_router__WEBPACK_IMPORTED_MODULE_2__["default"].redirect('');
+    });
+  }
+
+  return Promise.resolve();
+});
+var postDelete = {
+  init: function init() {
+    $('#delete-post').on('click', onDeleteClick);
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (postDelete);
+
+/***/ }),
+
 /***/ "./resources/js/shared/async-event-handler.js":
 /*!****************************************************!*\
   !*** ./resources/js/shared/async-event-handler.js ***!
@@ -64958,6 +65000,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(toastr__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _form_validation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./form-validation */ "./resources/js/shared/form-validation.js");
 /* harmony import */ var _http_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./http-service */ "./resources/js/shared/http-service.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -64965,7 +65013,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__(/*! jquery-serializejson */ "./node_modules/jquery-serializejson/jquery.serializejson.js");
 
 var props = {
-  createRedirectUrl: null
+  onCreateSuccess: null,
+  onUpdateSuccess: null,
+  onError: null
 };
 
 var onFormSubmit = function onFormSubmit(event) {
@@ -64983,51 +65033,66 @@ var onFormSubmit = function onFormSubmit(event) {
       parseNumbers: true
     });
     $form.find('button[type="submit"]').addClass('loading-btn');
-    _http_service__WEBPACK_IMPORTED_MODULE_2__["default"][config.method](config.endpoint, data).then(responseHandlers.success.bind(responseHandlers, $form, config))["catch"](responseHandlers.error.bind(responseHandlers, $form, config));
+    _http_service__WEBPACK_IMPORTED_MODULE_2__["default"][config.method](config.endpoint, data).then(responseHandlers.success.bind(responseHandlers, $form, config))["catch"](responseHandlers.error.bind(responseHandlers, $form));
   }
 };
 
 var responseHandlers = {
   success: function success($form, config, response) {
-    console.log(response);
-
     switch (config.method) {
       case 'post':
         this.successCreate($form, response);
         break;
 
       case 'put':
-        this.successUpdate($form, config);
+        this.successUpdate($form, response);
         break;
 
       default:
         break;
     }
   },
-  error: function error($form, _, _error) {
-    console.log(_error);
+  error: function error($form, _error) {
     toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Error occured during this action!');
     $form.find('button[type="submit"]').removeClass('loading-btn');
+
+    if (typeof props.onError === 'function') {
+      props.onError({
+        $form: $form,
+        error: _error
+      });
+    }
   },
   successCreate: function successCreate($form, response) {
     toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Successfully created!');
     $form.find('button[type="submit"]').hide();
 
-    if (typeof createRedirectUrl === 'function') {
-      var url = location.protocol + '//' + location.host + props.createRedirectUrl(response.data);
-      $(location).attr('href', url);
+    if (typeof props.onCreateSuccess === 'function') {
+      props.onCreateSuccess({
+        $form: $form,
+        response: response
+      });
     }
   },
-  successUpdate: function successUpdate($form) {
+  successUpdate: function successUpdate($form, response) {
     toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Successfully updated!');
     $form.on('submit', function (event) {
       return event.preventDefault();
     }).find('button[type="submit"]').removeClass('loading-btn');
+
+    if (typeof props.onUpdateSuccess === 'function') {
+      props.onUpdateSuccess({
+        $form: $form,
+        response: response
+      });
+    }
   }
 };
 var dataFrom = {
-  init: function init(_props) {
-    props = _props;
+  init: function init() {
+    var _props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    props = _objectSpread({}, props, {}, _props);
     $('form').on('submit', onFormSubmit);
   }
 };
@@ -65297,6 +65362,10 @@ var router = {
     if (params) {
       cb(params);
     }
+  },
+  redirect: function redirect(path) {
+    var url = location.protocol + '//' + location.host + path;
+    $(location).attr('href', url);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (router);
