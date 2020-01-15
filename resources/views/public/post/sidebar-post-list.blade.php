@@ -7,7 +7,7 @@
             <a class="text-black pointer" href="{{ route('posts.show', ['post' => $post->id]) }}">{{ $post->title }}</a>
         </h3>
         <div class="d-flex flex-column">
-            <span>{{ $post->user->name }}</span>
+            <a class="text-dark" href="{{ route('users.show', ['user' => $post->user->id]) }}">{{ $post->user->name }}</a>
             <span class="text-secondary">{{ $post->created_at->format('M d, Y') }}</span>
         </div>
     </div>

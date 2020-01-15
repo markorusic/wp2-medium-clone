@@ -30,12 +30,17 @@
         <h4 class="text-secondary font-weight-normal mt-3 mb-5">{{ $post->description }}</h4>
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex">
-                <img class="avatar mr-3"
-                    src="{{ $post->user->avatar }}"
-                    alt="{{ $post->user->name }}"
-                >
+                @php
+                    $userProfileUrl = route('users.show', ['user' => $post->user->id])
+                @endphp
+                <a href="{{ $userProfileUrl }}">
+                    <img class="avatar mr-3"
+                        src="{{ $post->user->avatar }}"
+                        alt="{{ $post->user->name }}"
+                    >
+                </a>
                 <div class="d-flex flex-column">
-                    <span>{{ $post->user->name }}</span>
+                    <a class="text-dark" href="{{ $userProfileUrl }}">{{ $post->user->name }}</a>
                     <span class="text-secondary">{{ $post->created_at->format('M d, Y') }}</span>
                 </div>
             </div>
