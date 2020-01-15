@@ -14699,6 +14699,10 @@ input[type=number]:active,
   box-shadow: none;
 }
 
+.dropdown-item:active {
+  background-color: #28a745;
+}
+
 .page-link {
   color: black;
 }
@@ -14721,6 +14725,22 @@ input[type=number]:active,
   width: 50px;
   height: 50px;
   border-radius: 50%;
+}
+
+.loading-btn {
+  pointer-events: none;
+  background-color: #c9c9c9;
+  border: none;
+}
+
+.loading-btn span.content {
+  display: none;
+}
+
+.loading-btn::after {
+  content: "Please wait..." !important;
+  font-weight: bold;
+  color: black;
 }
 
 .avatar-sm {

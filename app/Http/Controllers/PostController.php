@@ -38,4 +38,14 @@ class PostController extends Controller
         abort_unless($comment->delete(), 404);
         return response('Success', 200);
     }
+
+    public function create() {
+        return view('public.pages.create-post');
+    }
+
+    public function store(Request $request) {
+        $data = collect($request->all());
+        $data->put('main_photo', 'https://miro.medium.com/max/6120/0*qdqEWekIW_KHiu6P');
+        return auth()->user()->posts()->create($data->toArray());
+    }
 }

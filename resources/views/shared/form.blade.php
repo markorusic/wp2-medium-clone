@@ -50,7 +50,8 @@
 						class="form-control"
 						rows="4"
 						cols="50"
-						{{ stringifyProps($props->except('value')) }}
+						placeholder="{{ $props->get('placeholder', '') }}"
+						{{ stringifyProps($props->except(['value', 'placeholder'])) }}
 					>{{ $props->get('value') }}</textarea>
 			    @break
 
@@ -124,7 +125,8 @@
 	@endforeach
 	</div>
 	<button class="btn btn-success" type="submit">
-		<span class="content">Submit</span>
+		<i class="fa fa-floppy-o text-white mr-2"></i>
+		<span class="content">Save</span>
 	</button>
 
 	<div class="mt-4 response-alert alert-success">

@@ -1,11 +1,10 @@
-import dataForm from './modules/data-form'
-import dataTable from './modules/data-table'
+import dataForm from '../shared/data-form'
 import router from '../shared/router'
 import markdownEditor from '../shared/markdown-editor'
+import dataTable from './modules/data-table'
 
 window.Popper = require('popper.js').default
 window.$ = window.jQuery = require('jquery')
-require('jquery-serializejson')
 require('bootstrap')
 
 router.match('/admin/posts/show-all', () => {

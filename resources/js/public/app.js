@@ -1,5 +1,6 @@
 import router from '../shared/router'
 import markdownEditor from '../shared/markdown-editor'
+import dataForm from '../shared/data-form'
 import postActions from './post-actions'
 import auth from './auth'
 import followAction from './follow-action'
@@ -22,4 +23,9 @@ router.match('/posts/:id', ({ id }) => {
 
     postActions.init(id)
     followAction.init()
+})
+
+router.match('/posts/create/new', () => {
+    markdownEditor.init('[name="content"]')
+    dataForm.init({ createRedirectUrl: post => `/posts/${post.id}` })
 })
