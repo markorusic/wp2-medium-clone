@@ -11,7 +11,7 @@ class PostController extends Controller
 {
     public function show(Post $post) {
         $post->load(['user', 'comments.user', 'likes', 'categories']);
-        return view('public.pages.post-entry', compact('post'));
+        return view('public.pages.post', compact('post'));
     }
 
     public function categoryPosts(Category $category) {
@@ -46,7 +46,8 @@ class PostController extends Controller
     }
 
     public function edit(Post $post) {
-        return view('public.pages.post-update', compact('post'));
+        abort_if($post->user_id !== auth()->id(), 403);
+        return view('public.pages.post-edit', compact('post'));
     }
 
     public function update(Request $request, Post $post) {
