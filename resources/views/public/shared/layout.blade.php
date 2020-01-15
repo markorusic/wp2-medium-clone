@@ -45,6 +45,9 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a href="{{ route('post-create-page') }}" class="dropdown-item">
+                                        {{ __('New post') }}
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
                                                     document.getElementById('logout-form').submit();">
@@ -58,7 +61,7 @@
                             </li>
                         @else
                             <li class="nav-item">
-                                <a class="nav-link" href="#">{{ __('Sign in') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Sign in') }}</a>
                             </li>
                         @endauth
                     </ul>

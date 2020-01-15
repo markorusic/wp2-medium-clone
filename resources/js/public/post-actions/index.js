@@ -1,5 +1,6 @@
 import like from './like'
 import comment from './comment'
+import postDelete from './post-delete'
 
 const postActions = {
     id: null,
@@ -7,6 +8,7 @@ const postActions = {
         this.id = id
         like.init()
         comment.init()
+        postDelete.init()
     }
 }
 

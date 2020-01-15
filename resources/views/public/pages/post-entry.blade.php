@@ -1,12 +1,33 @@
+@php
+    $isUserPost = $post->user_id === auth()->id();
+@endphp
 @extends('public.shared.layout')
 
 @section('content')
     <div class="px-5 my-4">
-        <h1>{{ $post->title }}</h1>
-        <h4 class="text-secondary font-weight-normal mt-3 mb-5">
-            {{ $post->description }}
-        </h4>
-
+        <div class="d-flex justify-content-between">
+            <h1>{{ $post->title }}</h1>
+            @if ($isUserPost)
+                <div class="d-flex">
+                    <div class="mr-2">
+                        <a href="{{ route('post-update-page', ['post' => $post->id]) }}" class="btn btn-primary">
+                            <i class="fa fa-pencil mr-2"></i>
+                            {{ __('Edit') }}
+                        </a>
+                    </div>
+                    <div>
+                        <a id="delete-post"
+                            class="btn btn-danger"
+                            href="{{ route('post-delete', ['post' => $post->id]) }}"
+                        >
+                            <i class="fa fa-trash mr-2"></i>
+                            {{ __('Remove') }}
+                        </a>
+                    </div>
+                </div>
+            @endif
+        </div>
+        <h4 class="text-secondary font-weight-normal mt-3 mb-5">{{ $post->description }}</h4>
         <div class="d-flex mb-4">
             <img
                 class="avatar mr-3"
@@ -67,35 +88,33 @@
             </form>
         </div>
 
-        @if ($post->comments->count() > 0)
-            <h3 class="mb-5 pb-3 border-bottom">Comments</h3>
-            <div id="comment-list">
-                @foreach ($post->comments as $comment)
-                    <div class="d-flex" data-comment-id="{{ $comment->id }}">
-                        <div class="d-flex mb-2">
-                            <img
-                                class="avatar mr-3"
-                                src="{{ $comment->user->avatar }}"
-                                alt="{{ $comment->user->name }}"
-                            >
-                        </div>
-                        <div class="d-flex flex-column mb-4 w-100">
-                            <div class="d-flex flex-column">
-                                <div class="d-flex justify-content-between">
-                                    <span>{{ $comment->user->name }}</span>
-                                    @if (auth()->id() === $comment->user->id)
-                                        <a href="#" class="text-dark" data-user-action="remove-comment">
-                                            <i class="fa fa-times" aria-hidden="true"></i>
-                                        </a>
-                                    @endif
-                                </div>
-                                <span class="text-secondary">{{ $comment->created_at->format('M d, Y') }}</span>
-                            </div>
-                            <div>{{ $comment->content }}</div>
-                        </div>
+        <h3 class="mb-5 pb-3 border-bottom">{{$post->comments->count() > 0 ? 'Comments' : 'Be first to comment!'}}</h3>
+        <div id="comment-list">
+            @foreach ($post->comments as $comment)
+                <div class="d-flex" data-comment-id="{{ $comment->id }}">
+                    <div class="d-flex mb-2">
+                        <img
+                            class="avatar mr-3"
+                            src="{{ $comment->user->avatar }}"
+                            alt="{{ $comment->user->name }}"
+                        >
                     </div>
-                @endforeach
-            </div>
-        @endif
+                    <div class="d-flex flex-column mb-4 w-100">
+                        <div class="d-flex flex-column">
+                            <div class="d-flex justify-content-between">
+                                <span>{{ $comment->user->name }}</span>
+                                @if (auth()->id() === $comment->user->id)
+                                    <a href="#" class="text-dark" data-user-action="remove-comment">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </a>
+                                @endif
+                            </div>
+                            <span class="text-secondary">{{ $comment->created_at->format('M d, Y') }}</span>
+                        </div>
+                        <div>{{ $comment->content }}</div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
     </div>
 @endsection

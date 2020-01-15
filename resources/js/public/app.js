@@ -1,5 +1,6 @@
 import router from '../shared/router'
 import markdownEditor from '../shared/markdown-editor'
+import dataForm from '../shared/data-form'
 import postActions from './post-actions'
 import auth from './auth'
 import followAction from './follow-action'
@@ -22,4 +23,18 @@ router.match('/posts/:id', ({ id }) => {
 
     postActions.init(id)
     followAction.init()
+})
+
+router.match('/posts/create/_', () => {
+    markdownEditor.init('[name="content"]')
+    dataForm.init({
+        onCreateSuccess: ({ response }) => {
+            router.redirect(`/posts/${response.data.id}`)
+        }
+    })
+})
+
+router.match('/posts/:id/update', () => {
+    markdownEditor.init('[name="content"]')
+    dataForm.init()
 })

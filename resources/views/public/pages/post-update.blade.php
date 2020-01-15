@@ -1,16 +1,15 @@
-@extends('admin.shared.layout')
+@extends('public.shared.layout')
 
 @section('content')
     @component('shared.card-wrapper', [
-        'header' => ['title' => 'Update ' . $post->title]
+        'header' => ['title' => 'Update post']
     ])
         @include('shared.form', [
             'config' => [
-                'endpoint' => route('admin.posts.update', [
-                    'post' => $post->id
-                ]),
                 'method' => 'put',
-                'resource' => 'post'
+                'endpoint' => route('post-update', [
+                    'post' => $post->id
+                ])
             ],
             'fields' => [
                 [
@@ -18,6 +17,13 @@
                     'label' => 'Title',
                     'placeholder' => 'Enter post title',
                     'value' => $post->title
+                ],
+                [
+                    'type' => 'textarea',
+                    'name' => 'description',
+                    'label' => 'Description',
+                    'placeholder' => 'Enter description',
+                    'value' => $post->description
                 ],
                 // [
                 //     'type' => 'photo',

@@ -1,5 +1,5 @@
 import toastr from 'toastr'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import auth from '../auth'
 import http from '../../shared/http-service'
 import asyncEventHandler from '../../shared/async-event-handler'
@@ -34,7 +34,7 @@ const onCommentSubmit = asyncEventHandler(event => {
                             </a>
                         </div>
                         <span class="text-secondary">
-                            ${moment(data.created_at).format('MMM D, Y')}
+                            ${dayjs(data.created_at).format('MMM D, YYYY')}
                         </span>
                     </div>
                     <div>${content}</div>

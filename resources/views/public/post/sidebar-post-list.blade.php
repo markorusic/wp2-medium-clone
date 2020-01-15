@@ -3,7 +3,9 @@
 @endif
 @foreach ($popular_posts as $post)
     <div class="d-flex flex-column justify-content-between">
-        <h3>{{ $post->title }}</h3>
+        <h3>
+            <a class="text-black pointer" href="{{ route('post-entry', ['post' => $post->id]) }}">{{ $post->title }}</a>
+        </h3>
         <div class="d-flex flex-column">
             <span>{{ $post->user->name }}</span>
             <span class="text-secondary">{{ $post->created_at->format('M d, Y') }}</span>
