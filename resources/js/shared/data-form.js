@@ -1,6 +1,8 @@
 import toastr from 'toastr'
 import FormValidation from './form-validation'
 import http from './http-service'
+import photoUpload from './photo-upload'
+import asyncEventHandler from './async-event-handler'
 
 require('jquery-serializejson')
 
@@ -10,49 +12,39 @@ let props = {
     onError: null
 }
 
-const onFormSubmit = event => {
-    event.preventDefault()
+const onFormSubmit = asyncEventHandler(event => {
     const $form = $(event.target)
     const validator = new FormValidation({ $form })
 
-    if (validator.validate()) {
-        const config = $form.find('.config').data()
-        const data = $form.serializeJSON({
-            checkboxUncheckedValue: 'false',
-            parseBooleans: true,
-            parseNumbers: true
-        })
-
-        $form.find('button[type="submit"]').addClass('loading-btn')
-        http[config.method](config.endpoint, data)
-            .then(
-                responseHandlers.success.bind(responseHandlers, $form, config)
-            )
-            .catch(responseHandlers.error.bind(responseHandlers, $form))
+    if (!validator.validate()) {
+        return Promise.resolve()
     }
-}
+    const { method, endpoint } = $form.find('.config').data()
+    $form.find('button[type="submit"]').addClass('loading-btn')
+    return photoUpload
+        .upload()
+        .then(() => {
+            const data = $form.serializeJSON({
+                checkboxUncheckedValue: 'false',
+                parseBooleans: true,
+                parseNumbers: true
+            })
+            return http[method](endpoint, data)
+        })
+        .then(response => responseHandlers[method]($form, response))
+        .catch(responseHandlers.error.bind(responseHandlers, $form))
+})
 
 const responseHandlers = {
-    success($form, config, response) {
-        switch (config.method) {
-            case 'post':
-                this.successCreate($form, response)
-                break
-            case 'put':
-                this.successUpdate($form, response)
-                break
-            default:
-                break
-        }
-    },
     error($form, error) {
+        console.log(error)
         toastr.error('Error occured during this action!')
         $form.find('button[type="submit"]').removeClass('loading-btn')
         if (typeof props.onError === 'function') {
             props.onError({ $form, error })
         }
     },
-    successCreate($form, response) {
+    post($form, response) {
         toastr.success('Successfully created!')
         $form.find('button[type="submit"]').hide()
         if (typeof props.onCreateSuccess === 'function') {
@@ -62,7 +54,7 @@ const responseHandlers = {
             })
         }
     },
-    successUpdate($form, response) {
+    put($form, response) {
         toastr.success('Successfully updated!')
         $form
             .on('submit', event => event.preventDefault())
@@ -80,6 +72,7 @@ const responseHandlers = {
 const dataFrom = {
     init(_props = {}) {
         props = { ...props, ..._props }
+        photoUpload.init()
         $('form').on('submit', onFormSubmit)
     }
 }

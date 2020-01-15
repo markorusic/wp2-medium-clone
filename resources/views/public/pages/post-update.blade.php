@@ -25,12 +25,13 @@
                     'placeholder' => 'Enter description',
                     'value' => $post->description
                 ],
-                // [
-                //     'type' => 'photo',
-                //     'name' => 'main_photo',
-                //     'label' => 'Post main photo',
-                //     'value' => $post->main_photo
-                // ],
+                [
+                    'type' => 'photo',
+                    'name' => 'main_photo',
+                    'label' => 'Main photo',
+                    'placeholder' => 'Click to upload main photo',
+                    'value' => $post->main_photo
+                ],
                 [
                     'type' => 'textarea',
                     'name' => 'content',

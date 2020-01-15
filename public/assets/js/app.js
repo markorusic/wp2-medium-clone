@@ -64571,7 +64571,7 @@ _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/create/_', 
     }
   });
 });
-_shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/:id/update', function () {
+_shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/:id/edit', function () {
   _shared_markdown_editor__WEBPACK_IMPORTED_MODULE_1__["default"].init('[name="content"]');
   _shared_data_form__WEBPACK_IMPORTED_MODULE_2__["default"].init();
 });
@@ -65000,11 +65000,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(toastr__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _form_validation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./form-validation */ "./resources/js/shared/form-validation.js");
 /* harmony import */ var _http_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./http-service */ "./resources/js/shared/http-service.js");
+/* harmony import */ var _photo_upload__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./photo-upload */ "./resources/js/shared/photo-upload.js");
+/* harmony import */ var _async_event_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./async-event-handler */ "./resources/js/shared/async-event-handler.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
 
 
 
@@ -65017,42 +65021,35 @@ var props = {
   onUpdateSuccess: null,
   onError: null
 };
-
-var onFormSubmit = function onFormSubmit(event) {
-  event.preventDefault();
+var onFormSubmit = Object(_async_event_handler__WEBPACK_IMPORTED_MODULE_4__["default"])(function (event) {
   var $form = $(event.target);
   var validator = new _form_validation__WEBPACK_IMPORTED_MODULE_1__["default"]({
     $form: $form
   });
 
-  if (validator.validate()) {
-    var config = $form.find('.config').data();
+  if (!validator.validate()) {
+    return Promise.resolve();
+  }
+
+  var _$form$find$data = $form.find('.config').data(),
+      method = _$form$find$data.method,
+      endpoint = _$form$find$data.endpoint;
+
+  $form.find('button[type="submit"]').addClass('loading-btn');
+  return _photo_upload__WEBPACK_IMPORTED_MODULE_3__["default"].upload().then(function () {
     var data = $form.serializeJSON({
       checkboxUncheckedValue: 'false',
       parseBooleans: true,
       parseNumbers: true
     });
-    $form.find('button[type="submit"]').addClass('loading-btn');
-    _http_service__WEBPACK_IMPORTED_MODULE_2__["default"][config.method](config.endpoint, data).then(responseHandlers.success.bind(responseHandlers, $form, config))["catch"](responseHandlers.error.bind(responseHandlers, $form));
-  }
-};
-
+    return _http_service__WEBPACK_IMPORTED_MODULE_2__["default"][method](endpoint, data);
+  }).then(function (response) {
+    return responseHandlers[method]($form, response);
+  })["catch"](responseHandlers.error.bind(responseHandlers, $form));
+});
 var responseHandlers = {
-  success: function success($form, config, response) {
-    switch (config.method) {
-      case 'post':
-        this.successCreate($form, response);
-        break;
-
-      case 'put':
-        this.successUpdate($form, response);
-        break;
-
-      default:
-        break;
-    }
-  },
   error: function error($form, _error) {
+    console.log(_error);
     toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Error occured during this action!');
     $form.find('button[type="submit"]').removeClass('loading-btn');
 
@@ -65063,7 +65060,7 @@ var responseHandlers = {
       });
     }
   },
-  successCreate: function successCreate($form, response) {
+  post: function post($form, response) {
     toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Successfully created!');
     $form.find('button[type="submit"]').hide();
 
@@ -65074,7 +65071,7 @@ var responseHandlers = {
       });
     }
   },
-  successUpdate: function successUpdate($form, response) {
+  put: function put($form, response) {
     toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Successfully updated!');
     $form.on('submit', function (event) {
       return event.preventDefault();
@@ -65093,6 +65090,7 @@ var dataFrom = {
     var _props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
     props = _objectSpread({}, props, {}, _props);
+    _photo_upload__WEBPACK_IMPORTED_MODULE_3__["default"].init();
     $('form').on('submit', onFormSubmit);
   }
 };
@@ -65335,6 +65333,113 @@ var markdownEditor = {
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (markdownEditor);
+
+/***/ }),
+
+/***/ "./resources/js/shared/photo-upload.js":
+/*!*********************************************!*\
+  !*** ./resources/js/shared/photo-upload.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(toastr__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared/http-service */ "./resources/js/shared/http-service.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+var state = {
+  file: null
+};
+var $upload = {
+  fileInput: null,
+  input: null,
+  container: null
+};
+
+var renderPreview = function renderPreview() {
+  var src = $upload.input.val();
+
+  if (src) {
+    $upload.container.html("<img class=\"img-fluid\" src=\"".concat(src, "\">"));
+  }
+};
+
+var onContainerClick = function onContainerClick(event) {
+  event.preventDefault();
+  $upload.fileInput.trigger('click');
+};
+
+var onFileChange = function onFileChange(event) {
+  var _event$target$files = _slicedToArray(event.target.files, 1),
+      file = _event$target$files[0];
+
+  if (!file) {
+    return null;
+  }
+
+  if (!file.type.includes('image/')) {
+    return toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Invalid file type.');
+  }
+
+  var src = URL.createObjectURL(file);
+  var img = new Image();
+
+  img.onload = function () {
+    if (img.height >= img.width) {
+      return toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Photo has to be landscape.');
+    }
+
+    state.file = file;
+    $upload.input.val(img.src);
+    renderPreview();
+  };
+
+  img.src = src;
+};
+
+var photoUpload = {
+  init: function init() {
+    $upload.input = $('[data-photo-input]');
+    $upload.fileInput = $('[data-photo-file-input]');
+    $upload.container = $('.photo-upload-control');
+    $upload.container.on('click', onContainerClick);
+    $upload.fileInput.on('change', onFileChange);
+  },
+  upload: function upload() {
+    if (!state.file) {
+      return Promise.resolve();
+    }
+
+    var data = new FormData();
+    var config = {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    };
+    data.append('photo', state.file, state.file.name);
+    return _shared_http_service__WEBPACK_IMPORTED_MODULE_1__["default"].post('/upload/photo', data, config).then(function (_ref) {
+      var data = _ref.data;
+      $upload.input.val(data.url);
+      state.file = null;
+      return data.url;
+    })["catch"](function (err) {
+      toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Upload error.');
+      return Promise.reject(err);
+    });
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (photoUpload);
 
 /***/ }),
 

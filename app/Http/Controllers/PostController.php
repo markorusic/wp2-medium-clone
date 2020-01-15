@@ -42,8 +42,6 @@ class PostController extends Controller
 
     public function store(Request $request) {
         $data = collect($request->all());
-        // TODO: remove after photo upload module creation
-        $data->put('main_photo', 'https://miro.medium.com/max/6120/0*qdqEWekIW_KHiu6P');
         return auth()->user()->posts()->create($data->toArray());
     }
 
@@ -54,8 +52,6 @@ class PostController extends Controller
     public function update(Request $request, Post $post) {
         abort_if($post->user_id !== auth()->id(), 403);
         $data = collect($request->all());
-        // TODO: remove after photo upload module creation
-        $data->put('main_photo', 'https://miro.medium.com/max/6120/0*qdqEWekIW_KHiu6P');
         $post->update($data->toArray());
         return $post;
     }

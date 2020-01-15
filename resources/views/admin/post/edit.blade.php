@@ -2,15 +2,14 @@
 
 @section('content')
     @component('shared.card-wrapper', [
-        'header' => ['title' => 'Update ' . $post->title]
+        'header' => ['title' => 'Update post']
     ])
         @include('shared.form', [
             'config' => [
-                'endpoint' => route('admin.posts.update', [
-                    'post' => $post->id
-                ]),
                 'method' => 'put',
-                'resource' => 'post'
+                'endpoint' => route('post-update', [
+                    'post' => $post->id
+                ])
             ],
             'fields' => [
                 [
@@ -19,12 +18,20 @@
                     'placeholder' => 'Enter post title',
                     'value' => $post->title
                 ],
-                // [
-                //     'type' => 'photo',
-                //     'name' => 'main_photo',
-                //     'label' => 'Post main photo',
-                //     'value' => $post->main_photo
-                // ],
+                [
+                    'type' => 'textarea',
+                    'name' => 'description',
+                    'label' => 'Description',
+                    'placeholder' => 'Enter description',
+                    'value' => $post->description
+                ],
+                [
+                    'type' => 'photo',
+                    'name' => 'main_photo',
+                    'label' => 'Main photo',
+                    'placeholder' => 'Click to upload main photo',
+                    'value' => $post->main_photo
+                ],
                 [
                     'type' => 'textarea',
                     'name' => 'content',
