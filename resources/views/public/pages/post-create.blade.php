@@ -7,7 +7,7 @@
         @include('shared.form', [
             'config' => [
                 'method' => 'post',
-                'endpoint' => route('post-store')
+                'endpoint' => route('posts.store')
             ],
             'fields' => [
                 [

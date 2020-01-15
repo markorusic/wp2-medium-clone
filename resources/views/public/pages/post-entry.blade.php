@@ -10,7 +10,7 @@
             @if ($isUserPost)
                 <div class="d-flex">
                     <div class="mr-2">
-                        <a href="{{ route('post-update-page', ['post' => $post->id]) }}" class="btn btn-primary">
+                        <a href="{{ route('posts.edit', ['post' => $post->id]) }}" class="btn btn-primary">
                             <i class="fa fa-pencil mr-2"></i>
                             {{ __('Edit') }}
                         </a>
@@ -18,7 +18,7 @@
                     <div>
                         <a id="delete-post"
                             class="btn btn-danger"
-                            href="{{ route('post-delete', ['post' => $post->id]) }}"
+                            href="{{ route('posts.destroy', ['post' => $post->id]) }}"
                         >
                             <i class="fa fa-trash mr-2"></i>
                             {{ __('Remove') }}
