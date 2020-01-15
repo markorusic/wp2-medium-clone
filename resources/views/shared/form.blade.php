@@ -58,18 +58,24 @@
 						<input
 							{{ stringifyProps($props->except('value')) }}
 							value="true"
-							{{ $fieldProps->has('value') ? 'checked' : '' }}
+							{{ $props->has('value') ? 'checked' : '' }}
 						>
 					@break
 
 					@case('select')
-						<select class="form-control" {{ stringifyProps($props) }}>			    		
+						<select class="form-control" {{ stringifyProps($props->except(['value', 'type', 'displayProperty'])) }}>
+							@php
+								$displayProperty = $field->get('displayProperty', 'name')
+							@endphp
+
 							@foreach($field->get('options') as $option)
 								@php
-									$selected = in_array($option['value'], $value) ? 'selected' : '';
+									$selected = $props
+										->get('value', collect([]))
+										->contains('id', $option->id)
 								@endphp
-								<option value="{{ $option['value'] }}" {{ $selected }}>
-									{{ $option['display'] }}
+								<option value="{{ $option->id }}" {{ $selected ? 'selected' : '' }}>
+									{{ $option->$displayProperty }}
 								</option>
 							@endforeach
 						</select>
