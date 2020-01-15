@@ -43,6 +43,10 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Models\User', 'followers', 'followed_id', 'follower_id')->withTimestamps();
     }
 
+    public function following() {
+        return $this->belongsToMany('App\Models\User', 'followers', 'follower_id', 'followed_id')->withTimestamps();
+    }
+
     public function activities() {
         return $this->hasMany('App\Models\UserActivity');
     }
@@ -60,6 +64,9 @@ class User extends Authenticatable
 
     public function isFollowing() {
         $follower_id = auth()->id();
+        if ($this->followers) {
+            return $this->followers->contains('id', $follower_id);
+        }
         return $this->followers()
             ->where(compact('follower_id'))
             ->exists();

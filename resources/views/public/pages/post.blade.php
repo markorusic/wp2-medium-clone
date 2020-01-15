@@ -12,7 +12,7 @@
                     <div class="mr-2">
                         <a href="{{ route('posts.edit', ['post' => $post->id]) }}" class="btn btn-primary">
                             <i class="fa fa-pencil mr-2"></i>
-                            {{ __('Edit') }}
+                            {{ __('Edit post') }}
                         </a>
                     </div>
                     <div>
@@ -21,7 +21,7 @@
                             href="{{ route('posts.destroy', ['post' => $post->id]) }}"
                         >
                             <i class="fa fa-trash mr-2"></i>
-                            {{ __('Remove') }}
+                            {{ __('Remove post') }}
                         </a>
                     </div>
                 </div>

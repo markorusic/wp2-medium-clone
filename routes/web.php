@@ -11,12 +11,15 @@
 |
 */
 
+// API
+Route::get('/content/search', 'SearchController@contentSearch')->name('content.search');
 
+// Pages
 Route::get('', 'PageController@index')->name('home');
-Route::get('/posts/{post}', 'PostController@show')->name('posts.index');
+Route::get('/posts/{post}', 'PostController@show')->name('posts.show');
 Route::get('/posts/category/{category}', 'PostController@categoryPosts')->name('posts.category');
 Route::get('/popular-posts', 'PostController@popularPosts')->name('posts.popular');
-Route::get('/content/search', 'SearchController@contentSearch')->name('content.search');
+Route::get('/users/{user}', 'UserController@show')->name('users.show');
 
 Route::group([ 'middleware' => ['auth']], function () {
 	// API

@@ -13,6 +13,7 @@ window.auth = auth
 
 document.addEventListener('DOMContentLoaded', () => {
     navbarSearch.init()
+    followAction.init()
 })
 
 router.match('/posts/:id', ({ id }) => {
@@ -22,7 +23,6 @@ router.match('/posts/:id', ({ id }) => {
     mde.remove()
 
     postActions.init(id)
-    followAction.init()
 })
 
 router.match('/posts/create/_', () => {

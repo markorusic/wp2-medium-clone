@@ -64552,6 +64552,7 @@ __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap
 window.auth = _auth__WEBPACK_IMPORTED_MODULE_4__["default"];
 document.addEventListener('DOMContentLoaded', function () {
   _navbar_search__WEBPACK_IMPORTED_MODULE_6__["default"].init();
+  _follow_action__WEBPACK_IMPORTED_MODULE_5__["default"].init();
 });
 _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/:id', function (_ref) {
   var id = _ref.id;
@@ -64560,7 +64561,6 @@ _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/:id', funct
   $content.innerHTML = mde.toHTML(mde.value());
   mde.remove();
   _post_actions__WEBPACK_IMPORTED_MODULE_3__["default"].init(id);
-  _follow_action__WEBPACK_IMPORTED_MODULE_5__["default"].init();
 });
 _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/create/_', function () {
   _shared_markdown_editor__WEBPACK_IMPORTED_MODULE_1__["default"].init('[name="content"]');
@@ -64631,18 +64631,22 @@ var onFollowClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_
   }
 
   var $follow = $(event.currentTarget);
-  var $followText = $follow.find('span');
   var userId = $follow.data().followUser;
   return _shared_http_service__WEBPACK_IMPORTED_MODULE_2__["default"].post("/users/".concat(userId, "/follow")).then(function () {
+    var $followText = $follow.find('span');
+    var $followersCount = $('[data-followers-count]');
+    var followersCount = parseInt($followersCount.text());
     var isFollowing = $follow.hasClass(classType.follow);
 
     if (isFollowing) {
       $follow.removeClass(classType.follow).addClass(classType.unfollow);
       $followText.text('Follow');
+      $followersCount.text(followersCount - 1);
       toastr__WEBPACK_IMPORTED_MODULE_0___default.a.info('Unfollowed!');
     } else {
       $follow.removeClass(classType.unfollow).addClass(classType.follow);
       $followText.text('Following');
+      $followersCount.text(followersCount + 1);
       toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Followed!');
     }
   });

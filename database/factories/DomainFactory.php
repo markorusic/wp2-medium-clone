@@ -25,6 +25,7 @@ $factory->define(User::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
         'password' => bcrypt('123456'),
+        'bio' => $faker->realText($maxNbChars = 150, $indexSize = 2),
         // 'avatar' => $faker->imageUrl($width = 640, $height = 640),
         'avatar' => 'https://miro.medium.com/fit/c/160/160/2*qtsXztfxKoghRmsA-R3qVQ.jpeg',
         'remember_token' => Str::random(10),
