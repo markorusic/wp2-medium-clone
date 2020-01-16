@@ -10,6 +10,7 @@
             <div class="modal-body">
                 {{ $slot ?? '' }}
             </div>
+            <div class="modal-footer justify-content-start border-0"></div>
         </div>
     </div>
 </div>

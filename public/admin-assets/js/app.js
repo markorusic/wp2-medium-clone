@@ -64985,6 +64985,8 @@ var dataPagination = {
 
     var $pagination = renderPagination(selector, pagination);
     $pagination.find('.page-item').on('click', function (event) {
+      event.preventDefault();
+
       var _$$data = $(event.currentTarget).data(),
           page = _$$data.page;
 

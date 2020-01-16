@@ -65445,9 +65445,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_range__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_range__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared/http-service */ "./resources/js/shared/http-service.js");
 /* harmony import */ var _shared_template_render__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/template-render */ "./resources/js/shared/template-render.js");
+/* harmony import */ var _shared_data_pagination__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared/data-pagination */ "./resources/js/shared/data-pagination.js");
 
 
 
+
+var config = {
+  perPage: 5
+};
 var $profile = {
   followers: null,
   following: null
@@ -65462,7 +65467,7 @@ var userListTempalte = function userListTempalte(users) {
 };
 
 var userListLoadingTempalte = function userListLoadingTempalte() {
-  var numbeOfItems = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 5;
+  var numbeOfItems = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : config.perPage;
   return "\n    <div class=\"d-flex flex-column\">\n        ".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_2__["default"].list(lodash_range__WEBPACK_IMPORTED_MODULE_0___default()(0, numbeOfItems), function () {
     return "<div class=\"border-bottom border-white\" style=\"height: 82px; background-color: #ebe6e6\"></div>";
   }), "\n    </div>\n");
@@ -65476,15 +65481,27 @@ var onModalShow = function onModalShow(_ref) {
   var id = _ref.id,
       param = _ref.param;
   return function (event) {
-    var $container = $(event.currentTarget).find('.modal-body');
-    $container.html(userListLoadingTempalte());
-    return _shared_http_service__WEBPACK_IMPORTED_MODULE_1__["default"].get("/users/".concat(id, "/").concat(param)).then(function (response) {
-      var users = response.data.data;
-      $container.html(userListTempalte(users));
-    })["catch"](function () {
-      var message = "Error occured while fetching ".concat(param, " data.");
-      $container.html(userListAlertTemplate(message));
-    });
+    var $modal = $(event.currentTarget);
+    var $content = $modal.find('.modal-body');
+    var $footer = $modal.find('.modal-footer');
+    $content.html(userListLoadingTempalte());
+
+    var fetchData = function fetchData() {
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      return _shared_http_service__WEBPACK_IMPORTED_MODULE_1__["default"].get("/users/".concat(id, "/").concat(param, "?page=").concat(page, "&&size=").concat(config.perPage)).then(function (response) {
+        var users = response.data.data;
+        $content.html(userListTempalte(users));
+        _shared_data_pagination__WEBPACK_IMPORTED_MODULE_3__["default"].init($footer, {
+          pagination: response.data,
+          onPageChange: fetchData
+        });
+      })["catch"](function () {
+        var message = "Error occured while fetching ".concat(param, " data.");
+        $content.html(userListAlertTemplate(message));
+      });
+    };
+
+    return fetchData();
   };
 };
 
@@ -65656,6 +65673,75 @@ var dataFrom = {
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (dataFrom);
+
+/***/ }),
+
+/***/ "./resources/js/shared/data-pagination.js":
+/*!************************************************!*\
+  !*** ./resources/js/shared/data-pagination.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var lodash_noop__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/noop */ "./node_modules/lodash/noop.js");
+/* harmony import */ var lodash_noop__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_noop__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _template_render__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./template-render */ "./resources/js/shared/template-render.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+
+
+
+var renderPagination = function renderPagination(selector, _ref) {
+  var current_page = _ref.current_page,
+      per_page = _ref.per_page,
+      total = _ref.total;
+  var $pagination = $(selector);
+
+  var pages = _toConsumableArray(Array(Math.ceil(total / per_page)).keys()).map(function (page) {
+    return page + 1;
+  });
+
+  var paginationHtml = "\n        <ul class=\"pagination\">\n            <li class=\"page-item".concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](current_page < 2, ' disabled'), "\"\n                data-page=\"").concat(current_page - 1, "\"\n            >\n                <a class=\"page-link\" href=\"#\">\n                    <span aria-hidden=\"true\">&laquo;</span>\n                </a>\n            </li>\n            ").concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"].list(pages, function (page) {
+    return "<li class=\"page-item".concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](current_page === page, ' active'), "\" data-page=\"").concat(page, "\"><a class=\"page-link\" href=\"#\">").concat(page, "</a></li>");
+  }), "\n            <li class=\"page-item").concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](current_page >= pages.length, ' disabled'), " \" data-page=\"").concat(current_page + 1, "\">\n                <a class=\"page-link\" href=\"#\">\n                    <span aria-hidden=\"true\">&raquo;</span>\n                </a>\n            </li>\n        </ul>");
+  $pagination.html(paginationHtml);
+  return $pagination;
+};
+
+var defaultPagination = {
+  current_page: 0,
+  per_page: 10,
+  total: 0
+};
+var dataPagination = {
+  render: renderPagination,
+  init: function init(selector) {
+    var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+        _ref2$pagination = _ref2.pagination,
+        pagination = _ref2$pagination === void 0 ? defaultPagination : _ref2$pagination,
+        _ref2$onPageChange = _ref2.onPageChange,
+        onPageChange = _ref2$onPageChange === void 0 ? lodash_noop__WEBPACK_IMPORTED_MODULE_0___default.a : _ref2$onPageChange;
+
+    var $pagination = renderPagination(selector, pagination);
+    $pagination.find('.page-item').on('click', function (event) {
+      event.preventDefault();
+
+      var _$$data = $(event.currentTarget).data(),
+          page = _$$data.page;
+
+      onPageChange(page);
+    });
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (dataPagination);
 
 /***/ }),
 

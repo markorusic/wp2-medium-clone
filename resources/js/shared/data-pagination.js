@@ -50,6 +50,7 @@ const dataPagination = {
     ) {
         const $pagination = renderPagination(selector, pagination)
         $pagination.find('.page-item').on('click', event => {
+            event.preventDefault()
             const { page } = $(event.currentTarget).data()
             onPageChange(page)
         })

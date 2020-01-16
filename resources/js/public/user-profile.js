@@ -1,6 +1,11 @@
 import range from 'lodash/range'
 import http from '../shared/http-service'
 import templateRender from '../shared/template-render'
+import dataPagination from '../shared/data-pagination'
+
+const config = {
+    perPage: 5
+}
 
 const $profile = {
     followers: null,
@@ -20,7 +25,7 @@ const userListTempalte = users => `
     </div>
 `
 
-const userListLoadingTempalte = (numbeOfItems = 5) => `
+const userListLoadingTempalte = (numbeOfItems = config.perPage) => `
     <div class="d-flex flex-column">
         ${templateRender.list(
             range(0, numbeOfItems),
@@ -39,18 +44,27 @@ const userListAlertTemplate = message => `
 `
 
 const onModalShow = ({ id, param }) => event => {
-    const $container = $(event.currentTarget).find('.modal-body')
-    $container.html(userListLoadingTempalte())
-    return http
-        .get(`/users/${id}/${param}`)
-        .then(response => {
-            const users = response.data.data
-            $container.html(userListTempalte(users))
-        })
-        .catch(() => {
-            const message = `Error occured while fetching ${param} data.`
-            $container.html(userListAlertTemplate(message))
-        })
+    const $modal = $(event.currentTarget)
+    const $content = $modal.find('.modal-body')
+    const $footer = $modal.find('.modal-footer')
+
+    $content.html(userListLoadingTempalte())
+    const fetchData = (page = 1) =>
+        http
+            .get(`/users/${id}/${param}?page=${page}&&size=${config.perPage}`)
+            .then(response => {
+                const users = response.data.data
+                $content.html(userListTempalte(users))
+                dataPagination.init($footer, {
+                    pagination: response.data,
+                    onPageChange: fetchData
+                })
+            })
+            .catch(() => {
+                const message = `Error occured while fetching ${param} data.`
+                $content.html(userListAlertTemplate(message))
+            })
+    return fetchData()
 }
 
 const userProfile = {
