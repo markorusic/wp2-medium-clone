@@ -66704,7 +66704,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var $dom = {
   form: null,
-  listHeader: null,
+  title: null,
   list: null,
   listPagination: null
 };
@@ -66729,7 +66729,7 @@ var onCommentSubmit = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODUL
     $dom.list.prepend(commentTemplate(_objectSpread({}, comment, {
       user: user
     })));
-    $dom.listHeader.text('Comments');
+    $dom.title.text('Comments');
     $dom.list.children().first().find('[data-remove-comment]').on('click', onCommentRemove);
   });
 });
@@ -66745,7 +66745,7 @@ var onCommentRemove = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODUL
       $comment.remove();
 
       if ($('[data-comment-id]').length === 0) {
-        $dom.listHeader.text('No comments yet');
+        $dom.title.text('No comments yet');
       }
     });
   }
@@ -66753,7 +66753,7 @@ var onCommentRemove = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODUL
 var comment = {
   init: function init() {
     $dom.form = $('#comment-form');
-    $dom.listHeader = $('#comment-list-header');
+    $dom.title = $('#comment-list-header');
     $dom.list = $('#comment-list');
     $dom.listPagination = $('<div class="my-2"></div>').appendTo($dom.list.parent());
     $dom.form.on('submit', onCommentSubmit);
@@ -66765,10 +66765,10 @@ var comment = {
         var comments = data.data;
 
         if (comments.length === 0) {
-          return $dom.listHeader.text('No comments yet');
+          return $dom.title.text('No comments yet');
         }
 
-        $dom.listHeader.text('Comments');
+        $dom.title.text('Comments');
         $dom.list.html(_shared_template_render__WEBPACK_IMPORTED_MODULE_7__["default"].list(comments, commentTemplate));
         $dom.list.find('[data-remove-comment]').on('click', onCommentRemove);
         _shared_data_pagination__WEBPACK_IMPORTED_MODULE_8__["default"].init($dom.listPagination, {

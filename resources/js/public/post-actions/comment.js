@@ -10,7 +10,7 @@ import dataPagination from '../../shared/data-pagination'
 
 const $dom = {
     form: null,
-    listHeader: null,
+    title: null,
     list: null,
     listPagination: null
 }
@@ -69,7 +69,7 @@ const onCommentSubmit = asyncEventHandler(event => {
 
             $input.val('')
             $dom.list.prepend(commentTemplate({ ...comment, user }))
-            $dom.listHeader.text('Comments')
+            $dom.title.text('Comments')
             $dom.list
                 .children()
                 .first()
@@ -88,7 +88,7 @@ const onCommentRemove = asyncEventHandler(event => {
                 toastr.success('Successfully removed comment!')
                 $comment.remove()
                 if ($('[data-comment-id]').length === 0) {
-                    $dom.listHeader.text('No comments yet')
+                    $dom.title.text('No comments yet')
                 }
             })
     }
@@ -97,7 +97,7 @@ const onCommentRemove = asyncEventHandler(event => {
 const comment = {
     init() {
         $dom.form = $('#comment-form')
-        $dom.listHeader = $('#comment-list-header')
+        $dom.title = $('#comment-list-header')
         $dom.list = $('#comment-list')
         $dom.listPagination = $('<div class="my-2"></div>').appendTo(
             $dom.list.parent()
@@ -111,9 +111,9 @@ const comment = {
                 .then(({ data }) => {
                     const comments = data.data
                     if (comments.length === 0) {
-                        return $dom.listHeader.text('No comments yet')
+                        return $dom.title.text('No comments yet')
                     }
-                    $dom.listHeader.text('Comments')
+                    $dom.title.text('Comments')
                     $dom.list.html(
                         templateRender.list(comments, commentTemplate)
                     )
