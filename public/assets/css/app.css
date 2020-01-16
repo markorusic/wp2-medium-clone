@@ -14782,6 +14782,10 @@ input[type=number]:active,
   font-size: 25px;
 }
 
+.fs-18 {
+  font-size: 18px;
+}
+
 #navbar-search-input {
   width: 0;
 }
