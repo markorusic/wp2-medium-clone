@@ -66753,7 +66753,7 @@ var onCommentRemove = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODUL
 var comment = {
   init: function init() {
     $dom.form = $('#comment-form');
-    $dom.title = $('#comment-list-header');
+    $dom.title = $('#comment-list-title');
     $dom.list = $('#comment-list');
     $dom.listPagination = $('<div class="my-2"></div>').appendTo($dom.list.parent());
     $dom.form.on('submit', onCommentSubmit);

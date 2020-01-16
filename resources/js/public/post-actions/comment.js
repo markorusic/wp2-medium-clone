@@ -97,7 +97,7 @@ const onCommentRemove = asyncEventHandler(event => {
 const comment = {
     init() {
         $dom.form = $('#comment-form')
-        $dom.title = $('#comment-list-header')
+        $dom.title = $('#comment-list-title')
         $dom.list = $('#comment-list')
         $dom.listPagination = $('<div class="my-2"></div>').appendTo(
             $dom.list.parent()
