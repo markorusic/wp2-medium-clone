@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 class PostController extends Controller
 {
     public function show(Post $post) {
-        $post->load(['user', 'comments.user', 'likes', 'categories']);
+        $post->load(['user', 'comments.user', 'categories']);
+        $post->loadCount('likes');
         return view('public.pages.post', compact('post'));
     }
 

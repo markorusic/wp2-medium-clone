@@ -4,10 +4,12 @@
 @foreach ($popular_posts as $post)
     <div class="d-flex flex-column justify-content-between">
         <h3>
-            <a class="text-black pointer" href="{{ route('posts.index', ['post' => $post->id]) }}">{{ $post->title }}</a>
+            <a class="text-black pointer" href="{{ route('posts.show', ['post' => $post->id]) }}">{{ $post->title }}</a>
         </h3>
         <div class="d-flex flex-column">
-            <span>{{ $post->user->name }}</span>
+            @include('public.user.user-name', [
+                'user' => $post->user
+            ])
             <span class="text-secondary">{{ $post->created_at->format('M d, Y') }}</span>
         </div>
     </div>

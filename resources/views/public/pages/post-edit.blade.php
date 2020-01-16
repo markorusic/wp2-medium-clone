@@ -2,7 +2,7 @@
 
 @section('content')
     @component('shared.card-wrapper', [
-        'header' => ['title' => 'Update post']
+        'header' => ['title' => 'Edit post']
     ])
         @include('shared.form', [
             'config' => [

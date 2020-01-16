@@ -4,7 +4,7 @@
 <div class="d-flex justify-content-center flex-column">
     @foreach ($posts as $post)
         @php
-            $postEntryUrl = route('posts.index', ['post' => $post->id]);
+            $postEntryUrl = route('posts.show', ['post' => $post->id]);
         @endphp
         <div class="mb-5">
             <div class="d-flex justify-content-between">
@@ -18,7 +18,11 @@
                         <span class="text-secondary">{{ $post->description }}</span>
                     </div>
                     <div class="d-flex flex-column">
-                        <span>{{ $post->user->name }}</span>
+                        @if ($post->relationLoaded('user'))
+                            @include('public.user.user-name', [
+                                'user' => $post->user
+                            ])
+                        @endif
                         <span class="text-secondary">{{ $post->created_at->format('M d, Y') }}</span>
                     </div>
                 </div>

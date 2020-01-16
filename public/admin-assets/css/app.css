@@ -14671,6 +14671,14 @@ button.toast-close-button {
   min-height: 200px;
 }
 
+.disabled {
+  pointer-events: none;
+}
+
+.page-item.disabled .page-link {
+  opacity: 0.6;
+}
+
 .loading-btn {
   pointer-events: none;
   background-color: #c9c9c9;
@@ -14724,10 +14732,6 @@ h6,
 h6,
 .h6 {
   font-weight: 400;
-}
-
-.disabled {
-  pointer-events: none;
 }
 
 /*========================================================================

@@ -69,9 +69,9 @@ const responseHandlers = {
 }
 
 const dataFrom = {
-    init(_props = {}) {
+    init({ photoUploadProps, ..._props } = {}) {
         props = { ...props, ..._props }
-        photoUpload.init()
+        photoUpload.init(photoUploadProps)
         $('form').on('submit', onFormSubmit)
     }
 }

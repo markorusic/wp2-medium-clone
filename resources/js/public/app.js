@@ -5,6 +5,7 @@ import postActions from './post-actions'
 import auth from './auth'
 import followAction from './follow-action'
 import navbarSearch from './navbar-search'
+import userProfile from './user-profile'
 
 window.Popper = require('popper.js').default
 window.$ = window.jQuery = require('jquery')
@@ -13,6 +14,7 @@ window.auth = auth
 
 document.addEventListener('DOMContentLoaded', () => {
     navbarSearch.init()
+    followAction.init()
 })
 
 router.match('/posts/:id', ({ id }) => {
@@ -22,7 +24,6 @@ router.match('/posts/:id', ({ id }) => {
     mde.remove()
 
     postActions.init(id)
-    followAction.init()
 })
 
 router.match('/posts/create/_', () => {
@@ -36,5 +37,17 @@ router.match('/posts/create/_', () => {
 
 router.match('/posts/:id/edit', () => {
     markdownEditor.init('[name="content"]')
+    dataForm.init({
+        photoUploadProps: {
+            landscapeImg: true
+        }
+    })
+})
+
+router.match('/users/:id', ({ id }) => {
+    userProfile.init(id)
+})
+
+router.match('/users/:id/edit', () => {
     dataForm.init()
 })

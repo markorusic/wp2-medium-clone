@@ -1,6 +1,7 @@
 import debounce from 'lodash/debounce'
 import templateRender from '../../shared/template-render'
 import http from '../../shared/http-service'
+import dataPagination from '../../shared/data-pagination'
 
 const resourceAction = {
     edit: 'edit',
@@ -101,7 +102,9 @@ const view = {
             content,
             (item, index) => `
             <tr data-id="${item.id}">
-                <td>${(pagination.page - 1) * pagination.size + index + 1}</td>
+                <td>${(pagination.current_page - 1) * pagination.per_page +
+                    index +
+                    1}</td>
                 ${templateRender.list(props.columns, ({ name, type }) =>
                     templateRender.switch(type, {
                         default: `<td data-name="${name}">${item[name]}</td>`,
@@ -140,43 +143,11 @@ const view = {
         )}
     </tbody>
     `
-        const pages = [
-            ...Array(
-                Math.ceil(pagination.totalElements / pagination.size)
-            ).keys()
-        ].map(page => page + 1)
-
-        const paginationHtml = `
-        <ul class="pagination">
-            <li class="page-item${templateRender.if(
-                pagination.page < 2,
-                ' disabled'
-            )}"
-                data-page="${pagination.page - 1}"
-            >
-                <a class="page-link" href="#">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            ${templateRender.list(
-                pages,
-                page =>
-                    `<li class="page-item${templateRender.if(
-                        pagination.page === page,
-                        ' active'
-                    )}" data-page="${page}"><a class="page-link" href="#">${page}</a></li>`
-            )}
-            <li class="page-item${templateRender.if(
-                pagination.page >= pages.length,
-                ' disabled'
-            )} " data-page="${pagination.page + 1}">
-                <a class="page-link" href="#">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>`
         $dom.table.html(tableHtml)
-        $dom.pagination.html(paginationHtml)
+        dataPagination.init($dom.pagination, {
+            pagination,
+            onPageChange: handlePageChange
+        })
     },
     renderErrorTable() {
         $dom.pagination.html('')
@@ -201,11 +172,10 @@ const bindSearchEvent = () => {
 const bindTableEvents = () => {
     $dom.table.find('[data-sort]').on('click', handleSort)
     $dom.table.find('[data-delete]').on('click', handleRecordDelete)
-    $dom.pagination.find('[data-page]').on('click', handlePageChange)
 }
 
 // Load data procedure
-const loadData = ({ page = 0, size = 10, ...rest } = {}) => {
+const loadData = ({ page = 1, size = 10, ...rest } = {}) => {
     const baseUrl = '/admin/' + props.resource
     view.renderLoader()
     return http
@@ -215,9 +185,9 @@ const loadData = ({ page = 0, size = 10, ...rest } = {}) => {
             view.renderTable({
                 content: data,
                 pagination: {
-                    page: current_page,
-                    size: per_page,
-                    totalElements: total
+                    current_page,
+                    per_page,
+                    total
                 }
             })
             bindTableEvents()
@@ -272,9 +242,7 @@ const handleRecordDelete = event => {
         })
 }
 
-const handlePageChange = event => {
-    event.preventDefault()
-    const { page } = $(event.currentTarget).data()
+const handlePageChange = page => {
     loadData({
         page,
         order: state.sort,

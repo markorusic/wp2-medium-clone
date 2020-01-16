@@ -14671,6 +14671,14 @@ button.toast-close-button {
   min-height: 200px;
 }
 
+.disabled {
+  pointer-events: none;
+}
+
+.page-item.disabled .page-link {
+  opacity: 0.6;
+}
+
 .loading-btn {
   pointer-events: none;
   background-color: #c9c9c9;
@@ -14747,6 +14755,12 @@ input[type=number]:active,
   border-radius: 50%;
 }
 
+.avatar-lg {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+}
+
 .avatar-sm {
   width: 32px;
   height: 32px;
@@ -14774,6 +14788,10 @@ input[type=number]:active,
 
 .fs-25 {
   font-size: 25px;
+}
+
+.fs-18 {
+  font-size: 18px;
 }
 
 #navbar-search-input {

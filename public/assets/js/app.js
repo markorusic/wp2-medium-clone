@@ -54592,6 +54592,86 @@ module.exports = baseGetTag;
 
 /***/ }),
 
+/***/ "./node_modules/lodash/_baseRange.js":
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/_baseRange.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeCeil = Math.ceil,
+    nativeMax = Math.max;
+
+/**
+ * The base implementation of `_.range` and `_.rangeRight` which doesn't
+ * coerce arguments.
+ *
+ * @private
+ * @param {number} start The start of the range.
+ * @param {number} end The end of the range.
+ * @param {number} step The value to increment or decrement by.
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {Array} Returns the range of numbers.
+ */
+function baseRange(start, end, step, fromRight) {
+  var index = -1,
+      length = nativeMax(nativeCeil((end - start) / (step || 1)), 0),
+      result = Array(length);
+
+  while (length--) {
+    result[fromRight ? length : ++index] = start;
+    start += step;
+  }
+  return result;
+}
+
+module.exports = baseRange;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_createRange.js":
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/_createRange.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseRange = __webpack_require__(/*! ./_baseRange */ "./node_modules/lodash/_baseRange.js"),
+    isIterateeCall = __webpack_require__(/*! ./_isIterateeCall */ "./node_modules/lodash/_isIterateeCall.js"),
+    toFinite = __webpack_require__(/*! ./toFinite */ "./node_modules/lodash/toFinite.js");
+
+/**
+ * Creates a `_.range` or `_.rangeRight` function.
+ *
+ * @private
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {Function} Returns the new range function.
+ */
+function createRange(fromRight) {
+  return function(start, end, step) {
+    if (step && typeof step != 'number' && isIterateeCall(start, end, step)) {
+      end = step = undefined;
+    }
+    // Ensure the sign of `-0` is preserved.
+    start = toFinite(start);
+    if (end === undefined) {
+      end = start;
+      start = 0;
+    } else {
+      end = toFinite(end);
+    }
+    step = step === undefined ? (start < end ? 1 : -1) : toFinite(step);
+    return baseRange(start, end, step, fromRight);
+  };
+}
+
+module.exports = createRange;
+
+
+/***/ }),
+
 /***/ "./node_modules/lodash/_freeGlobal.js":
 /*!********************************************!*\
   !*** ./node_modules/lodash/_freeGlobal.js ***!
@@ -54661,6 +54741,83 @@ function getRawTag(value) {
 }
 
 module.exports = getRawTag;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_isIndex.js":
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/_isIndex.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/** Used as references for various `Number` constants. */
+var MAX_SAFE_INTEGER = 9007199254740991;
+
+/** Used to detect unsigned integer values. */
+var reIsUint = /^(?:0|[1-9]\d*)$/;
+
+/**
+ * Checks if `value` is a valid array-like index.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
+ * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
+ */
+function isIndex(value, length) {
+  var type = typeof value;
+  length = length == null ? MAX_SAFE_INTEGER : length;
+
+  return !!length &&
+    (type == 'number' ||
+      (type != 'symbol' && reIsUint.test(value))) &&
+        (value > -1 && value % 1 == 0 && value < length);
+}
+
+module.exports = isIndex;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/_isIterateeCall.js":
+/*!************************************************!*\
+  !*** ./node_modules/lodash/_isIterateeCall.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var eq = __webpack_require__(/*! ./eq */ "./node_modules/lodash/eq.js"),
+    isArrayLike = __webpack_require__(/*! ./isArrayLike */ "./node_modules/lodash/isArrayLike.js"),
+    isIndex = __webpack_require__(/*! ./_isIndex */ "./node_modules/lodash/_isIndex.js"),
+    isObject = __webpack_require__(/*! ./isObject */ "./node_modules/lodash/isObject.js");
+
+/**
+ * Checks if the given arguments are from an iteratee call.
+ *
+ * @private
+ * @param {*} value The potential iteratee value argument.
+ * @param {*} index The potential iteratee index or key argument.
+ * @param {*} object The potential iteratee object argument.
+ * @returns {boolean} Returns `true` if the arguments are from an iteratee call,
+ *  else `false`.
+ */
+function isIterateeCall(value, index, object) {
+  if (!isObject(object)) {
+    return false;
+  }
+  var type = typeof index;
+  if (type == 'number'
+        ? (isArrayLike(object) && isIndex(index, object.length))
+        : (type == 'string' && index in object)
+      ) {
+    return eq(object[index], value);
+  }
+  return false;
+}
+
+module.exports = isIterateeCall;
 
 
 /***/ }),
@@ -54920,6 +55077,192 @@ module.exports = debounce;
 
 /***/ }),
 
+/***/ "./node_modules/lodash/eq.js":
+/*!***********************************!*\
+  !*** ./node_modules/lodash/eq.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * Performs a
+ * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+ * comparison between two values to determine if they are equivalent.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to compare.
+ * @param {*} other The other value to compare.
+ * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
+ * @example
+ *
+ * var object = { 'a': 1 };
+ * var other = { 'a': 1 };
+ *
+ * _.eq(object, object);
+ * // => true
+ *
+ * _.eq(object, other);
+ * // => false
+ *
+ * _.eq('a', 'a');
+ * // => true
+ *
+ * _.eq('a', Object('a'));
+ * // => false
+ *
+ * _.eq(NaN, NaN);
+ * // => true
+ */
+function eq(value, other) {
+  return value === other || (value !== value && other !== other);
+}
+
+module.exports = eq;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/isArrayLike.js":
+/*!********************************************!*\
+  !*** ./node_modules/lodash/isArrayLike.js ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isFunction = __webpack_require__(/*! ./isFunction */ "./node_modules/lodash/isFunction.js"),
+    isLength = __webpack_require__(/*! ./isLength */ "./node_modules/lodash/isLength.js");
+
+/**
+ * Checks if `value` is array-like. A value is considered array-like if it's
+ * not a function and has a `value.length` that's an integer greater than or
+ * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+ * @example
+ *
+ * _.isArrayLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isArrayLike(document.body.children);
+ * // => true
+ *
+ * _.isArrayLike('abc');
+ * // => true
+ *
+ * _.isArrayLike(_.noop);
+ * // => false
+ */
+function isArrayLike(value) {
+  return value != null && isLength(value.length) && !isFunction(value);
+}
+
+module.exports = isArrayLike;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/isFunction.js":
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/isFunction.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseGetTag = __webpack_require__(/*! ./_baseGetTag */ "./node_modules/lodash/_baseGetTag.js"),
+    isObject = __webpack_require__(/*! ./isObject */ "./node_modules/lodash/isObject.js");
+
+/** `Object#toString` result references. */
+var asyncTag = '[object AsyncFunction]',
+    funcTag = '[object Function]',
+    genTag = '[object GeneratorFunction]',
+    proxyTag = '[object Proxy]';
+
+/**
+ * Checks if `value` is classified as a `Function` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a function, else `false`.
+ * @example
+ *
+ * _.isFunction(_);
+ * // => true
+ *
+ * _.isFunction(/abc/);
+ * // => false
+ */
+function isFunction(value) {
+  if (!isObject(value)) {
+    return false;
+  }
+  // The use of `Object#toString` avoids issues with the `typeof` operator
+  // in Safari 9 which returns 'object' for typed arrays and other constructors.
+  var tag = baseGetTag(value);
+  return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
+}
+
+module.exports = isFunction;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/isLength.js":
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/isLength.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/** Used as references for various `Number` constants. */
+var MAX_SAFE_INTEGER = 9007199254740991;
+
+/**
+ * Checks if `value` is a valid array-like length.
+ *
+ * **Note:** This method is loosely based on
+ * [`ToLength`](http://ecma-international.org/ecma-262/7.0/#sec-tolength).
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+ * @example
+ *
+ * _.isLength(3);
+ * // => true
+ *
+ * _.isLength(Number.MIN_VALUE);
+ * // => false
+ *
+ * _.isLength(Infinity);
+ * // => false
+ *
+ * _.isLength('3');
+ * // => false
+ */
+function isLength(value) {
+  return typeof value == 'number' &&
+    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+}
+
+module.exports = isLength;
+
+
+/***/ }),
+
 /***/ "./node_modules/lodash/isObject.js":
 /*!*****************************************!*\
   !*** ./node_modules/lodash/isObject.js ***!
@@ -55100,6 +55443,116 @@ var now = function() {
 };
 
 module.exports = now;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/range.js":
+/*!**************************************!*\
+  !*** ./node_modules/lodash/range.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var createRange = __webpack_require__(/*! ./_createRange */ "./node_modules/lodash/_createRange.js");
+
+/**
+ * Creates an array of numbers (positive and/or negative) progressing from
+ * `start` up to, but not including, `end`. A step of `-1` is used if a negative
+ * `start` is specified without an `end` or `step`. If `end` is not specified,
+ * it's set to `start` with `start` then set to `0`.
+ *
+ * **Note:** JavaScript follows the IEEE-754 standard for resolving
+ * floating-point values which can produce unexpected results.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Util
+ * @param {number} [start=0] The start of the range.
+ * @param {number} end The end of the range.
+ * @param {number} [step=1] The value to increment or decrement by.
+ * @returns {Array} Returns the range of numbers.
+ * @see _.inRange, _.rangeRight
+ * @example
+ *
+ * _.range(4);
+ * // => [0, 1, 2, 3]
+ *
+ * _.range(-4);
+ * // => [0, -1, -2, -3]
+ *
+ * _.range(1, 5);
+ * // => [1, 2, 3, 4]
+ *
+ * _.range(0, 20, 5);
+ * // => [0, 5, 10, 15]
+ *
+ * _.range(0, -4, -1);
+ * // => [0, -1, -2, -3]
+ *
+ * _.range(1, 4, 0);
+ * // => [1, 1, 1]
+ *
+ * _.range(0);
+ * // => []
+ */
+var range = createRange();
+
+module.exports = range;
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/toFinite.js":
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/toFinite.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toNumber = __webpack_require__(/*! ./toNumber */ "./node_modules/lodash/toNumber.js");
+
+/** Used as references for various `Number` constants. */
+var INFINITY = 1 / 0,
+    MAX_INTEGER = 1.7976931348623157e+308;
+
+/**
+ * Converts `value` to a finite number.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.12.0
+ * @category Lang
+ * @param {*} value The value to convert.
+ * @returns {number} Returns the converted number.
+ * @example
+ *
+ * _.toFinite(3.2);
+ * // => 3.2
+ *
+ * _.toFinite(Number.MIN_VALUE);
+ * // => 5e-324
+ *
+ * _.toFinite(Infinity);
+ * // => 1.7976931348623157e+308
+ *
+ * _.toFinite('3.2');
+ * // => 3.2
+ */
+function toFinite(value) {
+  if (!value) {
+    return value === 0 ? value : 0;
+  }
+  value = toNumber(value);
+  if (value === INFINITY || value === -INFINITY) {
+    var sign = (value < 0 ? -1 : 1);
+    return sign * MAX_INTEGER;
+  }
+  return value === value ? value : 0;
+}
+
+module.exports = toFinite;
 
 
 /***/ }),
@@ -64537,6 +64990,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth */ "./resources/js/public/auth.js");
 /* harmony import */ var _follow_action__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./follow-action */ "./resources/js/public/follow-action.js");
 /* harmony import */ var _navbar_search__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./navbar-search */ "./resources/js/public/navbar-search.js");
+/* harmony import */ var _user_profile__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./user-profile */ "./resources/js/public/user-profile.js");
+
 
 
 
@@ -64552,6 +65007,7 @@ __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap
 window.auth = _auth__WEBPACK_IMPORTED_MODULE_4__["default"];
 document.addEventListener('DOMContentLoaded', function () {
   _navbar_search__WEBPACK_IMPORTED_MODULE_6__["default"].init();
+  _follow_action__WEBPACK_IMPORTED_MODULE_5__["default"].init();
 });
 _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/:id', function (_ref) {
   var id = _ref.id;
@@ -64560,7 +65016,6 @@ _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/:id', funct
   $content.innerHTML = mde.toHTML(mde.value());
   mde.remove();
   _post_actions__WEBPACK_IMPORTED_MODULE_3__["default"].init(id);
-  _follow_action__WEBPACK_IMPORTED_MODULE_5__["default"].init();
 });
 _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/create/_', function () {
   _shared_markdown_editor__WEBPACK_IMPORTED_MODULE_1__["default"].init('[name="content"]');
@@ -64573,6 +65028,17 @@ _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/create/_', 
 });
 _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/:id/edit', function () {
   _shared_markdown_editor__WEBPACK_IMPORTED_MODULE_1__["default"].init('[name="content"]');
+  _shared_data_form__WEBPACK_IMPORTED_MODULE_2__["default"].init({
+    photoUploadProps: {
+      landscapeImg: true
+    }
+  });
+});
+_shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/users/:id', function (_ref3) {
+  var id = _ref3.id;
+  _user_profile__WEBPACK_IMPORTED_MODULE_7__["default"].init(id);
+});
+_shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/users/:id/edit', function () {
   _shared_data_form__WEBPACK_IMPORTED_MODULE_2__["default"].init();
 });
 
@@ -64631,18 +65097,22 @@ var onFollowClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_
   }
 
   var $follow = $(event.currentTarget);
-  var $followText = $follow.find('span');
   var userId = $follow.data().followUser;
   return _shared_http_service__WEBPACK_IMPORTED_MODULE_2__["default"].post("/users/".concat(userId, "/follow")).then(function () {
+    var $followText = $follow.find('span');
+    var $followersCount = $('[data-followers-count]');
+    var followersCount = parseInt($followersCount.text());
     var isFollowing = $follow.hasClass(classType.follow);
 
     if (isFollowing) {
       $follow.removeClass(classType.follow).addClass(classType.unfollow);
       $followText.text('Follow');
+      $followersCount.text(followersCount - 1);
       toastr__WEBPACK_IMPORTED_MODULE_0___default.a.info('Unfollowed!');
     } else {
       $follow.removeClass(classType.unfollow).addClass(classType.follow);
       $followText.text('Following');
+      $followersCount.text(followersCount + 1);
       toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Followed!');
     }
   });
@@ -64813,7 +65283,7 @@ var onCommentSubmit = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODUL
     var data = _ref.data;
     var user = _auth__WEBPACK_IMPORTED_MODULE_2__["default"].getUser();
     var $commentList = $('#comment-list');
-    var commentHTML = "\n                <div class=\"d-flex\" data-comment-id=\"".concat(data.id, "\">\n                    <div class=\"d-flex mb-2\">\n                        <img\n                            class=\"avatar mr-3\"\n                            src=\"").concat(user.avatar, "\"\n                            alt=\"").concat(user.name, "\"\n                        >\n                    </div>\n                    <div class=\"d-flex flex-column mb-4 w-100\">\n                        <div class=\"d-flex flex-column\">\n                            <div class=\"d-flex justify-content-between\">\n                                <span>").concat(user.name, "</span>\n                                <a href=\"#\" class=\"text-dark\" data-remove-comment>\n                                    <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n                                </a>\n                            </div>\n                            <span class=\"text-secondary\">\n                                ").concat(dayjs__WEBPACK_IMPORTED_MODULE_1___default()(data.created_at).format('MMM D, YYYY'), "\n                            </span>\n                        </div>\n                        <div>").concat(content, "</div>\n                    </div>\n                </div>\n            ");
+    var commentHTML = "\n                <div class=\"d-flex\" data-comment-id=\"".concat(data.id, "\">\n                    <div class=\"d-flex mb-2 mr-3\">\n                        <img class=\"avatar\"\n                            src=\"").concat(user.avatar, "\"\n                            alt=\"").concat(user.name, "\"\n                        >\n                    </div>\n                    <div class=\"d-flex flex-column mb-4 w-100\">\n                        <div class=\"d-flex flex-column\">\n                            <div class=\"d-flex justify-content-between\">\n                                <span>").concat(user.name, "</span>\n                                <a href=\"#\" class=\"text-dark\" data-remove-comment>\n                                    <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n                                </a>\n                            </div>\n                            <span class=\"text-secondary\">\n                                ").concat(dayjs__WEBPACK_IMPORTED_MODULE_1___default()(data.created_at).format('MMM D, YYYY'), "\n                            </span>\n                        </div>\n                        <div>").concat(content, "</div>\n                    </div>\n                </div>\n            ");
     $content.val('');
     $commentList.prepend(commentHTML);
     $commentList.children().first().find('[data-remove-comment]').on('click', onCommentRemove);
@@ -64962,6 +65432,97 @@ var postDelete = {
 
 /***/ }),
 
+/***/ "./resources/js/public/user-profile.js":
+/*!*********************************************!*\
+  !*** ./resources/js/public/user-profile.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var lodash_range__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/range */ "./node_modules/lodash/range.js");
+/* harmony import */ var lodash_range__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_range__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared/http-service */ "./resources/js/shared/http-service.js");
+/* harmony import */ var _shared_template_render__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/template-render */ "./resources/js/shared/template-render.js");
+/* harmony import */ var _shared_data_pagination__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared/data-pagination */ "./resources/js/shared/data-pagination.js");
+
+
+
+
+var config = {
+  perPage: 5
+};
+var $profile = {
+  followers: null,
+  following: null
+};
+
+var userTemplate = function userTemplate(user) {
+  return "\n    <a class=\"d-flex align-items-center p-3 border-bottom\" href=\"/users/".concat(user.id, "\">\n        <img class=\"avatar mr-3\" src=\"").concat(user.avatar, "\" alt=\"").concat(user.name, "\">\n        <span class=\"text-dark\">").concat(user.name, "</span>\n    </a>\n");
+};
+
+var userListTempalte = function userListTempalte(users) {
+  return "\n    <div class=\"d-flex flex-column\">\n        ".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_2__["default"].list(users, userTemplate), "\n    </div>\n");
+};
+
+var userListLoadingTempalte = function userListLoadingTempalte() {
+  var numbeOfItems = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : config.perPage;
+  return "\n    <div class=\"d-flex flex-column\">\n        ".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_2__["default"].list(lodash_range__WEBPACK_IMPORTED_MODULE_0___default()(0, numbeOfItems), function () {
+    return "<div class=\"border-bottom border-white\" style=\"height: 82px; background-color: #ebe6e6\"></div>";
+  }), "\n    </div>\n");
+};
+
+var userListAlertTemplate = function userListAlertTemplate(message) {
+  return "\n    <div class=\"d-flex flex-column\">\n        <div class=\"alert alert-danger\" role=\"alert\">\n            ".concat(message, "\n        </div>\n    </div>\n");
+};
+
+var onModalShow = function onModalShow(_ref) {
+  var id = _ref.id,
+      param = _ref.param;
+  return function (event) {
+    var $modal = $(event.currentTarget);
+    var $content = $modal.find('.modal-body');
+    var $footer = $modal.find('.modal-footer');
+
+    var fetchData = function fetchData() {
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      $content.html(userListLoadingTempalte());
+      return _shared_http_service__WEBPACK_IMPORTED_MODULE_1__["default"].get("/users/".concat(id, "/").concat(param, "?page=").concat(page, "&&size=").concat(config.perPage)).then(function (response) {
+        var users = response.data.data;
+        $content.html(userListTempalte(users));
+        _shared_data_pagination__WEBPACK_IMPORTED_MODULE_3__["default"].init($footer, {
+          pagination: response.data,
+          onPageChange: fetchData
+        });
+      })["catch"](function () {
+        var message = "Error occured while fetching ".concat(param, " data.");
+        $content.html(userListAlertTemplate(message));
+      });
+    };
+
+    return fetchData();
+  };
+};
+
+var userProfile = {
+  init: function init(id) {
+    $profile.followers = $('#followers-modal');
+    $profile.following = $('#following-modal');
+    $profile.followers.on('show.bs.modal', onModalShow({
+      id: id,
+      param: 'followers'
+    }));
+    $profile.following.on('show.bs.modal', onModalShow({
+      id: id,
+      param: 'following'
+    }));
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (userProfile);
+
+/***/ }),
+
 /***/ "./resources/js/shared/async-event-handler.js":
 /*!****************************************************!*\
   !*** ./resources/js/shared/async-event-handler.js ***!
@@ -65016,6 +65577,10 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 
 
@@ -65097,14 +65662,86 @@ var responseHandlers = {
 };
 var dataFrom = {
   init: function init() {
-    var _props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    var photoUploadProps = _ref.photoUploadProps,
+        _props = _objectWithoutProperties(_ref, ["photoUploadProps"]);
 
     props = _objectSpread({}, props, {}, _props);
-    _photo_upload__WEBPACK_IMPORTED_MODULE_3__["default"].init();
+    _photo_upload__WEBPACK_IMPORTED_MODULE_3__["default"].init(photoUploadProps);
     $('form').on('submit', onFormSubmit);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (dataFrom);
+
+/***/ }),
+
+/***/ "./resources/js/shared/data-pagination.js":
+/*!************************************************!*\
+  !*** ./resources/js/shared/data-pagination.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var lodash_noop__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/noop */ "./node_modules/lodash/noop.js");
+/* harmony import */ var lodash_noop__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_noop__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _template_render__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./template-render */ "./resources/js/shared/template-render.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+
+
+
+var renderPagination = function renderPagination(selector, _ref) {
+  var current_page = _ref.current_page,
+      per_page = _ref.per_page,
+      total = _ref.total;
+  var $pagination = $(selector);
+
+  var pages = _toConsumableArray(Array(Math.ceil(total / per_page)).keys()).map(function (page) {
+    return page + 1;
+  });
+
+  var paginationHtml = "\n        <ul class=\"pagination\">\n            <li class=\"page-item".concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](current_page < 2, ' disabled'), "\"\n                data-page=\"").concat(current_page - 1, "\"\n            >\n                <a class=\"page-link\" href=\"#\">\n                    <span aria-hidden=\"true\">&laquo;</span>\n                </a>\n            </li>\n            ").concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"].list(pages, function (page) {
+    return "<li class=\"page-item".concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](current_page === page, ' active'), "\" data-page=\"").concat(page, "\"><a class=\"page-link\" href=\"#\">").concat(page, "</a></li>");
+  }), "\n            <li class=\"page-item").concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](current_page >= pages.length, ' disabled'), " \" data-page=\"").concat(current_page + 1, "\">\n                <a class=\"page-link\" href=\"#\">\n                    <span aria-hidden=\"true\">&raquo;</span>\n                </a>\n            </li>\n        </ul>");
+  $pagination.html(paginationHtml);
+  return $pagination;
+};
+
+var defaultPagination = {
+  current_page: 0,
+  per_page: 10,
+  total: 0
+};
+var dataPagination = {
+  render: renderPagination,
+  init: function init(selector) {
+    var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+        _ref2$pagination = _ref2.pagination,
+        pagination = _ref2$pagination === void 0 ? defaultPagination : _ref2$pagination,
+        _ref2$onPageChange = _ref2.onPageChange,
+        onPageChange = _ref2$onPageChange === void 0 ? lodash_noop__WEBPACK_IMPORTED_MODULE_0___default.a : _ref2$onPageChange;
+
+    var $pagination = renderPagination(selector, pagination);
+    $pagination.find('.page-item').on('click', function (event) {
+      event.preventDefault();
+
+      var _$$data = $(event.currentTarget).data(),
+          page = _$$data.page;
+
+      onPageChange(page);
+    });
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (dataPagination);
 
 /***/ }),
 
@@ -65358,6 +65995,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
 /* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(toastr__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared/http-service */ "./resources/js/shared/http-service.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -65368,6 +66011,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+var props = {
+  portraitImg: false,
+  landscapeImg: false
+};
 var state = {
   file: null
 };
@@ -65406,8 +66053,10 @@ var onFileChange = function onFileChange(event) {
   var img = new Image();
 
   img.onload = function () {
-    if (img.height >= img.width) {
+    if (props.landscapeImg && img.height >= img.width) {
       return toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Photo has to be landscape.');
+    } else if (props.portraitImg && img.width >= img.height) {
+      return toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Photo has to be portrait.');
     }
 
     state.file = file;
@@ -65420,6 +66069,9 @@ var onFileChange = function onFileChange(event) {
 
 var photoUpload = {
   init: function init() {
+    var _props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    props = _objectSpread({}, props, {}, _props);
     $upload.input = $('[data-photo-input]');
     $upload.fileInput = $('[data-photo-file-input]');
     $upload.container = $('.photo-upload-control');

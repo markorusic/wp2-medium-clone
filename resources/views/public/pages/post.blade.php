@@ -12,7 +12,7 @@
                     <div class="mr-2">
                         <a href="{{ route('posts.edit', ['post' => $post->id]) }}" class="btn btn-primary">
                             <i class="fa fa-pencil mr-2"></i>
-                            {{ __('Edit') }}
+                            {{ __('Edit post') }}
                         </a>
                     </div>
                     <div>
@@ -21,7 +21,7 @@
                             href="{{ route('posts.destroy', ['post' => $post->id]) }}"
                         >
                             <i class="fa fa-trash mr-2"></i>
-                            {{ __('Remove') }}
+                            {{ __('Remove post') }}
                         </a>
                     </div>
                 </div>
@@ -30,16 +30,22 @@
         <h4 class="text-secondary font-weight-normal mt-3 mb-5">{{ $post->description }}</h4>
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex">
-                <img class="avatar mr-3"
-                    src="{{ $post->user->avatar }}"
-                    alt="{{ $post->user->name }}"
-                >
+                @php
+                    $userProfileUrl = route('users.show', ['user' => $post->user->id])
+                @endphp
+                <div class="mr-3">
+                    @include('public.user.user-avatar', [
+                        'user' => $post->user
+                    ])
+                </div>
                 <div class="d-flex flex-column">
-                    <span>{{ $post->user->name }}</span>
+                    @include('public.user.user-name', [
+                        'user' => $post->user
+                    ])
                     <span class="text-secondary">{{ $post->created_at->format('M d, Y') }}</span>
                 </div>
             </div>
-            @include('public.shared.follow-button', [
+            @include('public.user.follow-button', [
                 'user' => $post->user
             ])
         </div>
@@ -64,7 +70,7 @@
                 @php $isLiked = $post->isLiked() @endphp
                 <a id="like-action" href="#" class="d-flex align-items-center text-dark">
                     <i class="fa fa-thumbs-{{ $isLiked ? '' : 'o-' }}up fa-2x mr-2"></i>
-                    <span class="text-dark fs-25">{{ $post->likes->count() }}</span>
+                    <span class="text-dark fs-25">{{ $post->likes_count }}</span>
                 </a>
             </div>
             <form id="comment-form" class="w-100">
@@ -82,16 +88,17 @@
         <div id="comment-list">
             @foreach ($post->comments as $comment)
                 <div class="d-flex" data-comment-id="{{ $comment->id }}">
-                    <div class="d-flex mb-2">
-                        <img class="avatar mr-3"
-                            src="{{ $comment->user->avatar }}"
-                            alt="{{ $comment->user->name }}"
-                        >
+                    <div class="d-flex mb-2 mr-3">
+                        @include('public.user.user-avatar', [
+                            'user' => $comment->user
+                        ])
                     </div>
                     <div class="d-flex flex-column mb-4 w-100">
                         <div class="d-flex flex-column">
                             <div class="d-flex justify-content-between">
-                                <span>{{ $comment->user->name }}</span>
+                                @include('public.user.user-name', [
+                                    'user' => $comment->user
+                                ])
                                 @if (auth()->id() === $comment->user->id)
                                     <a href="#" class="text-dark" data-remove-comment>
                                         <i class="fa fa-times" aria-hidden="true"></i>

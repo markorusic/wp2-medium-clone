@@ -11,12 +11,17 @@
 |
 */
 
+// API
+Route::get('/content/search', 'SearchController@contentSearch')->name('content.search');
 
+// Pages
 Route::get('', 'PageController@index')->name('home');
-Route::get('/posts/{post}', 'PostController@show')->name('posts.index');
+Route::get('/posts/{post}', 'PostController@show')->name('posts.show');
 Route::get('/posts/category/{category}', 'PostController@categoryPosts')->name('posts.category');
 Route::get('/popular-posts', 'PostController@popularPosts')->name('posts.popular');
-Route::get('/content/search', 'SearchController@contentSearch')->name('content.search');
+Route::get('/users/{user}', 'UserController@show')->name('users.show');
+Route::get('/users/{user}/followers', 'UserController@followers')->name('users.find-followers');
+Route::get('/users/{user}/following', 'UserController@following')->name('users.find-following');
 
 Route::group([ 'middleware' => ['auth']], function () {
 	// API
@@ -26,12 +31,16 @@ Route::group([ 'middleware' => ['auth']], function () {
 	Route::post('/posts', 'PostController@store')->name('posts.store');
 	Route::put('/posts/{post}', 'PostController@update')->name('posts.update');
 	Route::delete('/posts/{post}', 'PostController@destroy')->name('posts.destroy');
+
 	Route::post('/users/{user}/follow', 'UserController@follow')->name('user.follow');
+	Route::put('/users/{user}/update', 'UserController@update')->name('users.update');
+
 	Route::post('upload/photo', 'FileController@uploadPhoto')->name('upload.photo');
 
 	// Pages
 	Route::get('/posts/create/_', 'PostController@create')->name('posts.create');
 	Route::get('/posts/{post}/edit', 'PostController@edit')->name('posts.edit');
+	Route::get('/users/{user}/edit', 'UserController@edit')->name('users.edit');
 	
 });
 

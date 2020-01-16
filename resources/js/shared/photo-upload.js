@@ -1,6 +1,11 @@
 import toastr from 'toastr'
 import http from '../shared/http-service'
 
+let props = {
+    portraitImg: false,
+    landscapeImg: false
+}
+
 const state = {
     file: null
 }
@@ -34,8 +39,10 @@ const onFileChange = event => {
     const src = URL.createObjectURL(file)
     const img = new Image()
     img.onload = () => {
-        if (img.height >= img.width) {
+        if (props.landscapeImg && img.height >= img.width) {
             return toastr.error('Photo has to be landscape.')
+        } else if (props.portraitImg && img.width >= img.height) {
+            return toastr.error('Photo has to be portrait.')
         }
         state.file = file
         $upload.input.val(img.src)
@@ -45,7 +52,8 @@ const onFileChange = event => {
 }
 
 const photoUpload = {
-    init() {
+    init(_props = {}) {
+        props = { ...props, ..._props }
         $upload.input = $('[data-photo-input]')
         $upload.fileInput = $('[data-photo-file-input]')
         $upload.container = $('.photo-upload-control')

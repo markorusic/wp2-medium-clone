@@ -18,9 +18,8 @@ const onCommentSubmit = asyncEventHandler(event => {
             const $commentList = $('#comment-list')
             const commentHTML = `
                 <div class="d-flex" data-comment-id="${data.id}">
-                    <div class="d-flex mb-2">
-                        <img
-                            class="avatar mr-3"
+                    <div class="d-flex mb-2 mr-3">
+                        <img class="avatar"
                             src="${user.avatar}"
                             alt="${user.name}"
                         >
