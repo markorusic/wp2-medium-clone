@@ -5,7 +5,6 @@ import postActions from './post-actions'
 import auth from './auth'
 import followAction from './follow-action'
 import navbarSearch from './navbar-search'
-import userProfile from './user-profile'
 import { fetchUserList } from './user-list'
 
 window.Popper = require('popper.js').default
@@ -19,12 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 router.match('/posts/:id', ({ id }) => {
+    postActions.init(id)
     const mde = markdownEditor.init('#content-ta')
     const $content = document.querySelector('#content')
     $content.innerHTML = mde.toHTML(mde.value())
     mde.remove()
-
-    postActions.init(id)
 })
 
 router.match('/posts/create/_', () => {
