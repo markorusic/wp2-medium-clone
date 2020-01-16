@@ -19,15 +19,19 @@ const onCommentSubmit = asyncEventHandler(event => {
             const commentHTML = `
                 <div class="d-flex" data-comment-id="${data.id}">
                     <div class="d-flex mb-2 mr-3">
-                        <img class="avatar"
-                            src="${user.avatar}"
-                            alt="${user.name}"
-                        >
+                        <a href="/users/${user.id}">
+                            <img class="avatar"
+                                src="${user.avatar}"
+                                alt="${user.name}"
+                            >
+                        </a>
                     </div>
                     <div class="d-flex flex-column mb-4 w-100">
                         <div class="d-flex flex-column">
                             <div class="d-flex justify-content-between">
-                                <span>${user.name}</span>
+                                <a class="text-dark" href="/users/${user.id}">
+                                    ${user.name}
+                                </a>
                                 <a href="#" class="text-dark" data-remove-comment>
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                 </a>

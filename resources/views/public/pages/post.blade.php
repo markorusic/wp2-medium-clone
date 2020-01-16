@@ -30,9 +30,6 @@
         <h4 class="text-secondary font-weight-normal mt-3 mb-5">{{ $post->description }}</h4>
         <div class="d-flex justify-content-between mb-4">
             <div class="d-flex">
-                @php
-                    $userProfileUrl = route('users.show', ['user' => $post->user->id])
-                @endphp
                 <div class="mr-3">
                     @include('public.user.user-avatar', [
                         'user' => $post->user
