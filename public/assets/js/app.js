@@ -66702,9 +66702,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+var $dom = {
+  form: null,
+  title: null,
+  list: null,
+  listPagination: null
+};
 
 var commentTemplate = function commentTemplate(comment) {
-  return "\n    <div class=\"d-flex\" data-comment-id=\"".concat(comment.id, "\">\n        <div class=\"d-flex mb-2 mr-3\">\n            <a href=\"/users/").concat(comment.user.id, "\">\n                <img class=\"avatar\"\n                    src=\"").concat(comment.user.avatar, "\"\n                    alt=\"").concat(comment.user.name, "\"\n                >\n            </a>\n        </div>\n        <div class=\"d-flex flex-column mb-4 w-100\">\n            <div class=\"d-flex flex-column\">\n                <div class=\"d-flex justify-content-between\">\n                    <a class=\"text-dark\" href=\"/users/").concat(comment.user.id, "\">\n                        ").concat(comment.user.name, "\n                    </a>\n                    ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_7__["default"]["if"](comment.user.id === lodash_get__WEBPACK_IMPORTED_MODULE_2___default()(_auth__WEBPACK_IMPORTED_MODULE_3__["default"].getUser(), 'id'), "<a href=\"#\" class=\"text-dark\" data-remove-comment>\n                            <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n                         </a>"), "\n                </div>\n                <span class=\"text-secondary\">\n                    ").concat(dayjs__WEBPACK_IMPORTED_MODULE_1___default()(comment.created_at).format('MMM D, YYYY'), "\n                </span>\n            </div>\n            <div>").concat(comment.content, "</div>\n        </div>\n    </div>\n");
+  return "\n    <div class=\"d-flex\" data-comment-id=\"".concat(comment.id, "\">\n        <div class=\"d-flex mb-2 mr-3\">\n            <a href=\"/users/").concat(comment.user.id, "\">\n                <img class=\"avatar\"\n                    src=\"").concat(comment.user.avatar, "\"\n                    alt=\"").concat(comment.user.name, "\"\n                >\n            </a>\n        </div>\n        <div class=\"d-flex flex-column mb-4 w-100 px-3 py-1 position-relative\"\n            style=\"background-color: #edfeeb;\"\n        >\n            <div class=\"d-flex flex-column\">\n                <div class=\"d-flex justify-content-between\">\n                    <a class=\"text-dark font-weight-bold\" href=\"/users/").concat(comment.user.id, "\">\n                        ").concat(comment.user.name, "\n                    </a>\n                    ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_7__["default"]["if"](comment.user.id === lodash_get__WEBPACK_IMPORTED_MODULE_2___default()(_auth__WEBPACK_IMPORTED_MODULE_3__["default"].getUser(), 'id'), "<a href=\"#\"\n                            data-remove-comment\n                            class=\"text-dark position-absolute\"\n                            style=\"top: 0; right: 7px;\"\n                        >\n                            <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n                         </a>"), "\n                </div>\n                <span class=\"text-secondary\">\n                    ").concat(dayjs__WEBPACK_IMPORTED_MODULE_1___default()(comment.created_at).format('MMM D, YYYY'), "\n                </span>\n            </div>\n            <div>").concat(comment.content, "</div>\n        </div>\n    </div>\n");
 };
 
 var onCommentSubmit = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_5__["default"])(function (event) {
@@ -66712,19 +66718,19 @@ var onCommentSubmit = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODUL
     return toastr__WEBPACK_IMPORTED_MODULE_0___default.a.info('Login to complete that action.');
   }
 
-  var $input = $(event.currentTarget).find('[name="content"]');
+  var $input = $dom.form.find('[name="content"]');
   var content = $input.val();
   return _shared_http_service__WEBPACK_IMPORTED_MODULE_4__["default"].post("/posts/".concat(_index__WEBPACK_IMPORTED_MODULE_6__["default"].id, "/comment"), {
     content: content
   }).then(function (response) {
     var user = _auth__WEBPACK_IMPORTED_MODULE_3__["default"].getUser();
     var comment = response.data;
-    var $commentList = $('#comment-list');
     $input.val('');
-    $commentList.prepend(commentTemplate(_objectSpread({}, comment, {
+    $dom.list.prepend(commentTemplate(_objectSpread({}, comment, {
       user: user
     })));
-    $commentList.children().first().find('[data-remove-comment]').on('click', onCommentRemove);
+    $dom.title.text('Comments');
+    $dom.list.children().first().find('[data-remove-comment]').on('click', onCommentRemove);
   });
 });
 var onCommentRemove = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_5__["default"])(function (event) {
@@ -66737,26 +66743,35 @@ var onCommentRemove = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODUL
     return _shared_http_service__WEBPACK_IMPORTED_MODULE_4__["default"]["delete"]("/posts/".concat(_index__WEBPACK_IMPORTED_MODULE_6__["default"].id, "/comment/").concat(commentId, "/remove")).then(function () {
       toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Successfully removed comment!');
       $comment.remove();
+
+      if ($('[data-comment-id]').length === 0) {
+        $dom.title.text('No comments yet');
+      }
     });
   }
 });
 var comment = {
   init: function init() {
-    var $commentForm = $('#comment-form');
-    var $commentListHeader = $('#comment-list-header');
-    var $commentList = $('#comment-list');
-    var $commentListPagination = $('<div class="my-2"></div>').appendTo($commentList.parent());
-    $commentForm.on('submit', onCommentSubmit);
+    $dom.form = $('#comment-form');
+    $dom.title = $('#comment-list-title');
+    $dom.list = $('#comment-list');
+    $dom.listPagination = $('<div class="my-2"></div>').appendTo($dom.list.parent());
+    $dom.form.on('submit', onCommentSubmit);
 
     var fetchData = function fetchData() {
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       return _shared_http_service__WEBPACK_IMPORTED_MODULE_4__["default"].get("/posts/".concat(_index__WEBPACK_IMPORTED_MODULE_6__["default"].id, "/comments?page=").concat(page, "&size=5")).then(function (_ref) {
         var data = _ref.data;
         var comments = data.data;
-        $commentListHeader.text(comments.length === 0 ? 'Be first to comment!' : 'Comments');
-        $commentList.html(_shared_template_render__WEBPACK_IMPORTED_MODULE_7__["default"].list(comments, commentTemplate));
-        $commentList.find('[data-remove-comment]').on('click', onCommentRemove);
-        _shared_data_pagination__WEBPACK_IMPORTED_MODULE_8__["default"].init($commentListPagination, {
+
+        if (comments.length === 0) {
+          return $dom.title.text('No comments yet');
+        }
+
+        $dom.title.text('Comments');
+        $dom.list.html(_shared_template_render__WEBPACK_IMPORTED_MODULE_7__["default"].list(comments, commentTemplate));
+        $dom.list.find('[data-remove-comment]').on('click', onCommentRemove);
+        _shared_data_pagination__WEBPACK_IMPORTED_MODULE_8__["default"].init($dom.listPagination, {
           pagination: data,
           onPageChange: fetchData
         });

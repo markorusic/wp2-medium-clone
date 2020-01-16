@@ -8,6 +8,13 @@ import postActions from './index'
 import templateRender from '../../shared/template-render'
 import dataPagination from '../../shared/data-pagination'
 
+const $dom = {
+    form: null,
+    title: null,
+    list: null,
+    listPagination: null
+}
+
 const commentTemplate = comment => `
     <div class="d-flex" data-comment-id="${comment.id}">
         <div class="d-flex mb-2 mr-3">
@@ -18,15 +25,23 @@ const commentTemplate = comment => `
                 >
             </a>
         </div>
-        <div class="d-flex flex-column mb-4 w-100">
+        <div class="d-flex flex-column mb-4 w-100 px-3 py-1 position-relative"
+            style="background-color: #edfeeb;"
+        >
             <div class="d-flex flex-column">
                 <div class="d-flex justify-content-between">
-                    <a class="text-dark" href="/users/${comment.user.id}">
+                    <a class="text-dark font-weight-bold" href="/users/${
+                        comment.user.id
+                    }">
                         ${comment.user.name}
                     </a>
                     ${templateRender.if(
                         comment.user.id === get(auth.getUser(), 'id'),
-                        `<a href="#" class="text-dark" data-remove-comment>
+                        `<a href="#"
+                            data-remove-comment
+                            class="text-dark position-absolute"
+                            style="top: 0; right: 7px;"
+                        >
                             <i class="fa fa-times" aria-hidden="true"></i>
                          </a>`
                     )}
@@ -44,18 +59,18 @@ const onCommentSubmit = asyncEventHandler(event => {
     if (!auth.isAuthenticated()) {
         return toastr.info('Login to complete that action.')
     }
-    const $input = $(event.currentTarget).find('[name="content"]')
+    const $input = $dom.form.find('[name="content"]')
     const content = $input.val()
     return http
         .post(`/posts/${postActions.id}/comment`, { content })
         .then(response => {
             const user = auth.getUser()
             const comment = response.data
-            const $commentList = $('#comment-list')
 
             $input.val('')
-            $commentList.prepend(commentTemplate({ ...comment, user }))
-            $commentList
+            $dom.list.prepend(commentTemplate({ ...comment, user }))
+            $dom.title.text('Comments')
+            $dom.list
                 .children()
                 .first()
                 .find('[data-remove-comment]')
@@ -72,38 +87,40 @@ const onCommentRemove = asyncEventHandler(event => {
             .then(() => {
                 toastr.success('Successfully removed comment!')
                 $comment.remove()
+                if ($('[data-comment-id]').length === 0) {
+                    $dom.title.text('No comments yet')
+                }
             })
     }
 })
 
 const comment = {
     init() {
-        const $commentForm = $('#comment-form')
-        const $commentListHeader = $('#comment-list-header')
-        const $commentList = $('#comment-list')
-        const $commentListPagination = $('<div class="my-2"></div>').appendTo(
-            $commentList.parent()
+        $dom.form = $('#comment-form')
+        $dom.title = $('#comment-list-title')
+        $dom.list = $('#comment-list')
+        $dom.listPagination = $('<div class="my-2"></div>').appendTo(
+            $dom.list.parent()
         )
 
-        $commentForm.on('submit', onCommentSubmit)
+        $dom.form.on('submit', onCommentSubmit)
 
         const fetchData = (page = 1) =>
             http
                 .get(`/posts/${postActions.id}/comments?page=${page}&size=5`)
                 .then(({ data }) => {
                     const comments = data.data
-                    $commentListHeader.text(
-                        comments.length === 0
-                            ? 'Be first to comment!'
-                            : 'Comments'
-                    )
-                    $commentList.html(
+                    if (comments.length === 0) {
+                        return $dom.title.text('No comments yet')
+                    }
+                    $dom.title.text('Comments')
+                    $dom.list.html(
                         templateRender.list(comments, commentTemplate)
                     )
-                    $commentList
+                    $dom.list
                         .find('[data-remove-comment]')
                         .on('click', onCommentRemove)
-                    dataPagination.init($commentListPagination, {
+                    dataPagination.init($dom.listPagination, {
                         pagination: data,
                         onPageChange: fetchData
                     })

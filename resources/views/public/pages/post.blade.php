@@ -80,7 +80,7 @@
             </form>
         </div>
 
-        <h3 id="comment-list-header" class="mb-5 pb-3 border-bottom"></h3>
+        <h3 id="comment-list-title" class="mb-5 pb-3 border-bottom"></h3>
         <div id="comment-list"></div>
     </div>
 @endsection
