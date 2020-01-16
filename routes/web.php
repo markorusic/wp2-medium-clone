@@ -21,8 +21,8 @@ Route::get('/posts/{post}/comments', 'PostController@comments')->name('posts.com
 Route::get('/posts/category/{category}', 'PostController@categoryPosts')->name('posts.category');
 Route::get('/popular-posts', 'PostController@popularPosts')->name('posts.popular');
 Route::get('/users/{user}', 'UserController@show')->name('users.show');
-Route::get('/users/{user}/followers', 'UserController@followers')->name('users..followers.index');
-Route::get('/users/{user}/following', 'UserController@following')->name('users..following.index');
+Route::get('/users/{user}/followers', 'UserController@followers')->name('users.followers.index');
+Route::get('/users/{user}/following', 'UserController@following')->name('users.following.index');
 
 Route::group([ 'middleware' => ['auth']], function () {
 	// API
