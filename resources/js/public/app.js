@@ -5,6 +5,7 @@ import postActions from './post-actions'
 import auth from './auth'
 import followAction from './follow-action'
 import navbarSearch from './navbar-search'
+import userProfile from './user-profile'
 
 window.Popper = require('popper.js').default
 window.$ = window.jQuery = require('jquery')
@@ -41,6 +42,10 @@ router.match('/posts/:id/edit', () => {
             landscapeImg: true
         }
     })
+})
+
+router.match('/users/:id', ({ id }) => {
+    userProfile.init(id)
 })
 
 router.match('/users/:id/edit', () => {

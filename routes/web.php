@@ -20,6 +20,8 @@ Route::get('/posts/{post}', 'PostController@show')->name('posts.show');
 Route::get('/posts/category/{category}', 'PostController@categoryPosts')->name('posts.category');
 Route::get('/popular-posts', 'PostController@popularPosts')->name('posts.popular');
 Route::get('/users/{user}', 'UserController@show')->name('users.show');
+Route::get('/users/{user}/followers', 'UserController@followers')->name('users.find-followers');
+Route::get('/users/{user}/following', 'UserController@following')->name('users.find-following');
 
 Route::group([ 'middleware' => ['auth']], function () {
 	// API
@@ -29,8 +31,10 @@ Route::group([ 'middleware' => ['auth']], function () {
 	Route::post('/posts', 'PostController@store')->name('posts.store');
 	Route::put('/posts/{post}', 'PostController@update')->name('posts.update');
 	Route::delete('/posts/{post}', 'PostController@destroy')->name('posts.destroy');
+
 	Route::post('/users/{user}/follow', 'UserController@follow')->name('user.follow');
-	Route::put('/users/{user}/update', 'UserController@update')->name('users.update');	
+	Route::put('/users/{user}/update', 'UserController@update')->name('users.update');
+
 	Route::post('upload/photo', 'FileController@uploadPhoto')->name('upload.photo');
 
 	// Pages

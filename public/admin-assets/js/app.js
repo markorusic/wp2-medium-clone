@@ -64566,6 +64566,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _shared_template_render__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/template-render */ "./resources/js/shared/template-render.js");
 /* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../shared/http-service */ "./resources/js/shared/http-service.js");
+/* harmony import */ var _shared_data_pagination__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/data-pagination */ "./resources/js/shared/data-pagination.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -64584,13 +64585,6 @@ function _objectWithoutProperties(source, excluded) { if (source == null) return
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 
 
@@ -64641,7 +64635,7 @@ var view = {
           sortable = _ref2$sortable === void 0 ? false : _ref2$sortable;
       return "\n                <th class=\"uc-first clickable\" data-sort=\"".concat(name, "\">\n                <span>").concat(displayName, "<span>\n                ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](sortable, '<span><i class="fa fa-sort" aria-hidden="true"></i></span>'), "\n                </th>\n            ");
     }), "\n        ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showEdit || showDelete, '<th>Actions</th>'), "\n        </tr>\n    </thead>\n    <tbody>\n        ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"].list(content, function (item, index) {
-      return "\n            <tr data-id=\"".concat(item.id, "\">\n                <td>").concat((pagination.page - 1) * pagination.size + index + 1, "</td>\n                ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"].list(props.columns, function (_ref3) {
+      return "\n            <tr data-id=\"".concat(item.id, "\">\n                <td>").concat((pagination.current_page - 1) * pagination.per_page + index + 1, "</td>\n                ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"].list(props.columns, function (_ref3) {
         var name = _ref3.name,
             type = _ref3.type;
         return _shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["switch"](type, {
@@ -64650,16 +64644,11 @@ var view = {
         });
       }), "\n                ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showEdit || showDelete, "<td class=\"flex resource-actions\">\n                        ".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showEdit, "\n                            <a class=\"btn btn-primary white-txt mr-2 btn-sm\"\n                                href=\"/admin/".concat(props.resource, "/").concat(item.id, "/edit\" \n                            >\n                                <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                            </a>\n                            ")), "\n                        ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showDelete, "\n                            <a class=\"btn btn-danger white-txt btn-sm\"\n                                data-delete=\"/admin/".concat(props.resource, "/").concat(item.id, "\"\n                            >\n                                <i class=\"fa fa-trash-o text-white\" aria-hidden=\"true\"></i>\n                            </a>\n                            ")), "\n                    </td>")), "\n            </tr>");
     }), "\n    </tbody>\n    ");
-
-    var pages = _toConsumableArray(Array(Math.ceil(pagination.totalElements / pagination.size)).keys()).map(function (page) {
-      return page + 1;
-    });
-
-    var paginationHtml = "\n        <ul class=\"pagination\">\n            <li class=\"page-item".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](pagination.page < 2, ' disabled'), "\"\n                data-page=\"").concat(pagination.page - 1, "\"\n            >\n                <a class=\"page-link\" href=\"#\">\n                    <span aria-hidden=\"true\">&laquo;</span>\n                </a>\n            </li>\n            ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"].list(pages, function (page) {
-      return "<li class=\"page-item".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](pagination.page === page, ' active'), "\" data-page=\"").concat(page, "\"><a class=\"page-link\" href=\"#\">").concat(page, "</a></li>");
-    }), "\n            <li class=\"page-item").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](pagination.page >= pages.length, ' disabled'), " \" data-page=\"").concat(pagination.page + 1, "\">\n                <a class=\"page-link\" href=\"#\">\n                    <span aria-hidden=\"true\">&raquo;</span>\n                </a>\n            </li>\n        </ul>");
     $dom.table.html(tableHtml);
-    $dom.pagination.html(paginationHtml);
+    _shared_data_pagination__WEBPACK_IMPORTED_MODULE_3__["default"].init($dom.pagination, {
+      pagination: pagination,
+      onPageChange: handlePageChange
+    });
   },
   renderErrorTable: function renderErrorTable() {
     $dom.pagination.html('');
@@ -64681,7 +64670,6 @@ var bindSearchEvent = function bindSearchEvent() {
 var bindTableEvents = function bindTableEvents() {
   $dom.table.find('[data-sort]').on('click', handleSort);
   $dom.table.find('[data-delete]').on('click', handleRecordDelete);
-  $dom.pagination.find('[data-page]').on('click', handlePageChange);
 }; // Load data procedure
 
 
@@ -64689,7 +64677,7 @@ var loadData = function loadData() {
   var _ref4 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   var _ref4$page = _ref4.page,
-      page = _ref4$page === void 0 ? 0 : _ref4$page,
+      page = _ref4$page === void 0 ? 1 : _ref4$page,
       _ref4$size = _ref4.size,
       size = _ref4$size === void 0 ? 10 : _ref4$size,
       rest = _objectWithoutProperties(_ref4, ["page", "size"]);
@@ -64711,9 +64699,9 @@ var loadData = function loadData() {
     view.renderTable({
       content: data,
       pagination: {
-        page: current_page,
-        size: per_page,
-        totalElements: total
+        current_page: current_page,
+        per_page: per_page,
+        total: total
       }
     });
     bindTableEvents();
@@ -64767,12 +64755,7 @@ var handleRecordDelete = function handleRecordDelete(event) {
   });
 };
 
-var handlePageChange = function handlePageChange(event) {
-  event.preventDefault();
-
-  var _$$data2 = $(event.currentTarget).data(),
-      page = _$$data2.page;
-
+var handlePageChange = function handlePageChange(page) {
   loadData(_defineProperty({
     page: page,
     order: state.sort
@@ -64943,6 +64926,73 @@ var dataFrom = {
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (dataFrom);
+
+/***/ }),
+
+/***/ "./resources/js/shared/data-pagination.js":
+/*!************************************************!*\
+  !*** ./resources/js/shared/data-pagination.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var lodash_noop__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/noop */ "./node_modules/lodash/noop.js");
+/* harmony import */ var lodash_noop__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_noop__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _template_render__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./template-render */ "./resources/js/shared/template-render.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+
+
+
+var renderPagination = function renderPagination(selector, _ref) {
+  var current_page = _ref.current_page,
+      per_page = _ref.per_page,
+      total = _ref.total;
+  var $pagination = $(selector);
+
+  var pages = _toConsumableArray(Array(Math.ceil(total / per_page)).keys()).map(function (page) {
+    return page + 1;
+  });
+
+  var paginationHtml = "\n        <ul class=\"pagination\">\n            <li class=\"page-item".concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](current_page < 2, ' disabled'), "\"\n                data-page=\"").concat(current_page - 1, "\"\n            >\n                <a class=\"page-link\" href=\"#\">\n                    <span aria-hidden=\"true\">&laquo;</span>\n                </a>\n            </li>\n            ").concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"].list(pages, function (page) {
+    return "<li class=\"page-item".concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](current_page === page, ' active'), "\" data-page=\"").concat(page, "\"><a class=\"page-link\" href=\"#\">").concat(page, "</a></li>");
+  }), "\n            <li class=\"page-item").concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](current_page >= pages.length, ' disabled'), " \" data-page=\"").concat(current_page + 1, "\">\n                <a class=\"page-link\" href=\"#\">\n                    <span aria-hidden=\"true\">&raquo;</span>\n                </a>\n            </li>\n        </ul>");
+  $pagination.html(paginationHtml);
+  return $pagination;
+};
+
+var defaultPagination = {
+  current_page: 0,
+  per_page: 10,
+  total: 0
+};
+var dataPagination = {
+  render: renderPagination,
+  init: function init(selector) {
+    var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+        _ref2$pagination = _ref2.pagination,
+        pagination = _ref2$pagination === void 0 ? defaultPagination : _ref2$pagination,
+        _ref2$onPageChange = _ref2.onPageChange,
+        onPageChange = _ref2$onPageChange === void 0 ? lodash_noop__WEBPACK_IMPORTED_MODULE_0___default.a : _ref2$onPageChange;
+
+    var $pagination = renderPagination(selector, pagination);
+    $pagination.find('.page-item').on('click', function (event) {
+      var _$$data = $(event.currentTarget).data(),
+          page = _$$data.page;
+
+      onPageChange(page);
+    });
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (dataPagination);
 
 /***/ }),
 

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="my-3 px-5 pt-5">
-        <div class="d-flex justify-content-between my-4">
+        <div class="d-flex  my-4">
             <div class="mr-5">
                 @include('public.user.user-avatar', [
                     'size' => 'lg',
@@ -52,6 +52,21 @@
             </div>
         </div>
 
+        @include('shared.modal', [
+            'id' => 'followers-modal',
+            'title' => 'Followers'
+        ])
+
+        @include('shared.modal', [
+            'id' => 'followers-modal',
+            'title' => 'Followers'
+        ])
+
+        @include('shared.modal', [
+            'id' => 'following-modal',
+            'title' => 'Following'
+        ])
+        
         <div class="my-5">
             @include('public.post.post-list', [
                 'title' => 'Posts',

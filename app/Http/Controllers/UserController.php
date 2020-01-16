@@ -28,6 +28,16 @@ class UserController extends Controller
         return $user;
     }
 
+    public function followers(User $user, Request $request) {
+        $size = $request->get('size', 5);
+        return $user->followers()->paginate($size);
+    }
+
+    public function following(User $user, Request $request) {
+        $size = $request->get('size', 5);
+        return $user->following()->paginate($size);
+    }
+
     public function follow(User $user) {
         return $user->follow();
     }

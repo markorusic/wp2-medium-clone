@@ -21,7 +21,8 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        return Post::filter($request->all())->paginate();
+        $size = $request->get('size', 10);
+        return Post::filter($request->all())->paginate($size);
     }
     
     /**
