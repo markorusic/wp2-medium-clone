@@ -66410,6 +66410,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _follow_action__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./follow-action */ "./resources/js/public/follow-action.js");
 /* harmony import */ var _navbar_search__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./navbar-search */ "./resources/js/public/navbar-search.js");
 /* harmony import */ var _user_profile__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./user-profile */ "./resources/js/public/user-profile.js");
+/* harmony import */ var _user_list__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./user-list */ "./resources/js/public/user-list.js");
+
 
 
 
@@ -66455,7 +66457,8 @@ _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/:id/edit', 
 });
 _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/users/:id', function (_ref3) {
   var id = _ref3.id;
-  _user_profile__WEBPACK_IMPORTED_MODULE_7__["default"].init(id);
+  $('#followers-modal').on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_8__["fetchUserList"])("/users/".concat(id, "/followers")));
+  $('#following-modal').on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_8__["fetchUserList"])("/users/".concat(id, "/following")));
 });
 _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/users/:id/edit', function () {
   _shared_data_form__WEBPACK_IMPORTED_MODULE_2__["default"].init();
@@ -67008,16 +67011,10 @@ var fetchUserList = function fetchUserList(baseUrl) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _user_list__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./user-list */ "./resources/js/public/user-list.js");
 
-var $profile = {
-  followers: null,
-  following: null
-};
 var userProfile = {
   init: function init(id) {
-    $profile.followers = $('#followers-modal');
-    $profile.following = $('#following-modal');
-    $profile.followers.on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_0__["fetchUserList"])("/users/".concat(id, "/followers")));
-    $profile.following.on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_0__["fetchUserList"])("/users/".concat(id, "/following")));
+    $('#followers-modal').on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_0__["fetchUserList"])("/users/".concat(id, "/followers")));
+    $('#following-modal').on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_0__["fetchUserList"])("/users/".concat(id, "/following")));
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (userProfile);

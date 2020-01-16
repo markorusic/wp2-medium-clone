@@ -6,6 +6,7 @@ import auth from './auth'
 import followAction from './follow-action'
 import navbarSearch from './navbar-search'
 import userProfile from './user-profile'
+import { fetchUserList } from './user-list'
 
 window.Popper = require('popper.js').default
 window.$ = window.jQuery = require('jquery')
@@ -45,7 +46,14 @@ router.match('/posts/:id/edit', () => {
 })
 
 router.match('/users/:id', ({ id }) => {
-    userProfile.init(id)
+    $('#followers-modal').on(
+        'show.bs.modal',
+        fetchUserList(`/users/${id}/followers`)
+    )
+    $('#following-modal').on(
+        'show.bs.modal',
+        fetchUserList(`/users/${id}/following`)
+    )
 })
 
 router.match('/users/:id/edit', () => {
