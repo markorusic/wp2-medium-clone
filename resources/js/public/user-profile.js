@@ -48,9 +48,9 @@ const onModalShow = ({ id, param }) => event => {
     const $content = $modal.find('.modal-body')
     const $footer = $modal.find('.modal-footer')
 
-    $content.html(userListLoadingTempalte())
-    const fetchData = (page = 1) =>
-        http
+    const fetchData = (page = 1) => {
+        $content.html(userListLoadingTempalte())
+        return http
             .get(`/users/${id}/${param}?page=${page}&&size=${config.perPage}`)
             .then(response => {
                 const users = response.data.data
@@ -64,6 +64,7 @@ const onModalShow = ({ id, param }) => event => {
                 const message = `Error occured while fetching ${param} data.`
                 $content.html(userListAlertTemplate(message))
             })
+    }
     return fetchData()
 }
 

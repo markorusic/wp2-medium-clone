@@ -65484,10 +65484,10 @@ var onModalShow = function onModalShow(_ref) {
     var $modal = $(event.currentTarget);
     var $content = $modal.find('.modal-body');
     var $footer = $modal.find('.modal-footer');
-    $content.html(userListLoadingTempalte());
 
     var fetchData = function fetchData() {
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      $content.html(userListLoadingTempalte());
       return _shared_http_service__WEBPACK_IMPORTED_MODULE_1__["default"].get("/users/".concat(id, "/").concat(param, "?page=").concat(page, "&&size=").concat(config.perPage)).then(function (response) {
         var users = response.data.data;
         $content.html(userListTempalte(users));
