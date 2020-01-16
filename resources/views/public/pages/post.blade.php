@@ -80,34 +80,7 @@
             </form>
         </div>
 
-        <h3 class="mb-5 pb-3 border-bottom">{{$post->comments->count() > 0 ? 'Comments' : 'Be first to comment!'}}</h3>
-
-        <div id="comment-list">
-            @foreach ($post->comments as $comment)
-                <div class="d-flex" data-comment-id="{{ $comment->id }}">
-                    <div class="d-flex mb-2 mr-3">
-                        @include('public.user.user-avatar', [
-                            'user' => $comment->user
-                        ])
-                    </div>
-                    <div class="d-flex flex-column mb-4 w-100">
-                        <div class="d-flex flex-column">
-                            <div class="d-flex justify-content-between">
-                                @include('public.user.user-name', [
-                                    'user' => $comment->user
-                                ])
-                                @if (auth()->id() === $comment->user->id)
-                                    <a href="#" class="text-dark" data-remove-comment>
-                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                    </a>
-                                @endif
-                            </div>
-                            <span class="text-secondary">{{ $comment->created_at->format('M d, Y') }}</span>
-                        </div>
-                        <div>{{ $comment->content }}</div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
+        <h3 id="comment-list-header" class="mb-5 pb-3 border-bottom"></h3>
+        <div id="comment-list"></div>
     </div>
 @endsection

@@ -10,9 +10,14 @@ use Illuminate\Http\Request;
 class PostController extends Controller
 {
     public function show(Post $post) {
-        $post->load(['user', 'comments.user', 'categories']);
+        $post->load(['user', 'categories']);
         $post->loadCount('likes');
         return view('public.pages.post', compact('post'));
+    }
+
+    public function comments(Post $post, Request $request) {
+        $size = $request->get('size', 5);
+        return $post->comments()->with('user')->paginate($size);
     }
 
     public function categoryPosts(Category $category) {
