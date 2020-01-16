@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\{Post, Comment, Category};
 
 use Illuminate\Http\Request;
+use \Illuminate\Pagination\LengthAwarePaginator;
 
 class PostController extends Controller
 {
@@ -18,6 +19,25 @@ class PostController extends Controller
     public function comments(Post $post, Request $request) {
         $size = $request->get('size', 5);
         return $post->comments()->with('user')->paginate($size);
+    }
+
+    public function likes(Post $post, Request $request) {
+        $size = $request->get('size', 5);
+        $likes = $post->likes()->with('user')->paginate($size);
+        $users = $likes->getCollection()->map(function ($like) {
+            return $like->user;
+        });
+        return new LengthAwarePaginator(
+            $users,
+            $likes->total(),
+            $likes->perPage(),
+            $likes->currentPage(), [
+                'path' => \Request::url(),
+                'query' => [
+                    'page' => $likes->currentPage()
+                ]
+            ]
+        );
     }
 
     public function categoryPosts(Category $category) {

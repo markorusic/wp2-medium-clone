@@ -2,6 +2,7 @@ import toastr from 'toastr'
 import auth from '../auth'
 import http from '../../shared/http-service'
 import asyncEventHandler from '../../shared/async-event-handler'
+import { fetchUserList } from '../user-list'
 import postActions from './index'
 
 const iconType = {
@@ -13,12 +14,11 @@ const onLikeClick = asyncEventHandler(event => {
     if (!auth.isAuthenticated()) {
         return toastr.info('Login to complete that action.')
     }
-    return http.post(`/posts/${postActions.id}/like`).then(() => {
-        const $like = $(event.currentTarget)
-        const $likeIcon = $like.find('i')
-        const $likeCount = $like.find('span')
+    return http.post(`/posts/${postActions.id}/like`).then(({ data }) => {
+        const $likeIcon = $(event.currentTarget).find('i')
+        const $likeCount = $('[data-likes-count]')
 
-        const isLiked = $likeIcon.hasClass(iconType.like)
+        const isLiked = data !== 1
         const likeCount = parseInt($likeCount.text())
 
         if (isLiked) {
@@ -34,6 +34,12 @@ const onLikeClick = asyncEventHandler(event => {
 const like = {
     init() {
         $('#like-action').on('click', onLikeClick)
+        $('#like-users-modal').on(
+            'show.bs.modal',
+            fetchUserList(`/posts/${postActions.id}/likes`, {
+                onFetch: ({ total }) => $('[data-likes-count]').text(total)
+            })
+        )
     }
 }
 

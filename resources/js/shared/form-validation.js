@@ -1,7 +1,7 @@
 const selector = {
     form: '[data-validate-form]',
     field: '[data-validate]',
-    errorPlaceholder: '.invalid-feedback'
+    errorPlaceholder: '[data-validate-error-message]'
 }
 
 const defaultRules = {

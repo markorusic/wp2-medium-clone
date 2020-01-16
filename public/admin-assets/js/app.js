@@ -65033,7 +65033,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 var selector = {
   form: '[data-validate-form]',
   field: '[data-validate]',
-  errorPlaceholder: '.invalid-feedback'
+  errorPlaceholder: '[data-validate-error-message]'
 };
 var defaultRules = {
   required: null,

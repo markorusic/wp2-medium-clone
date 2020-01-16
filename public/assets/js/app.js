@@ -66827,7 +66827,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../auth */ "./resources/js/public/auth.js");
 /* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../shared/http-service */ "./resources/js/shared/http-service.js");
 /* harmony import */ var _shared_async_event_handler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/async-event-handler */ "./resources/js/shared/async-event-handler.js");
-/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./index */ "./resources/js/public/post-actions/index.js");
+/* harmony import */ var _user_list__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../user-list */ "./resources/js/public/user-list.js");
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./index */ "./resources/js/public/post-actions/index.js");
+
 
 
 
@@ -66842,11 +66844,11 @@ var onLikeClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_3_
     return toastr__WEBPACK_IMPORTED_MODULE_0___default.a.info('Login to complete that action.');
   }
 
-  return _shared_http_service__WEBPACK_IMPORTED_MODULE_2__["default"].post("/posts/".concat(_index__WEBPACK_IMPORTED_MODULE_4__["default"].id, "/like")).then(function () {
-    var $like = $(event.currentTarget);
-    var $likeIcon = $like.find('i');
-    var $likeCount = $like.find('span');
-    var isLiked = $likeIcon.hasClass(iconType.like);
+  return _shared_http_service__WEBPACK_IMPORTED_MODULE_2__["default"].post("/posts/".concat(_index__WEBPACK_IMPORTED_MODULE_5__["default"].id, "/like")).then(function (_ref) {
+    var data = _ref.data;
+    var $likeIcon = $(event.currentTarget).find('i');
+    var $likeCount = $('[data-likes-count]');
+    var isLiked = data !== 1;
     var likeCount = parseInt($likeCount.text());
 
     if (isLiked) {
@@ -66861,6 +66863,12 @@ var onLikeClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_3_
 var like = {
   init: function init() {
     $('#like-action').on('click', onLikeClick);
+    $('#like-users-modal').on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_4__["fetchUserList"])("/posts/".concat(_index__WEBPACK_IMPORTED_MODULE_5__["default"].id, "/likes"), {
+      onFetch: function onFetch(_ref2) {
+        var total = _ref2.total;
+        return $('[data-likes-count]').text(total);
+      }
+    }));
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (like);
@@ -66905,15 +66913,20 @@ var postDelete = {
 
 /***/ }),
 
-/***/ "./resources/js/public/user-profile.js":
-/*!*********************************************!*\
-  !*** ./resources/js/public/user-profile.js ***!
-  \*********************************************/
-/*! exports provided: default */
+/***/ "./resources/js/public/user-list.js":
+/*!******************************************!*\
+  !*** ./resources/js/public/user-list.js ***!
+  \******************************************/
+/*! exports provided: userTemplate, userListTempalte, userListLoadingTempalte, userListAlertTemplate, fetchUserList */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "userTemplate", function() { return userTemplate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "userListTempalte", function() { return userListTempalte; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "userListLoadingTempalte", function() { return userListLoadingTempalte; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "userListAlertTemplate", function() { return userListAlertTemplate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchUserList", function() { return fetchUserList; });
 /* harmony import */ var lodash_range__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/range */ "./node_modules/lodash/range.js");
 /* harmony import */ var lodash_range__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_range__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _shared_http_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared/http-service */ "./resources/js/shared/http-service.js");
@@ -66926,33 +66939,27 @@ __webpack_require__.r(__webpack_exports__);
 var config = {
   perPage: 5
 };
-var $profile = {
-  followers: null,
-  following: null
-};
-
 var userTemplate = function userTemplate(user) {
   return "\n    <a class=\"d-flex align-items-center p-3 border-bottom\" href=\"/users/".concat(user.id, "\">\n        <img class=\"avatar mr-3\" src=\"").concat(user.avatar, "\" alt=\"").concat(user.name, "\">\n        <span class=\"text-dark\">").concat(user.name, "</span>\n    </a>\n");
 };
-
 var userListTempalte = function userListTempalte(users) {
   return "\n    <div class=\"d-flex flex-column\">\n        ".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_2__["default"].list(users, userTemplate), "\n    </div>\n");
 };
-
 var userListLoadingTempalte = function userListLoadingTempalte() {
   var numbeOfItems = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : config.perPage;
   return "\n    <div class=\"d-flex flex-column\">\n        ".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_2__["default"].list(lodash_range__WEBPACK_IMPORTED_MODULE_0___default()(0, numbeOfItems), function () {
     return "<div class=\"border-bottom border-white\" style=\"height: 82px; background-color: #ebe6e6\"></div>";
   }), "\n    </div>\n");
 };
-
 var userListAlertTemplate = function userListAlertTemplate(message) {
-  return "\n    <div class=\"d-flex flex-column\">\n        <div class=\"alert alert-danger\" role=\"alert\">\n            ".concat(message, "\n        </div>\n    </div>\n");
+  var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'info';
+  return "\n    <div class=\"d-flex flex-column\">\n        <div class=\"alert alert-".concat(type, "\" role=\"alert\">\n            ").concat(message, "\n        </div>\n    </div>\n");
 };
+var fetchUserList = function fetchUserList(baseUrl) {
+  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+      _ref$onFetch = _ref.onFetch,
+      onFetch = _ref$onFetch === void 0 ? null : _ref$onFetch;
 
-var onModalShow = function onModalShow(_ref) {
-  var id = _ref.id,
-      param = _ref.param;
   return function (event) {
     var $modal = $(event.currentTarget);
     var $content = $modal.find('.modal-body');
@@ -66961,16 +66968,26 @@ var onModalShow = function onModalShow(_ref) {
     var fetchData = function fetchData() {
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       $content.html(userListLoadingTempalte());
-      return _shared_http_service__WEBPACK_IMPORTED_MODULE_1__["default"].get("/users/".concat(id, "/").concat(param, "?page=").concat(page, "&&size=").concat(config.perPage)).then(function (response) {
+      return _shared_http_service__WEBPACK_IMPORTED_MODULE_1__["default"].get("".concat(baseUrl, "?page=").concat(page, "&&size=").concat(config.perPage)).then(function (response) {
+        if (typeof onFetch === 'function') {
+          onFetch(response.data);
+        }
+
         var users = response.data.data;
+
+        if (users.length === 0) {
+          var message = 'No data.';
+          return $content.html(userListAlertTemplate(message));
+        }
+
         $content.html(userListTempalte(users));
         _shared_data_pagination__WEBPACK_IMPORTED_MODULE_3__["default"].init($footer, {
           pagination: response.data,
           onPageChange: fetchData
         });
       })["catch"](function () {
-        var message = "Error occured while fetching ".concat(param, " data.");
-        $content.html(userListAlertTemplate(message));
+        var message = 'Error occured while fetching data.';
+        $content.html(userListAlertTemplate(message, 'danger'));
       });
     };
 
@@ -66978,18 +66995,29 @@ var onModalShow = function onModalShow(_ref) {
   };
 };
 
+/***/ }),
+
+/***/ "./resources/js/public/user-profile.js":
+/*!*********************************************!*\
+  !*** ./resources/js/public/user-profile.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _user_list__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./user-list */ "./resources/js/public/user-list.js");
+
+var $profile = {
+  followers: null,
+  following: null
+};
 var userProfile = {
   init: function init(id) {
     $profile.followers = $('#followers-modal');
     $profile.following = $('#following-modal');
-    $profile.followers.on('show.bs.modal', onModalShow({
-      id: id,
-      param: 'followers'
-    }));
-    $profile.following.on('show.bs.modal', onModalShow({
-      id: id,
-      param: 'following'
-    }));
+    $profile.followers.on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_0__["fetchUserList"])("/users/".concat(id, "/followers")));
+    $profile.following.on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_0__["fetchUserList"])("/users/".concat(id, "/following")));
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (userProfile);
@@ -67253,7 +67281,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 var selector = {
   form: '[data-validate-form]',
   field: '[data-validate]',
-  errorPlaceholder: '.invalid-feedback'
+  errorPlaceholder: '[data-validate-error-message]'
 };
 var defaultRules = {
   required: null,
