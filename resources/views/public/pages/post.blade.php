@@ -63,12 +63,20 @@
         ])
 
         <div class="d-flex justify-content-between mt-5 mb-4">
-            <div class="mr-4">
-                @php $isLiked = $post->isLiked() @endphp
-                <a id="like-action" href="#" class="d-flex align-items-center text-dark">
-                    <i class="fa fa-thumbs-{{ $isLiked ? '' : 'o-' }}up fa-2x mr-2"></i>
-                    <span class="text-dark fs-25">{{ $post->likes_count }}</span>
+            <div class="mr-4 d-flex align-items-baseline">
+                <a id="like-action" href="#" class="text-dark">
+                    <i class="fa fa-thumbs-{{ $post->isLiked() ? '' : 'o-' }}up fa-2x mr-2"></i>
                 </a>
+                <a href="#"
+                    class="text-dark fs-25"
+                    data-likes-count
+                    data-toggle="modal"
+                    data-target="#like-users-modal"
+                >{{ $post->likes_count }}</a>
+                @include('shared.modal', [
+                    'id' => 'like-users-modal',
+                    'title' => 'Likes'
+                ])
             </div>
             <form id="comment-form" class="w-100">
                 <div class="input-group mb-3">
