@@ -66409,7 +66409,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth */ "./resources/js/public/auth.js");
 /* harmony import */ var _follow_action__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./follow-action */ "./resources/js/public/follow-action.js");
 /* harmony import */ var _navbar_search__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./navbar-search */ "./resources/js/public/navbar-search.js");
-/* harmony import */ var _user_profile__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./user-profile */ "./resources/js/public/user-profile.js");
+/* harmony import */ var _user_list__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./user-list */ "./resources/js/public/user-list.js");
 
 
 
@@ -66430,11 +66430,11 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/:id', function (_ref) {
   var id = _ref.id;
+  _post_actions__WEBPACK_IMPORTED_MODULE_3__["default"].init(id);
   var mde = _shared_markdown_editor__WEBPACK_IMPORTED_MODULE_1__["default"].init('#content-ta');
   var $content = document.querySelector('#content');
   $content.innerHTML = mde.toHTML(mde.value());
   mde.remove();
-  _post_actions__WEBPACK_IMPORTED_MODULE_3__["default"].init(id);
 });
 _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/create/_', function () {
   _shared_markdown_editor__WEBPACK_IMPORTED_MODULE_1__["default"].init('[name="content"]');
@@ -66455,7 +66455,8 @@ _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/:id/edit', 
 });
 _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/users/:id', function (_ref3) {
   var id = _ref3.id;
-  _user_profile__WEBPACK_IMPORTED_MODULE_7__["default"].init(id);
+  $('#followers-modal').on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_7__["fetchUserList"])("/users/".concat(id, "/followers")));
+  $('#following-modal').on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_7__["fetchUserList"])("/users/".concat(id, "/following")));
 });
 _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/users/:id/edit', function () {
   _shared_data_form__WEBPACK_IMPORTED_MODULE_2__["default"].init();
@@ -66994,33 +66995,6 @@ var fetchUserList = function fetchUserList(baseUrl) {
     return fetchData();
   };
 };
-
-/***/ }),
-
-/***/ "./resources/js/public/user-profile.js":
-/*!*********************************************!*\
-  !*** ./resources/js/public/user-profile.js ***!
-  \*********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _user_list__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./user-list */ "./resources/js/public/user-list.js");
-
-var $profile = {
-  followers: null,
-  following: null
-};
-var userProfile = {
-  init: function init(id) {
-    $profile.followers = $('#followers-modal');
-    $profile.following = $('#following-modal');
-    $profile.followers.on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_0__["fetchUserList"])("/users/".concat(id, "/followers")));
-    $profile.following.on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_0__["fetchUserList"])("/users/".concat(id, "/following")));
-  }
-};
-/* harmony default export */ __webpack_exports__["default"] = (userProfile);
 
 /***/ }),
 
