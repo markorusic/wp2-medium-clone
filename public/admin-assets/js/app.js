@@ -64962,11 +64962,14 @@ var renderPagination = function renderPagination(selector, _ref) {
     return page + 1;
   });
 
+  if (pages.length < 2) {
+    return null;
+  }
+
   var paginationHtml = "\n        <ul class=\"pagination\">\n            <li class=\"page-item".concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](current_page < 2, ' disabled'), "\"\n                data-page=\"").concat(current_page - 1, "\"\n            >\n                <a class=\"page-link\" href=\"#\">\n                    <span aria-hidden=\"true\">&laquo;</span>\n                </a>\n            </li>\n            ").concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"].list(pages, function (page) {
     return "<li class=\"page-item".concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](current_page === page, ' active'), "\" data-page=\"").concat(page, "\"><a class=\"page-link\" href=\"#\">").concat(page, "</a></li>");
   }), "\n            <li class=\"page-item").concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](current_page >= pages.length, ' disabled'), " \" data-page=\"").concat(current_page + 1, "\">\n                <a class=\"page-link\" href=\"#\">\n                    <span aria-hidden=\"true\">&raquo;</span>\n                </a>\n            </li>\n        </ul>");
-  $pagination.html(paginationHtml);
-  return $pagination;
+  return $pagination.html(paginationHtml);
 };
 
 var defaultPagination = {
@@ -64984,14 +64987,17 @@ var dataPagination = {
         onPageChange = _ref2$onPageChange === void 0 ? lodash_noop__WEBPACK_IMPORTED_MODULE_0___default.a : _ref2$onPageChange;
 
     var $pagination = renderPagination(selector, pagination);
-    $pagination.find('.page-item').on('click', function (event) {
-      event.preventDefault();
 
-      var _$$data = $(event.currentTarget).data(),
-          page = _$$data.page;
+    if ($pagination) {
+      $pagination.find('.page-item').on('click', function (event) {
+        event.preventDefault();
 
-      onPageChange(page);
-    });
+        var _$$data = $(event.currentTarget).data(),
+            page = _$$data.page;
+
+        onPageChange(page);
+      });
+    }
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (dataPagination);

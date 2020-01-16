@@ -17,11 +17,12 @@ Route::get('/content/search', 'SearchController@contentSearch')->name('content.s
 // Pages
 Route::get('', 'PageController@index')->name('home');
 Route::get('/posts/{post}', 'PostController@show')->name('posts.show');
+Route::get('/posts/{post}/comments', 'PostController@comments')->name('posts.comments.index');
 Route::get('/posts/category/{category}', 'PostController@categoryPosts')->name('posts.category');
 Route::get('/popular-posts', 'PostController@popularPosts')->name('posts.popular');
 Route::get('/users/{user}', 'UserController@show')->name('users.show');
-Route::get('/users/{user}/followers', 'UserController@followers')->name('users.find-followers');
-Route::get('/users/{user}/following', 'UserController@following')->name('users.find-following');
+Route::get('/users/{user}/followers', 'UserController@followers')->name('users..followers.index');
+Route::get('/users/{user}/following', 'UserController@following')->name('users..following.index');
 
 Route::group([ 'middleware' => ['auth']], function () {
 	// API

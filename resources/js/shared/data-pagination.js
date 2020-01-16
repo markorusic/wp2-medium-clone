@@ -7,6 +7,10 @@ const renderPagination = (selector, { current_page, per_page, total }) => {
         page => page + 1
     )
 
+    if (pages.length < 2) {
+        return null
+    }
+
     const paginationHtml = `
         <ul class="pagination">
             <li class="page-item${templateRender.if(
@@ -37,8 +41,7 @@ const renderPagination = (selector, { current_page, per_page, total }) => {
             </li>
         </ul>`
 
-    $pagination.html(paginationHtml)
-    return $pagination
+    return $pagination.html(paginationHtml)
 }
 const defaultPagination = { current_page: 0, per_page: 10, total: 0 }
 
@@ -49,11 +52,13 @@ const dataPagination = {
         { pagination = defaultPagination, onPageChange = noop } = {}
     ) {
         const $pagination = renderPagination(selector, pagination)
-        $pagination.find('.page-item').on('click', event => {
-            event.preventDefault()
-            const { page } = $(event.currentTarget).data()
-            onPageChange(page)
-        })
+        if ($pagination) {
+            $pagination.find('.page-item').on('click', event => {
+                event.preventDefault()
+                const { page } = $(event.currentTarget).data()
+                onPageChange(page)
+            })
+        }
     }
 }
 
