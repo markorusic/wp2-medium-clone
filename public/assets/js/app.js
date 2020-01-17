@@ -66721,7 +66721,7 @@ var commentTemplate = function commentTemplate(comment) {
   return "\n    <div class=\"d-flex\" data-comment-id=\"".concat(comment.id, "\">\n        <div class=\"d-flex mb-2 mr-3\">\n            <a href=\"/users/").concat(comment.user.id, "\">\n                <img class=\"avatar\"\n                    src=\"").concat(comment.user.avatar, "\"\n                    alt=\"").concat(comment.user.name, "\"\n                >\n            </a>\n        </div>\n        <div class=\"d-flex flex-column mb-4 w-100 px-3 py-1 position-relative\"\n            style=\"background-color: #edfeeb;\"\n        >\n            <div class=\"d-flex flex-column\">\n                <div class=\"d-flex justify-content-between\">\n                    <a class=\"text-dark font-weight-bold\" href=\"/users/").concat(comment.user.id, "\">\n                        ").concat(comment.user.name, "\n                    </a>\n                    ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_7__["default"]["if"](comment.user.id === lodash_get__WEBPACK_IMPORTED_MODULE_2___default()(_auth__WEBPACK_IMPORTED_MODULE_3__["default"].getUser(), 'id'), "<a href=\"#\"\n                            data-remove-comment\n                            class=\"text-dark position-absolute\"\n                            style=\"top: 0; right: 7px;\"\n                        >\n                            <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n                         </a>"), "\n                </div>\n                <span class=\"text-secondary\">\n                    ").concat(dayjs__WEBPACK_IMPORTED_MODULE_1___default()(comment.created_at).format('MMM D, YYYY'), "\n                </span>\n            </div>\n            <div>").concat(comment.content, "</div>\n        </div>\n    </div>\n");
 };
 
-var onCommentSubmit = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_5__["default"])(function (event) {
+var onCommentSubmit = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_5__["default"])(function () {
   if (!_auth__WEBPACK_IMPORTED_MODULE_3__["default"].isAuthenticated()) {
     return toastr__WEBPACK_IMPORTED_MODULE_0___default.a.info('Login to complete that action.');
   }
@@ -67022,9 +67022,14 @@ var asyncEventHandler = function asyncEventHandler(fn) {
 
     if (!isLoading) {
       isLoading = true;
-      return fn(event)["catch"](function (err) {
-        toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Error occured during this action!');
-        return Promise.reject(err);
+      return fn(event)["catch"](function (error) {
+        if (error.response.status === 422) {
+          toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error(error.response.data.message);
+        } else {
+          toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Error occured during this action!');
+        }
+
+        return Promise.reject(error);
       })["finally"](function () {
         isLoading = false;
       });

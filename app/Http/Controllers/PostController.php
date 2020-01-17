@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\{StorePostRequest};
+use App\Http\Requests\{StorePostRequest, StoreCommentRequest};
 use App\Models\{Post, Comment, Category};
 
 use Illuminate\Http\Request;
@@ -57,10 +57,7 @@ class PostController extends Controller
         return response()->json(compact('liked', 'likes_count'));
     }
 
-    public function comment(Post $post) {
-        abort_unless(request()->validate([
-            'content' => 'required'
-        ]), 400);
+    public function comment(StoreCommentRequest $request, Post $post) {
         return $post->comment(request()->input('content'));
     }
 

@@ -64796,9 +64796,14 @@ var asyncEventHandler = function asyncEventHandler(fn) {
 
     if (!isLoading) {
       isLoading = true;
-      return fn(event)["catch"](function (err) {
-        toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Error occured during this action!');
-        return Promise.reject(err);
+      return fn(event)["catch"](function (error) {
+        if (error.response.status === 422) {
+          toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error(error.response.data.message);
+        } else {
+          toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Error occured during this action!');
+        }
+
+        return Promise.reject(error);
       })["finally"](function () {
         isLoading = false;
       });
