@@ -64873,8 +64873,15 @@ var onFormSubmit = Object(_async_event_handler__WEBPACK_IMPORTED_MODULE_4__["def
   }).then(function (response) {
     return responseHandlers[method]($form, response);
   })["catch"](function (error) {
-    console.log(error);
-    toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Error occured during this action!');
+    if (error.response.status === 422) {
+      var _error$response$data = error.response.data,
+          errors = _error$response$data.errors,
+          message = _error$response$data.message;
+      validator.renderErrors(errors);
+      toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error(message);
+    } else {
+      toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Error occured during this action!');
+    }
 
     if (typeof props.onError === 'function') {
       props.onError({
@@ -65145,7 +65152,7 @@ function () {
       this.fields.forEach(function (_ref3) {
         var name = _ref3.name,
             $el = _ref3.$el;
-        var fieldErrors = errors[name];
+        var fieldErrors = errors[name] || errors[name.replace('[]', '')];
 
         if (fieldErrors && fieldErrors.length > 0) {
           fieldErrors.forEach(function (error) {

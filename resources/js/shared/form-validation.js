@@ -83,7 +83,7 @@ export default class FormValidation {
 
     renderErrors(errors) {
         this.fields.forEach(({ name, $el }) => {
-            const fieldErrors = errors[name]
+            const fieldErrors = errors[name] || errors[name.replace('[]', '')]
             if (fieldErrors && fieldErrors.length > 0) {
                 fieldErrors.forEach(error => this.showErrorMessage($el, error))
             } else {

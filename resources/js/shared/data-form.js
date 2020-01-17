@@ -32,8 +32,13 @@ const onFormSubmit = asyncEventHandler(event => {
         })
         .then(response => responseHandlers[method]($form, response))
         .catch(error => {
-            console.log(error)
-            toastr.error('Error occured during this action!')
+            if (error.response.status === 422) {
+                const { errors, message } = error.response.data
+                validator.renderErrors(errors)
+                toastr.error(message)
+            } else {
+                toastr.error('Error occured during this action!')
+            }
             if (typeof props.onError === 'function') {
                 props.onError({ $form, error })
             }
