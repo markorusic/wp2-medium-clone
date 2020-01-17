@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\{StorePostRequest, StoreCommentRequest};
 use App\Models\{Post, Comment, Category};
 
 use Illuminate\Http\Request;
@@ -56,10 +57,7 @@ class PostController extends Controller
         return response()->json(compact('liked', 'likes_count'));
     }
 
-    public function comment(Post $post) {
-        abort_unless(request()->validate([
-            'content' => 'required'
-        ]), 400);
+    public function comment(StoreCommentRequest $request, Post $post) {
         return $post->comment(request()->input('content'));
     }
 
@@ -74,7 +72,7 @@ class PostController extends Controller
         return view('public.pages.post-create', compact('categories'));
     }
 
-    public function store(Request $request) {
+    public function store(StorePostRequest $request) {
         $data = collect($request->all());
         $categories = $data->get('categories', []);
         $post = auth()->user()->posts()->create($data->toArray());
@@ -89,7 +87,7 @@ class PostController extends Controller
         return view('public.pages.post-edit', compact('post', 'categories'));
     }
 
-    public function update(Request $request, Post $post) {
+    public function update(StorePostRequest $request, Post $post) {
         abort_if($post->user_id !== auth()->id(), 403);
         $data = collect($request->all());
         $categories = $data->get('categories', []);

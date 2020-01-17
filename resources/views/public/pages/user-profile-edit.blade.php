@@ -16,7 +16,11 @@
                     'name' => 'name',
                     'label' => 'Full name',
                     'placeholder' => 'Enter full name',
-                    'value' => $user->name
+                    'value' => $user->name,
+                    'validation' => '
+                        data-validate
+                        data-required
+                    '
                 ],
                 
                 [
@@ -24,14 +28,22 @@
                     'name' => 'bio',
                     'label' => 'Bio',
                     'placeholder' => 'Enter bio',
-                    'value' => $user->bio
+                    'value' => $user->bio,
+                    'validation' => '
+                        data-validate
+                        data-required
+                    '
                 ],
                 [
                     'type' => 'photo',
                     'name' => 'avatar',
                     'label' => 'Avatar photo',
                     'placeholder' => 'Click to upload avatar photo',
-                    'value' => $user->avatar
+                    'value' => $user->avatar,
+                    'validation' => '
+                        data-validate
+                        data-required
+                    '
                 ]
             ]
         ])

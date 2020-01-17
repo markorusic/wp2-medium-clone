@@ -55,7 +55,7 @@ const commentTemplate = comment => `
     </div>
 `
 
-const onCommentSubmit = asyncEventHandler(event => {
+const onCommentSubmit = asyncEventHandler(() => {
     if (!auth.isAuthenticated()) {
         return toastr.info('Login to complete that action.')
     }
@@ -111,15 +111,16 @@ const comment = {
                 .then(({ data }) => {
                     const comments = data.data
                     if (comments.length === 0) {
-                        return $dom.title.text('No comments yet')
+                        $dom.title.text('No comments yet')
+                    } else {
+                        $dom.title.text('Comments')
+                        $dom.list.html(
+                            templateRender.list(comments, commentTemplate)
+                        )
+                        $dom.list
+                            .find('[data-remove-comment]')
+                            .on('click', onCommentRemove)
                     }
-                    $dom.title.text('Comments')
-                    $dom.list.html(
-                        templateRender.list(comments, commentTemplate)
-                    )
-                    $dom.list
-                        .find('[data-remove-comment]')
-                        .on('click', onCommentRemove)
                     dataPagination.init($dom.listPagination, {
                         pagination: data,
                         onPageChange: fetchData

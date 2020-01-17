@@ -7,9 +7,13 @@ const asyncEventHandler = fn => {
         if (!isLoading) {
             isLoading = true
             return fn(event)
-                .catch(err => {
-                    toastr.error('Error occured during this action!')
-                    return Promise.reject(err)
+                .catch(error => {
+                    if (error.response.status === 422) {
+                        toastr.error(error.response.data.message)
+                    } else {
+                        toastr.error('Error occured during this action!')
+                    }
+                    return Promise.reject(error)
                 })
                 .finally(() => {
                     isLoading = false

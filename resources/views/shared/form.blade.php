@@ -23,11 +23,12 @@
 			@php
 				$field = collect($field);
 				$type = $field->get('type', 'text');
-				$props = $field->except(['label', 'options', 'containerClass']);
+				$validation = $field->get('validation', '');
+				$props = $field->except(['label', 'options', 'containerClass', 'validation']);
 			@endphp
 			<div class="form-group col-12 {{ $field->get('containerClass', '') }}">
 				@if ($field->has('label'))
-					<label for="{{ $field->get('id') }}">
+					<label class="m-0" for="{{ $field->get('id', '') }}">
 						<strong>{{ $field->get('label') }}</strong>
 					</label>
 				@endif
@@ -40,6 +41,7 @@
 							class="form-control"
 							value="{{ $props->get('value', '') }}"
 							placeholder="{{ $props->get('placeholder', '') }}"
+							{!! $validation !!}
 							{{ stringifyProps($props->except(['value', 'placeholder'])) }}
 						>
 					@break
@@ -50,12 +52,14 @@
 							rows="4"
 							cols="50"
 							placeholder="{{ $props->get('placeholder', '') }}"
+							{!! $validation !!}
 							{{ stringifyProps($props->except(['value', 'placeholder'])) }}
 						>{{ $props->get('value') }}</textarea>
 					@break
 
 					@case('checkbox')
 						<input
+							{!! $validation !!}
 							{{ stringifyProps($props->except('value')) }}
 							value="true"
 							{{ $props->has('value') ? 'checked' : '' }}
@@ -63,7 +67,11 @@
 					@break
 
 					@case('select')
-						<select class="form-control" {{ stringifyProps($props->except(['value', 'type', 'displayProperty'])) }}>
+						<select
+							class="form-control"
+							{!! $validation !!}
+							{{ stringifyProps($props->except(['value', 'type', 'displayProperty'])) }}
+						>
 							@php
 								$displayProperty = $field->get('displayProperty', 'name')
 							@endphp
@@ -85,6 +93,7 @@
 						<div>
 							<input type="file" accept="image/*" class="d-none" data-photo-file-input />
 							<input
+								{!! $validation !!}
 								data-photo-input
 								type="hidden"
 								name="{{ $field->get('name') }}"

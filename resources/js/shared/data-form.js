@@ -15,7 +15,6 @@ let props = {
 const onFormSubmit = asyncEventHandler(event => {
     const $form = $(event.target)
     const validator = new FormValidation({ $form })
-
     if (!validator.validate()) {
         return Promise.resolve()
     }
@@ -32,17 +31,24 @@ const onFormSubmit = asyncEventHandler(event => {
             return http[method](endpoint, data)
         })
         .then(response => responseHandlers[method]($form, response))
-        .catch(error => responseHandlers.error($form, error))
+        .catch(error => {
+            if (error.response.status === 422) {
+                const { errors, message } = error.response.data
+                validator.renderErrors(errors)
+                toastr.error(message)
+            } else {
+                toastr.error('Error occured during this action!')
+            }
+            if (typeof props.onError === 'function') {
+                props.onError({ $form, error })
+            }
+        })
+        .finally(() => {
+            $form.find('button[type="submit"]').removeClass('loading-btn')
+        })
 })
 
 const responseHandlers = {
-    error($form, error) {
-        toastr.error('Error occured during this action!')
-        $form.find('button[type="submit"]').removeClass('loading-btn')
-        if (typeof props.onError === 'function') {
-            props.onError({ $form, error })
-        }
-    },
     post($form, response) {
         toastr.success('Successfully created!')
         $form.find('button[type="submit"]').hide()

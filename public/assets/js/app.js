@@ -66721,7 +66721,7 @@ var commentTemplate = function commentTemplate(comment) {
   return "\n    <div class=\"d-flex\" data-comment-id=\"".concat(comment.id, "\">\n        <div class=\"d-flex mb-2 mr-3\">\n            <a href=\"/users/").concat(comment.user.id, "\">\n                <img class=\"avatar\"\n                    src=\"").concat(comment.user.avatar, "\"\n                    alt=\"").concat(comment.user.name, "\"\n                >\n            </a>\n        </div>\n        <div class=\"d-flex flex-column mb-4 w-100 px-3 py-1 position-relative\"\n            style=\"background-color: #edfeeb;\"\n        >\n            <div class=\"d-flex flex-column\">\n                <div class=\"d-flex justify-content-between\">\n                    <a class=\"text-dark font-weight-bold\" href=\"/users/").concat(comment.user.id, "\">\n                        ").concat(comment.user.name, "\n                    </a>\n                    ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_7__["default"]["if"](comment.user.id === lodash_get__WEBPACK_IMPORTED_MODULE_2___default()(_auth__WEBPACK_IMPORTED_MODULE_3__["default"].getUser(), 'id'), "<a href=\"#\"\n                            data-remove-comment\n                            class=\"text-dark position-absolute\"\n                            style=\"top: 0; right: 7px;\"\n                        >\n                            <i class=\"fa fa-times\" aria-hidden=\"true\"></i>\n                         </a>"), "\n                </div>\n                <span class=\"text-secondary\">\n                    ").concat(dayjs__WEBPACK_IMPORTED_MODULE_1___default()(comment.created_at).format('MMM D, YYYY'), "\n                </span>\n            </div>\n            <div>").concat(comment.content, "</div>\n        </div>\n    </div>\n");
 };
 
-var onCommentSubmit = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_5__["default"])(function (event) {
+var onCommentSubmit = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_5__["default"])(function () {
   if (!_auth__WEBPACK_IMPORTED_MODULE_3__["default"].isAuthenticated()) {
     return toastr__WEBPACK_IMPORTED_MODULE_0___default.a.info('Login to complete that action.');
   }
@@ -66773,12 +66773,13 @@ var comment = {
         var comments = data.data;
 
         if (comments.length === 0) {
-          return $dom.title.text('No comments yet');
+          $dom.title.text('No comments yet');
+        } else {
+          $dom.title.text('Comments');
+          $dom.list.html(_shared_template_render__WEBPACK_IMPORTED_MODULE_7__["default"].list(comments, commentTemplate));
+          $dom.list.find('[data-remove-comment]').on('click', onCommentRemove);
         }
 
-        $dom.title.text('Comments');
-        $dom.list.html(_shared_template_render__WEBPACK_IMPORTED_MODULE_7__["default"].list(comments, commentTemplate));
-        $dom.list.find('[data-remove-comment]').on('click', onCommentRemove);
         _shared_data_pagination__WEBPACK_IMPORTED_MODULE_8__["default"].init($dom.listPagination, {
           pagination: data,
           onPageChange: fetchData
@@ -67021,9 +67022,14 @@ var asyncEventHandler = function asyncEventHandler(fn) {
 
     if (!isLoading) {
       isLoading = true;
-      return fn(event)["catch"](function (err) {
-        toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Error occured during this action!');
-        return Promise.reject(err);
+      return fn(event)["catch"](function (error) {
+        if (error.response.status === 422) {
+          toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error(error.response.data.message);
+        } else {
+          toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Error occured during this action!');
+        }
+
+        return Promise.reject(error);
       })["finally"](function () {
         isLoading = false;
       });
@@ -67098,21 +67104,27 @@ var onFormSubmit = Object(_async_event_handler__WEBPACK_IMPORTED_MODULE_4__["def
   }).then(function (response) {
     return responseHandlers[method]($form, response);
   })["catch"](function (error) {
-    return responseHandlers.error($form, error);
-  });
-});
-var responseHandlers = {
-  error: function error($form, _error) {
-    toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Error occured during this action!');
-    $form.find('button[type="submit"]').removeClass('loading-btn');
+    if (error.response.status === 422) {
+      var _error$response$data = error.response.data,
+          errors = _error$response$data.errors,
+          message = _error$response$data.message;
+      validator.renderErrors(errors);
+      toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error(message);
+    } else {
+      toastr__WEBPACK_IMPORTED_MODULE_0___default.a.error('Error occured during this action!');
+    }
 
     if (typeof props.onError === 'function') {
       props.onError({
         $form: $form,
-        error: _error
+        error: error
       });
     }
-  },
+  })["finally"](function () {
+    $form.find('button[type="submit"]').removeClass('loading-btn');
+  });
+});
+var responseHandlers = {
   post: function post($form, response) {
     toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Successfully created!');
     $form.find('button[type="submit"]').hide();
@@ -67187,8 +67199,10 @@ var renderPagination = function renderPagination(selector, _ref) {
     return page + 1;
   });
 
+  q;
+
   if (pages.length < 2) {
-    return null;
+    return $pagination.html('');
   }
 
   var paginationHtml = "\n        <ul class=\"pagination\">\n            <li class=\"page-item".concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](current_page < 2, ' disabled'), "\"\n                data-page=\"").concat(current_page - 1, "\"\n            >\n                <a class=\"page-link\" href=\"#\">\n                    <span aria-hidden=\"true\">&laquo;</span>\n                </a>\n            </li>\n            ").concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"].list(pages, function (page) {
@@ -67212,17 +67226,14 @@ var dataPagination = {
         onPageChange = _ref2$onPageChange === void 0 ? lodash_noop__WEBPACK_IMPORTED_MODULE_0___default.a : _ref2$onPageChange;
 
     var $pagination = renderPagination(selector, pagination);
+    $pagination.find('.page-item').on('click', function (event) {
+      event.preventDefault();
 
-    if ($pagination) {
-      $pagination.find('.page-item').on('click', function (event) {
-        event.preventDefault();
+      var _$$data = $(event.currentTarget).data(),
+          page = _$$data.page;
 
-        var _$$data = $(event.currentTarget).data(),
-            page = _$$data.page;
-
-        onPageChange(page);
-      });
-    }
+      onPageChange(page);
+    });
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (dataPagination);
@@ -67324,45 +67335,64 @@ function () {
   _createClass(FormValidation, [{
     key: "validate",
     value: function validate() {
-      var fieldValidities = this.fields.map(this.validateField.bind(this));
-      return fieldValidities.every(function (v) {
-        return v;
-      });
+      var errors = this.collectErrors();
+      this.renderErrors(errors);
+      return Object.keys(errors).length === 0;
     }
   }, {
-    key: "validateField",
-    value: function validateField(field) {
-      var errorMessages = [];
-      var rules = field.rules,
-          $el = field.$el;
-      var value = $el.val();
+    key: "collectErrors",
+    value: function collectErrors() {
+      var errors = {};
+      this.fields.forEach(function (_ref2, _, fields) {
+        var name = _ref2.name,
+            rules = _ref2.rules,
+            $el = _ref2.$el;
+        var value = $el.val();
+        var fieldErrors = [];
 
-      if (rules.required && !value) {
-        errorMessages.push(rules.required);
-      }
-
-      if (rules.pattern && !new RegExp(rules.pattern).test(value)) {
-        errorMessages.push(rules.patternMessage);
-      }
-
-      if (rules.sameAs) {
-        var cmpFieldName = rules.sameAs;
-        var cmpField = this.fields.find(function (f) {
-          return f.name === cmpFieldName;
-        });
-
-        if (cmpField && value !== cmpField.$el.val()) {
-          errorMessages.push(rules.sameAsMessage);
+        if (rules.required !== undefined && (!value || value.length === 0)) {
+          fieldErrors.push(rules.required || 'Required field');
         }
-      }
 
-      if (errorMessages.length > 0) {
-        this.showErrorMessage($el, errorMessages.join('<br />'));
-        return false;
-      }
+        if (rules.pattern && !new RegExp(rules.pattern).test(value)) {
+          fieldErrors.push(rules.patternMessage);
+        }
 
-      this.removeErrorMessage($el);
-      return true;
+        if (rules.sameAs) {
+          var cmpFieldName = rules.sameAs;
+          var cmpField = fields.find(function (f) {
+            return f.name === cmpFieldName;
+          });
+
+          if (cmpField && value !== cmpField.$el.val()) {
+            fieldErrors.push(rules.sameAsMessage);
+          }
+        }
+
+        if (fieldErrors.length > 0) {
+          errors[name] = fieldErrors;
+        }
+      });
+      return errors;
+    }
+  }, {
+    key: "renderErrors",
+    value: function renderErrors(errors) {
+      var _this2 = this;
+
+      this.fields.forEach(function (_ref3) {
+        var name = _ref3.name,
+            $el = _ref3.$el;
+        var fieldErrors = errors[name] || errors[name.replace('[]', '')];
+
+        if (fieldErrors && fieldErrors.length > 0) {
+          fieldErrors.forEach(function (error) {
+            return _this2.showErrorMessage($el, error);
+          });
+        } else {
+          _this2.removeErrorMessage($el);
+        }
+      });
     }
   }, {
     key: "showErrorMessage",
@@ -67370,17 +67400,15 @@ function () {
       var $placeholder = $field.siblings(selector.errorPlaceholder).first();
 
       if ($placeholder.length === 0) {
-        $field.after("<span class=\"".concat(selector.errorPlaceholder.slice(1), "\"></span>"));
-        $placeholder = $field.next();
+        $placeholder = $("\n                <div class=\"mb-1\" ".concat(selector.errorPlaceholder.slice(1, -1), ">\n                </div>\n            "));
+        $field.before($placeholder);
       }
 
-      $field.addClass('is-invalid');
-      $placeholder.html("<strong>".concat(message, "</strong>"));
+      $placeholder.html("<span class=\"text-danger\">".concat(message, "</span>"));
     }
   }, {
     key: "removeErrorMessage",
     value: function removeErrorMessage($field) {
-      $field.removeClass('is-invalid');
       $field.siblings(selector.errorPlaceholder).remove();
     }
   }]);
