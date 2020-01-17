@@ -48,49 +48,63 @@ export default class FormValidation {
     }
 
     validate() {
-        const fieldValidities = this.fields.map(this.validateField.bind(this))
-        return fieldValidities.every(v => v)
+        const errors = this.collectErrors()
+        this.renderErrors(errors)
+        return Object.keys(errors).length === 0
     }
 
-    validateField(field) {
-        let errorMessages = []
-        const { rules, $el } = field
-        const value = $el.val()
-        if (rules.required && !value) {
-            errorMessages.push(rules.required)
-        }
-        if (rules.pattern && !new RegExp(rules.pattern).test(value)) {
-            errorMessages.push(rules.patternMessage)
-        }
-        if (rules.sameAs) {
-            const cmpFieldName = rules.sameAs
-            const cmpField = this.fields.find(f => f.name === cmpFieldName)
-            if (cmpField && value !== cmpField.$el.val()) {
-                errorMessages.push(rules.sameAsMessage)
+    collectErrors() {
+        const errors = {}
+        this.fields.forEach(({ name, rules, $el }, _, fields) => {
+            const value = $el.val()
+            const fieldErrors = []
+            if (
+                rules.required !== undefined &&
+                (!value || value.length === 0)
+            ) {
+                fieldErrors.push(rules.required || 'Required field')
             }
-        }
-        if (errorMessages.length > 0) {
-            this.showErrorMessage($el, errorMessages.join('<br />'))
-            return false
-        }
-        this.removeErrorMessage($el)
-        return true
+            if (rules.pattern && !new RegExp(rules.pattern).test(value)) {
+                fieldErrors.push(rules.patternMessage)
+            }
+            if (rules.sameAs) {
+                const cmpFieldName = rules.sameAs
+                const cmpField = fields.find(f => f.name === cmpFieldName)
+                if (cmpField && value !== cmpField.$el.val()) {
+                    fieldErrors.push(rules.sameAsMessage)
+                }
+            }
+            if (fieldErrors.length > 0) {
+                errors[name] = fieldErrors
+            }
+        })
+        return errors
+    }
+
+    renderErrors(errors) {
+        this.fields.forEach(({ name, $el }) => {
+            const fieldErrors = errors[name]
+            if (fieldErrors && fieldErrors.length > 0) {
+                fieldErrors.forEach(error => this.showErrorMessage($el, error))
+            } else {
+                this.removeErrorMessage($el)
+            }
+        })
     }
 
     showErrorMessage($field, message) {
         let $placeholder = $field.siblings(selector.errorPlaceholder).first()
         if ($placeholder.length === 0) {
-            $field.after(
-                `<span class="${selector.errorPlaceholder.slice(1)}"></span>`
-            )
-            $placeholder = $field.next()
+            $placeholder = $(`
+                <div class="mb-1" ${selector.errorPlaceholder.slice(1, -1)}>
+                </div>
+            `)
+            $field.before($placeholder)
         }
-        $field.addClass('is-invalid')
-        $placeholder.html(`<strong>${message}</strong>`)
+        $placeholder.html(`<span class="text-danger">${message}</span>`)
     }
 
     removeErrorMessage($field) {
-        $field.removeClass('is-invalid')
         $field.siblings(selector.errorPlaceholder).remove()
     }
 }

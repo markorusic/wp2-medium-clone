@@ -13,7 +13,11 @@
                 [
                     'name' => 'title',
                     'label' => 'Title',
-                    'placeholder' => 'Enter post title'
+                    'placeholder' => 'Enter post title',
+                    'validation' => '
+                        data-validate
+                        data-required
+                    '
                 ],
                 [
                     'type' => 'select',
@@ -21,26 +25,42 @@
                     'displayProperty' => 'name',
                     'multiple' => true,
                     'name' => 'categories[]',
-                    'label' => 'Categories'
+                    'label' => 'Categories',
+                    'validation' => '
+                        data-validate
+                        data-required
+                    '
                 ],
                 [
                     'type' => 'textarea',
                     'name' => 'description',
                     'label' => 'Description',
                     'placeholder' => 'Enter description',
+                    'validation' => '
+                        data-validate
+                        data-required
+                    '
                 ],
                 [
                     'type' => 'photo',
                     'name' => 'main_photo',
                     'placeholder' => 'Click to upload main photo',
-                    'label' => 'Main photo'
+                    'label' => 'Main photo',
+                    'validation' => '
+                        data-validate
+                        data-required
+                    '
                 ],
                 [
                     'type' => 'textarea',
                     'name' => 'content',
                     'label' => 'Markdown Content',
                     'placeholder' => 'Enter markdown content',
-                    'style' => 'display: none;'
+                    'style' => 'display: none;',
+                    'validation' => '
+                        data-validate
+                        data-required
+                    '
                 ]
             ]
         ])
