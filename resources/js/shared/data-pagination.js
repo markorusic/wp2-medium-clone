@@ -6,9 +6,9 @@ const renderPagination = (selector, { current_page, per_page, total }) => {
     const pages = [...Array(Math.ceil(total / per_page)).keys()].map(
         page => page + 1
     )
-
+    q
     if (pages.length < 2) {
-        return null
+        return $pagination.html('')
     }
 
     const paginationHtml = `
@@ -52,13 +52,11 @@ const dataPagination = {
         { pagination = defaultPagination, onPageChange = noop } = {}
     ) {
         const $pagination = renderPagination(selector, pagination)
-        if ($pagination) {
-            $pagination.find('.page-item').on('click', event => {
-                event.preventDefault()
-                const { page } = $(event.currentTarget).data()
-                onPageChange(page)
-            })
-        }
+        $pagination.find('.page-item').on('click', event => {
+            event.preventDefault()
+            const { page } = $(event.currentTarget).data()
+            onPageChange(page)
+        })
     }
 }
 

@@ -66773,12 +66773,13 @@ var comment = {
         var comments = data.data;
 
         if (comments.length === 0) {
-          return $dom.title.text('No comments yet');
+          $dom.title.text('No comments yet');
+        } else {
+          $dom.title.text('Comments');
+          $dom.list.html(_shared_template_render__WEBPACK_IMPORTED_MODULE_7__["default"].list(comments, commentTemplate));
+          $dom.list.find('[data-remove-comment]').on('click', onCommentRemove);
         }
 
-        $dom.title.text('Comments');
-        $dom.list.html(_shared_template_render__WEBPACK_IMPORTED_MODULE_7__["default"].list(comments, commentTemplate));
-        $dom.list.find('[data-remove-comment]').on('click', onCommentRemove);
         _shared_data_pagination__WEBPACK_IMPORTED_MODULE_8__["default"].init($dom.listPagination, {
           pagination: data,
           onPageChange: fetchData
@@ -67187,8 +67188,10 @@ var renderPagination = function renderPagination(selector, _ref) {
     return page + 1;
   });
 
+  q;
+
   if (pages.length < 2) {
-    return null;
+    return $pagination.html('');
   }
 
   var paginationHtml = "\n        <ul class=\"pagination\">\n            <li class=\"page-item".concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](current_page < 2, ' disabled'), "\"\n                data-page=\"").concat(current_page - 1, "\"\n            >\n                <a class=\"page-link\" href=\"#\">\n                    <span aria-hidden=\"true\">&laquo;</span>\n                </a>\n            </li>\n            ").concat(_template_render__WEBPACK_IMPORTED_MODULE_1__["default"].list(pages, function (page) {
@@ -67212,17 +67215,14 @@ var dataPagination = {
         onPageChange = _ref2$onPageChange === void 0 ? lodash_noop__WEBPACK_IMPORTED_MODULE_0___default.a : _ref2$onPageChange;
 
     var $pagination = renderPagination(selector, pagination);
+    $pagination.find('.page-item').on('click', function (event) {
+      event.preventDefault();
 
-    if ($pagination) {
-      $pagination.find('.page-item').on('click', function (event) {
-        event.preventDefault();
+      var _$$data = $(event.currentTarget).data(),
+          page = _$$data.page;
 
-        var _$$data = $(event.currentTarget).data(),
-            page = _$$data.page;
-
-        onPageChange(page);
-      });
-    }
+      onPageChange(page);
+    });
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (dataPagination);
