@@ -44,7 +44,7 @@
                         data-toggle="modal"
                         data-target="#following-modal"
                     >
-                        <span class="font-weight-600 text-black">
+                        <span class="font-weight-600 text-black" data-following-count>
                             {{ $user->following_count }}
                         </span> following
                     </a>

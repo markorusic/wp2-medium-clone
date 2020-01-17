@@ -51,7 +51,9 @@ class PostController extends Controller
     }
 
     public function like(Post $post) {
-        return $post->like();
+        $liked = $post->like() !== 1;
+        $likes_count = $post->loadCount('likes')->likes_count;
+        return response()->json(compact('liked', 'likes_count'));
     }
 
     public function comment(Post $post) {

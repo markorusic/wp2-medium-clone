@@ -46,11 +46,15 @@ router.match('/posts/:id/edit', () => {
 router.match('/users/:id', ({ id }) => {
     $('#followers-modal').on(
         'show.bs.modal',
-        fetchUserList(`/users/${id}/followers`)
+        fetchUserList(`/users/${id}/followers`, {
+            onChange: ({ total }) => $('[data-followers-count]').text(total)
+        })
     )
     $('#following-modal').on(
         'show.bs.modal',
-        fetchUserList(`/users/${id}/following`)
+        fetchUserList(`/users/${id}/following`, {
+            onChange: ({ total }) => $('[data-following-count]').text(total)
+        })
     )
 })
 

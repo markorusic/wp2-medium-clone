@@ -38,7 +38,7 @@ export const userListAlertTemplate = (message, type = 'info') => `
     </div>
 `
 
-export const fetchUserList = (baseUrl, { onFetch = null } = {}) => event => {
+export const fetchUserList = (baseUrl, { onChange = null } = {}) => event => {
     const $modal = $(event.currentTarget)
     const $content = $modal.find('.modal-body')
     const $footer = $modal.find('.modal-footer')
@@ -48,8 +48,8 @@ export const fetchUserList = (baseUrl, { onFetch = null } = {}) => event => {
         return http
             .get(`${baseUrl}?page=${page}&&size=${config.perPage}`)
             .then(response => {
-                if (typeof onFetch === 'function') {
-                    onFetch(response.data)
+                if (typeof onChange === 'function') {
+                    onChange(response.data)
                 }
                 const users = response.data.data
                 if (users.length === 0) {

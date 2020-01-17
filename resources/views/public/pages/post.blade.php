@@ -80,10 +80,7 @@
             </div>
             <form id="comment-form" class="w-100">
                 <div class="input-group mb-3">
-                    <input type="text" name="content" required class="form-control" placeholder="Write a comment..." aria-label="Write a comment..." aria-describedby="comment-buttom">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-success input-group-text" id="comment-buttom">Submit</button>
-                    </div>
+                    <input type="text" name="content" required class="form-control" placeholder="Write a comment..." aria-label="Write a comment...">
                 </div>
             </form>
         </div>
