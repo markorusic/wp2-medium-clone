@@ -6,7 +6,7 @@ const renderPagination = (selector, { current_page, per_page, total }) => {
     const pages = [...Array(Math.ceil(total / per_page)).keys()].map(
         page => page + 1
     )
-    q
+
     if (pages.length < 2) {
         return $pagination.html('')
     }

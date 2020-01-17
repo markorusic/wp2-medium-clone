@@ -64973,8 +64973,6 @@ var renderPagination = function renderPagination(selector, _ref) {
     return page + 1;
   });
 
-  q;
-
   if (pages.length < 2) {
     return $pagination.html('');
   }
