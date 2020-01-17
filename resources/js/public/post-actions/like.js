@@ -16,17 +16,11 @@ const onLikeClick = asyncEventHandler(event => {
     }
     return http.post(`/posts/${postActions.id}/like`).then(({ data }) => {
         const $likeIcon = $(event.currentTarget).find('i')
-        const $likeCount = $('[data-likes-count]')
-
-        const isLiked = data !== 1
-        const likeCount = parseInt($likeCount.text())
-
-        if (isLiked) {
+        $('[data-likes-count]').text(data.likes_count)
+        if (data.liked) {
             $likeIcon.removeClass(iconType.like).addClass(iconType.unlike)
-            $likeCount.text(likeCount + 1)
         } else {
             $likeIcon.removeClass(iconType.unlike).addClass(iconType.like)
-            $likeCount.text(likeCount - 1)
         }
     })
 })
@@ -37,7 +31,7 @@ const like = {
         $('#like-users-modal').on(
             'show.bs.modal',
             fetchUserList(`/posts/${postActions.id}/likes`, {
-                onFetch: ({ total }) => $('[data-likes-count]').text(total)
+                onChange: ({ total }) => $('[data-likes-count]').text(total)
             })
         )
     }

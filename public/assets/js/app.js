@@ -66455,8 +66455,18 @@ _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/:id/edit', 
 });
 _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/users/:id', function (_ref3) {
   var id = _ref3.id;
-  $('#followers-modal').on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_7__["fetchUserList"])("/users/".concat(id, "/followers")));
-  $('#following-modal').on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_7__["fetchUserList"])("/users/".concat(id, "/following")));
+  $('#followers-modal').on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_7__["fetchUserList"])("/users/".concat(id, "/followers"), {
+    onChange: function onChange(_ref4) {
+      var total = _ref4.total;
+      return $('[data-followers-count]').text(total);
+    }
+  }));
+  $('#following-modal').on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_7__["fetchUserList"])("/users/".concat(id, "/following"), {
+    onChange: function onChange(_ref5) {
+      var total = _ref5.total;
+      return $('[data-following-count]').text(total);
+    }
+  }));
 });
 _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/users/:id/edit', function () {
   _shared_data_form__WEBPACK_IMPORTED_MODULE_2__["default"].init();
@@ -66518,22 +66528,19 @@ var onFollowClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_
 
   var $follow = $(event.currentTarget);
   var userId = $follow.data().followUser;
-  return _shared_http_service__WEBPACK_IMPORTED_MODULE_2__["default"].post("/users/".concat(userId, "/follow")).then(function () {
+  return _shared_http_service__WEBPACK_IMPORTED_MODULE_2__["default"].post("/users/".concat(userId, "/follow")).then(function (_ref) {
+    var data = _ref.data;
     var $followText = $follow.find('span');
-    var $followersCount = $('[data-followers-count]');
-    var followersCount = parseInt($followersCount.text());
-    var isFollowing = $follow.hasClass(classType.follow);
+    $('[data-followers-count]').text(data.followers_count);
 
-    if (isFollowing) {
-      $follow.removeClass(classType.follow).addClass(classType.unfollow);
-      $followText.text('Follow');
-      $followersCount.text(followersCount - 1);
-      toastr__WEBPACK_IMPORTED_MODULE_0___default.a.info('Unfollowed!');
-    } else {
+    if (data.followed) {
       $follow.removeClass(classType.unfollow).addClass(classType.follow);
       $followText.text('Following');
-      $followersCount.text(followersCount + 1);
       toastr__WEBPACK_IMPORTED_MODULE_0___default.a.success('Followed!');
+    } else {
+      $follow.removeClass(classType.follow).addClass(classType.unfollow);
+      $followText.text('Follow');
+      toastr__WEBPACK_IMPORTED_MODULE_0___default.a.info('Unfollowed!');
     }
   });
 });
@@ -66848,16 +66855,12 @@ var onLikeClick = Object(_shared_async_event_handler__WEBPACK_IMPORTED_MODULE_3_
   return _shared_http_service__WEBPACK_IMPORTED_MODULE_2__["default"].post("/posts/".concat(_index__WEBPACK_IMPORTED_MODULE_5__["default"].id, "/like")).then(function (_ref) {
     var data = _ref.data;
     var $likeIcon = $(event.currentTarget).find('i');
-    var $likeCount = $('[data-likes-count]');
-    var isLiked = data !== 1;
-    var likeCount = parseInt($likeCount.text());
+    $('[data-likes-count]').text(data.likes_count);
 
-    if (isLiked) {
+    if (data.liked) {
       $likeIcon.removeClass(iconType.like).addClass(iconType.unlike);
-      $likeCount.text(likeCount + 1);
     } else {
       $likeIcon.removeClass(iconType.unlike).addClass(iconType.like);
-      $likeCount.text(likeCount - 1);
     }
   });
 });
@@ -66865,7 +66868,7 @@ var like = {
   init: function init() {
     $('#like-action').on('click', onLikeClick);
     $('#like-users-modal').on('show.bs.modal', Object(_user_list__WEBPACK_IMPORTED_MODULE_4__["fetchUserList"])("/posts/".concat(_index__WEBPACK_IMPORTED_MODULE_5__["default"].id, "/likes"), {
-      onFetch: function onFetch(_ref2) {
+      onChange: function onChange(_ref2) {
         var total = _ref2.total;
         return $('[data-likes-count]').text(total);
       }
@@ -66958,8 +66961,8 @@ var userListAlertTemplate = function userListAlertTemplate(message) {
 };
 var fetchUserList = function fetchUserList(baseUrl) {
   var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-      _ref$onFetch = _ref.onFetch,
-      onFetch = _ref$onFetch === void 0 ? null : _ref$onFetch;
+      _ref$onChange = _ref.onChange,
+      onChange = _ref$onChange === void 0 ? null : _ref$onChange;
 
   return function (event) {
     var $modal = $(event.currentTarget);
@@ -66970,8 +66973,8 @@ var fetchUserList = function fetchUserList(baseUrl) {
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       $content.html(userListLoadingTempalte());
       return _shared_http_service__WEBPACK_IMPORTED_MODULE_1__["default"].get("".concat(baseUrl, "?page=").concat(page, "&&size=").concat(config.perPage)).then(function (response) {
-        if (typeof onFetch === 'function') {
-          onFetch(response.data);
+        if (typeof onChange === 'function') {
+          onChange(response.data);
         }
 
         var users = response.data.data;

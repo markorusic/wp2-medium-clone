@@ -15,23 +15,17 @@ const onFollowClick = asyncEventHandler(event => {
     const $follow = $(event.currentTarget)
     const userId = $follow.data().followUser
 
-    return http.post(`/users/${userId}/follow`).then(() => {
+    return http.post(`/users/${userId}/follow`).then(({ data }) => {
         const $followText = $follow.find('span')
-        const $followersCount = $('[data-followers-count]')
-
-        const followersCount = parseInt($followersCount.text())
-        const isFollowing = $follow.hasClass(classType.follow)
-
-        if (isFollowing) {
-            $follow.removeClass(classType.follow).addClass(classType.unfollow)
-            $followText.text('Follow')
-            $followersCount.text(followersCount - 1)
-            toastr.info('Unfollowed!')
-        } else {
+        $('[data-followers-count]').text(data.followers_count)
+        if (data.followed) {
             $follow.removeClass(classType.unfollow).addClass(classType.follow)
             $followText.text('Following')
-            $followersCount.text(followersCount + 1)
             toastr.success('Followed!')
+        } else {
+            $follow.removeClass(classType.follow).addClass(classType.unfollow)
+            $followText.text('Follow')
+            toastr.info('Unfollowed!')
         }
     })
 })
