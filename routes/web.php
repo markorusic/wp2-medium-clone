@@ -13,17 +13,17 @@
 
 // API
 Route::get('/content/search', 'SearchController@contentSearch')->name('content.search');
+Route::get('/users/{user}/followers', 'UserController@followers')->name('users.followers.index');
+Route::get('/users/{user}/following', 'UserController@following')->name('users.following.index');
+Route::get('/posts/{post}/likes', 'PostController@likes')->name('posts.likes.index');
+Route::get('/posts/{post}/comments', 'PostController@comments')->name('posts.comments.index');
 
 // Pages
 Route::get('', 'PageController@index')->name('home');
 Route::get('/posts/{post}', 'PostController@show')->name('posts.show');
-Route::get('/posts/{post}/comments', 'PostController@comments')->name('posts.comments.index');
-Route::get('/posts/{post}/likes', 'PostController@likes')->name('posts.likes.index');
 Route::get('/posts/category/{category}', 'PostController@categoryPosts')->name('posts.category');
 Route::get('/popular-posts', 'PostController@popularPosts')->name('posts.popular');
 Route::get('/users/{user}', 'UserController@show')->name('users.show');
-Route::get('/users/{user}/followers', 'UserController@followers')->name('users.followers.index');
-Route::get('/users/{user}/following', 'UserController@following')->name('users.following.index');
 
 Route::group([ 'middleware' => ['auth']], function () {
 	// API
