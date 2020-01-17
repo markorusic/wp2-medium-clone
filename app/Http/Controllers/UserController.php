@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\{UpdateUserRequest};
 use App\Models\{User};
 
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ class UserController extends Controller
         return view('public.pages.user-profile-edit', compact('user'));
     }
 
-    public function update(User $user, Request $request) {
+    public function update(UpdateUserRequest $user, Request $request) {
         abort_if($user->id !== auth()->id(), 403);
         $user->update($request->all());
         return $user;
