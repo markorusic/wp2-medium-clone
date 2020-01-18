@@ -25,8 +25,7 @@ class LoginController extends Controller
         $credentials = $request->only('email','password');
         $remember = $request->filled('remember');
         if(auth('admin')->attempt($credentials, $remember)){
-            return redirect()
-                ->intended(route('admin.home'));
+            return redirect()->intended(route('admin.home'));
         }
         return redirect()->back();
     }
