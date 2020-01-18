@@ -11,9 +11,7 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     public function show(User $user) {
-        $user
-            ->loadCount('followers')
-            ->loadCount('following');
+        $user->loadCount('followers')->loadCount('following');
         $posts = $user->posts()->paginate();
         return view('public.pages.user-profile', compact('user', 'posts'));
     }

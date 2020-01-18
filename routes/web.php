@@ -13,19 +13,19 @@
 
 // API
 Route::get('/content/search', 'SearchController@contentSearch')->name('content.search');
+Route::get('/users/{user}/followers', 'UserController@followers')->name('users.followers.index');
+Route::get('/users/{user}/following', 'UserController@following')->name('users.following.index');
+Route::get('/posts/{post}/likes', 'PostController@likes')->name('posts.likes.index');
+Route::get('/posts/{post}/comments', 'PostController@comments')->name('posts.comments.index');
 
 // Pages
 Route::get('', 'PageController@index')->name('home');
 Route::get('/posts/{post}', 'PostController@show')->name('posts.show');
-Route::get('/posts/{post}/comments', 'PostController@comments')->name('posts.comments.index');
-Route::get('/posts/{post}/likes', 'PostController@likes')->name('posts.likes.index');
 Route::get('/posts/category/{category}', 'PostController@categoryPosts')->name('posts.category');
 Route::get('/popular-posts', 'PostController@popularPosts')->name('posts.popular');
 Route::get('/users/{user}', 'UserController@show')->name('users.show');
-Route::get('/users/{user}/followers', 'UserController@followers')->name('users.followers.index');
-Route::get('/users/{user}/following', 'UserController@following')->name('users.following.index');
 
-Route::group([ 'middleware' => ['auth']], function () {
+Route::middleware('auth')->group(function () {
 	// API
 	Route::post('/posts/{post}/like', 'PostController@like')->name('posts.like');
 	Route::post('/posts/{post}/comment', 'PostController@comment')->name('posts.comment');
@@ -49,18 +49,20 @@ Route::group([ 'middleware' => ['auth']], function () {
 Auth::routes();
 
 // Admin routes
-Route::group(
-	[
-		'middleware' => ['auth'],
-		'prefix' => 'admin',
-		'namespace' => 'Admin',
-		'as' => 'admin.'
-	],
-	function () {
+Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
+
+	Route::namespace('Auth')->group(function () {
+		Route::get('/login','LoginController@index')->name('login');
+		Route::post('/login','LoginController@login');
+		Route::post('/logout','LoginController@logout')->name('logout');
+	});
+
+	Route::middleware('auth:admin')->group(function () {
 		Route::get('', 'PageController@index')->name('home');
-		Route::get('posts/show-all', 'PostController@showAll');
-        
-        Route::resource('posts', 'PostController');
-        Route::resource('users', 'UserController');
-	}
-);
+		Route::get('posts/show-all', 'PostController@showAll')->name('posts.show-all');
+		
+		Route::resource('posts', 'PostController');
+		Route::resource('users', 'UserController');
+	});
+
+});

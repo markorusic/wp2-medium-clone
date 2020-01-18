@@ -1,10 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use App\Models\Post;
-use App\Models\Category;
-use App\Models\Comment;
+use App\Models\{User, Post, Category, Comment, Admin};
 use App\Enums\UserActivityType;
 
 class DatabaseSeeder extends Seeder
@@ -30,6 +27,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        Admin::create([
+            'name' => 'Jon Doe',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('123456'),
+            'remember_token' => Str::random(10),
+        ]);
 
         $categories = factory(Category::class, self::NUMBER_OF_CATEGORIES)->create();
 

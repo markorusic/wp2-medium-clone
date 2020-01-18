@@ -1,4 +1,4 @@
-@extends('admin.shared.layout')
+@extends('public.shared.layout')
 
 @section('content')
 <div class="container py-5">
