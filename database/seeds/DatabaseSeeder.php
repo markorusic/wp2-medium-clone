@@ -27,7 +27,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        factory(Admin::class)->create();
+        Admin::create([
+            'name' => 'Jon Doe',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('123456'),
+            'remember_token' => Str::random(10),
+        ]);
 
         $categories = factory(Category::class, self::NUMBER_OF_CATEGORIES)->create();
 
