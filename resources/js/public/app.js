@@ -58,6 +58,6 @@ router.match('/users/:id', ({ id }) => {
     )
 })
 
-router.match('/users/:id/edit', () => {
+router.match('/user/profile', () => {
     dataForm.init()
 })

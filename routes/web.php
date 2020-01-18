@@ -35,14 +35,14 @@ Route::middleware('auth')->group(function () {
 	Route::delete('/posts/{post}', 'PostController@destroy')->name('posts.destroy');
 
 	Route::post('/users/{user}/follow', 'UserController@follow')->name('user.follow');
-	Route::put('/users/{user}/update', 'UserController@update')->name('users.update');
+	Route::put('/users/profile/update', 'UserController@update')->name('user-profile.update');
 
 	Route::post('upload/photo', 'FileController@uploadPhoto')->name('upload.photo');
 
 	// Pages
 	Route::get('/posts/create/_', 'PostController@create')->name('posts.create');
 	Route::get('/posts/{post}/edit', 'PostController@edit')->name('posts.edit');
-	Route::get('/users/{user}/edit', 'UserController@edit')->name('users.edit');
+	Route::get('/user/profile', 'UserController@edit')->name('user-profile.edit');
 	
 });
 

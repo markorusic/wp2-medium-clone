@@ -66468,7 +66468,7 @@ _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/users/:id', funct
     }
   }));
 });
-_shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/users/:id/edit', function () {
+_shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/user/profile', function () {
   _shared_data_form__WEBPACK_IMPORTED_MODULE_2__["default"].init();
 });
 

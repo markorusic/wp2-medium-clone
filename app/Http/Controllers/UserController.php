@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\{UpdateUserRequest};
-use App\Models\{User};
+use App\Enums\UserActivityType;
+use App\Http\Requests\UpdateUserRequest;
+use App\Models\User;
 
 use Illuminate\Http\Request;
 
@@ -16,14 +17,15 @@ class UserController extends Controller
         return view('public.pages.user-profile', compact('user', 'posts'));
     }
 
-    public function edit(User $user) {
-        abort_if($user->id !== auth()->id(), 403);
+    public function edit() {
+        $user = auth()->user();
         return view('public.pages.user-profile-edit', compact('user'));
     }
 
-    public function update(User $user, UpdateUserRequest $request) {
-        abort_if($user->id !== auth()->id(), 403);
+    public function update(UpdateUserRequest $request) {
+        $user = auth()->user();
         $user->update($request->all());
+        $user->track(UserActivityType::PROFILE_UPDATED);
         return $user;
     }
 
