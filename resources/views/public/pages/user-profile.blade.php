@@ -25,11 +25,11 @@
                     <h5 class="text-dark font-weight-normal">{{ $user->bio }}</h5>
                 </div>
                 <div class="my-2">
-                    <span class="text-secondary fs-18 mr-3">
+                    <a href="#user-posts" class="text-secondary fs-18 mr-3">
                         <span class="font-weight-600 text-black">
                             {{ $posts->count() }}
                         </span> posts
-                    </span>
+                    </a>
                     <a href="#"
                         class="text-secondary fs-18 mr-3 pointer"
                         data-toggle="modal"
@@ -67,7 +67,7 @@
             'title' => 'Following'
         ])
         
-        <div class="my-5">
+        <div id="user-posts" class="my-5">
             @include('public.post.post-list', [
                 'title' => 'Posts',
                 'posts' => $posts
