@@ -1,10 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use App\Models\Post;
-use App\Models\Category;
-use App\Models\Comment;
+use App\Models\{User, Post, Category, Comment, Admin};
 use App\Enums\UserActivityType;
 
 class DatabaseSeeder extends Seeder
@@ -30,6 +27,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        factory(Admin::class)->create();
 
         $categories = factory(Category::class, self::NUMBER_OF_CATEGORIES)->create();
 

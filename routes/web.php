@@ -25,7 +25,7 @@ Route::get('/posts/category/{category}', 'PostController@categoryPosts')->name('
 Route::get('/popular-posts', 'PostController@popularPosts')->name('posts.popular');
 Route::get('/users/{user}', 'UserController@show')->name('users.show');
 
-Route::group([ 'middleware' => ['auth']], function () {
+Route::middleware('auth')->group(function () {
 	// API
 	Route::post('/posts/{post}/like', 'PostController@like')->name('posts.like');
 	Route::post('/posts/{post}/comment', 'PostController@comment')->name('posts.comment');
@@ -49,18 +49,20 @@ Route::group([ 'middleware' => ['auth']], function () {
 Auth::routes();
 
 // Admin routes
-Route::group(
-	[
-		'middleware' => ['auth'],
-		'prefix' => 'admin',
-		'namespace' => 'Admin',
-		'as' => 'admin.'
-	],
-	function () {
+Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
+
+	Route::namespace('Auth')->group(function () {
+		Route::get('/login','LoginController@index')->name('login');
+		Route::post('/login','LoginController@login');
+		Route::post('/logout','LoginController@logout')->name('logout');
+	});
+
+	Route::middleware('auth:admin')->group(function () {
 		Route::get('', 'PageController@index')->name('home');
-		Route::get('posts/show-all', 'PostController@showAll');
-        
-        Route::resource('posts', 'PostController');
-        Route::resource('users', 'UserController');
-	}
-);
+		Route::get('posts/show-all', 'PostController@showAll')->name('posts.show-all');
+		
+		Route::resource('posts', 'PostController');
+		Route::resource('users', 'UserController');
+	});
+
+});

@@ -1,10 +1,7 @@
 <?php
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
-use App\Models\User;
-use App\Models\Post;
-use App\Models\Category;
-use App\Models\Comment;
+use App\Models\{User, Post, Category, Comment, Admin};
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
@@ -18,6 +15,15 @@ use Illuminate\Support\Str;
 | model instances for testing / seeding your application's database.
 |
 */
+
+$factory->define(Admin::class, function (Faker $faker) {
+    return [
+        'name' => $faker->name,
+        'email' => $faker->unique()->safeEmail,
+        'password' => bcrypt('123456'),
+        'remember_token' => Str::random(10),
+    ];
+});
 
 $factory->define(User::class, function (Faker $faker) {
     return [
