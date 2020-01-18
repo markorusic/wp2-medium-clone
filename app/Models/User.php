@@ -72,15 +72,10 @@ class User extends Authenticatable
             ->exists();
     }
 
-    public function track($activity) {
-        if (is_array($activity)) {
-            $activities = collect($activity)
-                ->map(function ($activity) {
-                    return compact('activity');
-                })
-                ->toArray();
-            return $this->activities()->createMany($activities);
-        }
-        return $this->activities()->create(compact('activity'));
+    public function track($activity_type, $activity_description = null) {
+        return $this->activities()->create([
+            'type' => $activity_type,
+            'description' => $activity_description
+        ]);
     }
 }

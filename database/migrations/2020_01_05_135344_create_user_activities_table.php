@@ -17,7 +17,8 @@ class CreateUserActivitiesTable extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
 
-            $table->text('activity');
+            $table->text('type');
+            $table->text('description')->nullable();
 
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')

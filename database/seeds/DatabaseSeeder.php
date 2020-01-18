@@ -42,12 +42,10 @@ class DatabaseSeeder extends Seeder
                 auth()->loginUsingId($user->id, true);
 
                 // User activities
-                $user->track([
-                    UserActivityType::USER_REGISTER_SUCCESS,
-                    UserActivityType::USER_LOGIN_FAIL,
-                    UserActivityType::USER_LOGIN_SUCCESS,
-                    UserActivityType::USER_LOGOUT_SUCCESS
-                ]);
+                $user->track(UserActivityType::REGISTER_SUCCESS);
+                $user->track(UserActivityType::LOGIN_FAIL);
+                $user->track(UserActivityType::LOGIN_SUCCESS);
+                $user->track(UserActivityType::LOGOUT_SUCCESS);
 
                 // User posts
                 $user->posts()->saveMany(
