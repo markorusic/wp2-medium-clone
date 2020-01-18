@@ -11,6 +11,13 @@
 |
 */
 
+// Pages
+Route::get('', 'PageController@index')->name('home');
+Route::get('/posts/category/{category}', 'PostController@categoryPosts')->name('posts.category');
+Route::get('/popular-posts', 'PostController@popularPosts')->name('posts.popular');
+Route::get('/posts/{post}', 'PostController@show')->name('posts.show');
+Route::get('/users/{user}', 'UserController@show')->name('users.show');
+
 // API
 Route::get('/content/search', 'SearchController@contentSearch')->name('content.search');
 Route::get('/users/{user}/followers', 'UserController@followers')->name('users.followers.index');
@@ -18,14 +25,14 @@ Route::get('/users/{user}/following', 'UserController@following')->name('users.f
 Route::get('/posts/{post}/likes', 'PostController@likes')->name('posts.likes.index');
 Route::get('/posts/{post}/comments', 'PostController@comments')->name('posts.comments.index');
 
-// Pages
-Route::get('', 'PageController@index')->name('home');
-Route::get('/posts/{post}', 'PostController@show')->name('posts.show');
-Route::get('/posts/category/{category}', 'PostController@categoryPosts')->name('posts.category');
-Route::get('/popular-posts', 'PostController@popularPosts')->name('posts.popular');
-Route::get('/users/{user}', 'UserController@show')->name('users.show');
-
 Route::middleware('auth')->group(function () {
+
+	// Pages
+	Route::get('/posts/create/_', 'PostController@create')->name('posts.create');
+	Route::get('/posts/{post}/edit', 'PostController@edit')->name('posts.edit');
+	Route::get('/user/profile', 'UserController@edit')->name('user-profile.edit');
+	Route::get('/user/activity', 'UserController@activity')->name('users.activity');
+
 	// API
 	Route::post('/posts/{post}/like', 'PostController@like')->name('posts.like');
 	Route::post('/posts/{post}/comment', 'PostController@comment')->name('posts.comment');
@@ -38,11 +45,6 @@ Route::middleware('auth')->group(function () {
 	Route::put('/users/profile/update', 'UserController@update')->name('user-profile.update');
 
 	Route::post('upload/photo', 'FileController@uploadPhoto')->name('upload.photo');
-
-	// Pages
-	Route::get('/posts/create/_', 'PostController@create')->name('posts.create');
-	Route::get('/posts/{post}/edit', 'PostController@edit')->name('posts.edit');
-	Route::get('/user/profile', 'UserController@edit')->name('user-profile.edit');
 	
 });
 
@@ -59,10 +61,12 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
 
 	Route::middleware('auth:admin')->group(function () {
 		Route::get('', 'PageController@index')->name('home');
+
 		Route::get('posts/show-all', 'PostController@showAll')->name('posts.show-all');
-		
 		Route::resource('posts', 'PostController');
+
 		Route::resource('users', 'UserController');
+		Route::get('users/{user}/activity', 'UserController@activity')->name('users.activity');
 	});
 
 });

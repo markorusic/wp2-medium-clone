@@ -22,6 +22,12 @@ class UserController extends Controller
         return view('public.pages.user-profile-edit', compact('user'));
     }
 
+    public function activity() {
+        $user = auth()->user();
+        $activities = $user->activities()->paginate(12);
+        return view('public.pages.user-activity', compact('user', 'activities'));
+    }
+
     public function update(UpdateUserRequest $request) {
         $user = auth()->user();
         $user->update($request->all());
@@ -43,9 +49,9 @@ class UserController extends Controller
         $followed = $user->follow() !== 1;
         $followers_count = $user->loadCount('followers')->followers_count;
         if ($followed) {
-            $user->track(UserActivityType::USER_FOLLOW, $user->name);
+            auth()->user()->track(UserActivityType::USER_FOLLOW, $user->name);
         } else {
-            $user->track(UserActivityType::USER_UNFOLLOW, $user->name);
+            auth()->user()->track(UserActivityType::USER_UNFOLLOW, $user->name);
         }
         return response()->json(compact('followed', 'followers_count'));
     }

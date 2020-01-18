@@ -14699,6 +14699,10 @@ a:hover {
   text-decoration: none;
 }
 
+th {
+  border: none !important;
+}
+
 textarea:focus,
 textarea:active,
 textarea.form-control:focus,

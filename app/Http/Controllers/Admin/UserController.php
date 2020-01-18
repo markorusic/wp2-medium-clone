@@ -83,4 +83,9 @@ class UserController extends Controller
     {
         return $user->delete();
     }
+
+    public function activity(User $user) {
+        $activities = $user->activities()->paginate(10);
+        return view('admin.user.activity', compact('user', 'activities'));
+    }
 }
