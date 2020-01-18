@@ -42,6 +42,11 @@ class UserController extends Controller
     public function follow(User $user) {
         $followed = $user->follow() !== 1;
         $followers_count = $user->loadCount('followers')->followers_count;
+        if ($followed) {
+            $user->track(UserActivityType::USER_FOLLOW, $user->name);
+        } else {
+            $user->track(UserActivityType::USER_UNFOLLOW, $user->name);
+        }
         return response()->json(compact('followed', 'followers_count'));
     }
 }

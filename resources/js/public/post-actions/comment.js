@@ -55,7 +55,7 @@ const commentTemplate = comment => `
     </div>
 `
 
-const onCommentSubmit = asyncEventHandler(() => {
+const onCommentSubmit = asyncEventHandler(async () => {
     if (!auth.isAuthenticated()) {
         return toastr.info('Login to complete that action.')
     }
