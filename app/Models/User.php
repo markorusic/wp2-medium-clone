@@ -53,9 +53,6 @@ class User extends Authenticatable
 
      public function follow() {
         $follower_id = auth()->id();
-        if (is_null($follower_id)) {
-            return false;
-        }
         if ($this->isFollowing()) {
             return $this->followers()->detach($follower_id);
         }
@@ -72,15 +69,10 @@ class User extends Authenticatable
             ->exists();
     }
 
-    public function track($activity) {
-        if (is_array($activity)) {
-            $activities = collect($activity)
-                ->map(function ($activity) {
-                    return compact('activity');
-                })
-                ->toArray();
-            return $this->activities()->createMany($activities);
-        }
-        return $this->activities()->create(compact('activity'));
+    public function track($activity_type, $activity_description = null) {
+        return $this->activities()->create([
+            'type' => $activity_type,
+            'description' => $activity_description
+        ]);
     }
 }

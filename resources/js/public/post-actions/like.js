@@ -10,7 +10,7 @@ const iconType = {
     unlike: 'fa-thumbs-up'
 }
 
-const onLikeClick = asyncEventHandler(event => {
+const onLikeClick = asyncEventHandler(async event => {
     if (!auth.isAuthenticated()) {
         return toastr.info('Login to complete that action.')
     }

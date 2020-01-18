@@ -3,12 +3,27 @@
 namespace App\Enums;
 
 abstract class UserActivityType {
-    const USER_REGISTER_SUCCESS = 'User register success';
 
-    const USER_LOGIN_FAIL = 'User login fail';
+    // Auth
+    const REGISTER_SUCCESS = 'Registered successfully';
+    const LOGIN_FAIL = 'Login failed';
+    const LOGIN_SUCCESS = 'Logged in successfully';
+    const LOGOUT_SUCCESS = 'Logged out successfully';
 
-    const USER_LOGIN_SUCCESS = 'User login success';
+    // Profile
+    const PROFILE_UPDATED = 'Profile updated';
 
-    const USER_LOGOUT_SUCCESS = 'User logout success';
+    // User
+    const USER_FOLLOW = 'Followed';
+    const USER_UNFOLLOW = 'Unfollowed';
+
+    // Post
+    const POST_LIKE = 'Liked post';
+    const POST_UNLIKE = 'Unliked post';
+    const POST_COMMENT = 'Commented post';
+    const POST_COMMENT_REMOVE = 'Removed comment from post';
+    const POST_CREATE = 'Created post';
+    const POST_UPDATE = 'Updated post';
+    const POST_DELETE = 'Removed post';
 
 }

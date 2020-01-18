@@ -8,7 +8,7 @@ const classType = {
     unfollow: 'btn-outline-success'
 }
 
-const onFollowClick = asyncEventHandler(event => {
+const onFollowClick = asyncEventHandler(async event => {
     if (!auth.isAuthenticated()) {
         return toastr.info('Login to complete that action.')
     }

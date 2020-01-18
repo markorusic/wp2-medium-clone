@@ -7,9 +7,7 @@
         @include('shared.form', [
             'config' => [
                 'method' => 'put',
-                'endpoint' => route('users.update', [
-                    'user' => $user->id
-                ])
+                'endpoint' => route('user-profile.update')
             ],
             'fields' => [
                 [
