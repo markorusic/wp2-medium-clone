@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Enums\UserActivityType;
 use App\Http\Requests\{StorePostRequest, StoreCommentRequest};
 use App\Models\{Post, Comment, Category};
 
@@ -54,6 +55,11 @@ class PostController extends Controller
     public function like(Post $post) {
         $liked = $post->like() !== 1;
         $likes_count = $post->loadCount('likes')->likes_count;
+        if ($liked) {
+            auth()->user()->track(UserActivityType::POST_LIKE, $post->title);
+        } else {
+            auth()->user()->track(UserActivityType::POST_UNLIKE, $post->title);
+        }
         return response()->json(compact('liked', 'likes_count'));
     }
 
