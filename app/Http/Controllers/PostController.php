@@ -64,12 +64,15 @@ class PostController extends Controller
     }
 
     public function comment(StoreCommentRequest $request, Post $post) {
+        $comment = $post->comment(request()->input('content'));
+        auth()->user()->track(UserActivityType::POST_COMMENT, $post->title);
         return $post->comment(request()->input('content'));
     }
 
     public function removeComment(Post $post, Comment $comment) {
         abort_if($comment->user_id !== auth()->id(), 403);
         abort_unless($comment->delete(), 404);
+        auth()->user()->track(UserActivityType::POST_COMMENT_REMOVE, $post->title);
         return response('Success', 200);
     }
 
@@ -80,9 +83,11 @@ class PostController extends Controller
 
     public function store(StorePostRequest $request) {
         $data = collect($request->all());
+        $user = auth()->user();
         $categories = $data->get('categories', []);
-        $post = auth()->user()->posts()->create($data->toArray());
+        $post = $user->posts()->create($data->toArray());
         $post->categories()->sync($categories);
+        $user->track(UserActivityType::POST_CREATE, $post->title);
         return $post;
     }
 
@@ -94,17 +99,21 @@ class PostController extends Controller
     }
 
     public function update(StorePostRequest $request, Post $post) {
-        abort_if($post->user_id !== auth()->id(), 403);
+        $user = auth()->user();
+        abort_if($post->user_id !== $user->id, 403);
         $data = collect($request->all());
         $categories = $data->get('categories', []);
         $post->update($data->except('categories')->toArray());
         $post->categories()->sync($categories);
+        $user->track(UserActivityType::POST_UPDATE, $post->title);
         return $post;
     }
 
     public function destroy(Post $post) {
-        abort_if($post->user_id !== auth()->id(), 403);
+        $user = auth()->user();
+        abort_if($post->user_id !== $user->id, 403);
         abort_unless($post->delete(), 404);
+        $user->track(UserActivityType::POST_DELETE, $post->title);
         return response('Success', 200);
     }
 }
