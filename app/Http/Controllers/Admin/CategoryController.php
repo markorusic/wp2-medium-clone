@@ -9,10 +9,6 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function indexView()
-    {
-        return view('admin.category.index');
-    }
     /**
      * Display a listing of the resource.
      *

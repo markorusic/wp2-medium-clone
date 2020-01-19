@@ -9,10 +9,6 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function indexView()
-    {
-        return view('admin.user.index');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -92,10 +88,6 @@ class UserController extends Controller
     {
         abort_unless($user->delete(), 404);
         return response('Success', 200);
-    }
-
-    public function commentsView() {
-        return view('admin.user.comments');
     }
 
     public function comments(User $user) {

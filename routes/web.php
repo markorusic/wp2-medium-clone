@@ -70,8 +70,8 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
 		Route::get('', 'PageController@index')->name('home');
 
 		Route::get('users/{user}/activity', 'UserController@activity')->name('users.activity');
-		Route::get('users/all', 'UserController@indexView')->name('users.index-view');
-		Route::get('users/{user}/comments/all', 'UserController@commentsView')->name('users.comments-view');
+		Route::get('users/all', 'PageController@layoutView')->name('users.index-view');
+		Route::get('users/{user}/comments/all', 'PageController@layoutView')->name('users.comments-view');
 		Route::get('users/{user}/comments', 'UserController@comments')->name('users.comments-view');
 		Route::resource('users', 'UserController');
 
@@ -79,10 +79,10 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
 		Route::put('comments/{comment}', 'CommentController@update')->name('comments.update');
 		Route::delete('users/{id}/comments/{comment}', 'CommentController@destroy')->name('comments.destroy');
 
-		Route::get('posts/all', 'PostController@indexView')->name('posts.index-view');
+		Route::get('posts/all', 'PageController@layoutView')->name('posts.index-view');
 		Route::resource('posts', 'PostController');
 
-		Route::get('categories/all', 'CategoryController@indexView')->name('categories.index-view');
+		Route::get('categories/all', 'PageController@layoutView')->name('categories.index-view');
 		Route::resource('categories', 'CategoryController');
 
 	});
