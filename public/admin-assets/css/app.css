@@ -14716,7 +14716,7 @@ button.toast-close-button {
           flex: 5;
 }
 
-.main-content nav {
+.main-content nav.navbar {
   background-color: #171f22;
 }
 

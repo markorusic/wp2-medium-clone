@@ -16,10 +16,7 @@ router.match('/admin/posts/all', () => {
         title: 'Posts',
         baseUrl: '/admin/posts',
         searchBy: 'title',
-        allowedActions: [
-            dataTable.crudAction.edit,
-            dataTable.crudAction.delete
-        ],
+        crudActions: [dataTable.crudAction.edit, dataTable.crudAction.delete],
         columns: [
             {
                 name: 'title',

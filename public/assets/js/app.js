@@ -68003,7 +68003,7 @@ var dataFrom = {
 
     props = _objectSpread({}, props, {}, _props);
     _photo_upload__WEBPACK_IMPORTED_MODULE_3__["default"].init(photoUploadProps);
-    $('form').on('submit', onFormSubmit);
+    $('[data-from]').on('submit', onFormSubmit);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (dataFrom);

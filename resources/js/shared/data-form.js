@@ -78,7 +78,7 @@ const dataFrom = {
     init({ photoUploadProps, ..._props } = {}) {
         props = { ...props, ..._props }
         photoUpload.init(photoUploadProps)
-        $('form').on('submit', onFormSubmit)
+        $('[data-from]').on('submit', onFormSubmit)
     }
 }
 

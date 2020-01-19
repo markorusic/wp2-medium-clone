@@ -66054,7 +66054,7 @@ _shared_router__WEBPACK_IMPORTED_MODULE_1__["default"].match('/admin/posts/all',
     title: 'Posts',
     baseUrl: '/admin/posts',
     searchBy: 'title',
-    allowedActions: [_modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"].crudAction.edit, _modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"].crudAction["delete"]],
+    crudActions: [_modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"].crudAction.edit, _modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"].crudAction["delete"]],
     columns: [{
       name: 'title',
       sortable: true
@@ -66502,7 +66502,7 @@ var dataFrom = {
 
     props = _objectSpread({}, props, {}, _props);
     _photo_upload__WEBPACK_IMPORTED_MODULE_3__["default"].init(photoUploadProps);
-    $('form').on('submit', onFormSubmit);
+    $('[data-from]').on('submit', onFormSubmit);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (dataFrom);
