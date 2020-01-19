@@ -85,3 +85,29 @@ router.match('/admin/users/:id/comments/all', ({ id }) => {
         ]
     })
 })
+
+router.match('/admin/categories/all', () => {
+    dataTable.init({
+        title: 'Categories',
+        baseUrl: '/admin/categories',
+        searchBy: 'name',
+        crudActions: [
+            dataTable.crudAction.create,
+            dataTable.crudAction.edit,
+            dataTable.crudAction.delete
+        ],
+        columns: [
+            {
+                name: 'name'
+            },
+            {
+                name: 'description'
+            },
+            {
+                name: 'main_photo',
+                displayName: 'Main photo',
+                type: 'photo'
+            }
+        ]
+    })
+})

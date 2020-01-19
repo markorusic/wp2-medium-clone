@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function indexView()
     {
-        return view('admin.post.index');
+        return view('admin.user.index');
     }
     /**
      * Display a listing of the resource.

@@ -66113,6 +66113,23 @@ _shared_router__WEBPACK_IMPORTED_MODULE_1__["default"].match('/admin/users/:id/c
     }]
   });
 });
+_shared_router__WEBPACK_IMPORTED_MODULE_1__["default"].match('/admin/categories/all', function () {
+  _modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"].init({
+    title: 'Categories',
+    baseUrl: '/admin/categories',
+    searchBy: 'name',
+    crudActions: [_modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"].crudAction.create, _modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"].crudAction.edit, _modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"].crudAction["delete"]],
+    columns: [{
+      name: 'name'
+    }, {
+      name: 'description'
+    }, {
+      name: 'main_photo',
+      displayName: 'Main photo',
+      type: 'photo'
+    }]
+  });
+});
 
 /***/ }),
 
