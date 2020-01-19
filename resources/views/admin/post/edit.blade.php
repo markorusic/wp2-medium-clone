@@ -7,7 +7,7 @@
         @include('shared.form', [
             'config' => [
                 'method' => 'put',
-                'endpoint' => route('posts.update', [
+                'endpoint' => route('admin.posts.update', [
                     'post' => $post->id
                 ])
             ],
@@ -17,6 +17,19 @@
                     'label' => 'Title',
                     'placeholder' => 'Enter post title',
                     'value' => $post->title
+                ],
+                [
+                    'type' => 'select',
+                    'options' => $categories,
+                    'value' => $post->categories,
+                    'displayProperty' => 'name',
+                    'multiple' => true,
+                    'name' => 'categories[]',
+                    'label' => 'Categories',
+                    'validation' => '
+                        data-validate
+                        data-required
+                    '
                 ],
                 [
                     'type' => 'textarea',

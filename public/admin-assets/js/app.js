@@ -64531,11 +64531,14 @@ window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jqu
 
 __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
 
-_shared_router__WEBPACK_IMPORTED_MODULE_1__["default"].match('/admin/posts/show-all', function () {
+document.addEventListener('DOMContentLoaded', function () {
+  _shared_data_form__WEBPACK_IMPORTED_MODULE_0__["default"].init();
+});
+_shared_router__WEBPACK_IMPORTED_MODULE_1__["default"].match('/admin/posts/all', function () {
   _modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"].init({
     resource: 'posts',
     searchBy: 'title',
-    actions: [_modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"].resourceAction.edit, _modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"].resourceAction["delete"]],
+    allowedActions: [_modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"].resourceAction.edit, _modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"].resourceAction["delete"]],
     columns: [{
       name: 'title',
       sortable: true
@@ -64548,7 +64551,31 @@ _shared_router__WEBPACK_IMPORTED_MODULE_1__["default"].match('/admin/posts/show-
 });
 _shared_router__WEBPACK_IMPORTED_MODULE_1__["default"].match('/admin/posts/:id/edit', function () {
   _shared_markdown_editor__WEBPACK_IMPORTED_MODULE_2__["default"].init('[name="content"]');
-  _shared_data_form__WEBPACK_IMPORTED_MODULE_0__["default"].init();
+});
+_shared_router__WEBPACK_IMPORTED_MODULE_1__["default"].match('/admin/users/all', function () {
+  _modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"].init({
+    resource: 'users',
+    searchBy: 'name',
+    crudActions: [_modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"].resourceAction.edit, _modules_data_table__WEBPACK_IMPORTED_MODULE_3__["default"].resourceAction["delete"]],
+    actions: [{
+      type: 'success',
+      icon: 'user',
+      title: 'Activity',
+      link: function link(user) {
+        return "/admin/users/".concat(user.id, "/activity");
+      }
+    }],
+    columns: [{
+      name: 'avatar',
+      displayName: 'Avatar',
+      type: 'photo'
+    }, {
+      name: 'name',
+      sortable: true
+    }, {
+      name: 'email'
+    }]
+  });
 });
 
 /***/ }),
@@ -64597,7 +64624,8 @@ var resourceAction = {
 var props = {
   resource: null,
   searchBy: null,
-  actions: Object.values(resourceAction),
+  crudActions: Object.values(resourceAction),
+  actions: [],
   columns: []
 };
 var state = {
@@ -64612,7 +64640,7 @@ var $dom = {
 };
 var view = {
   renderContainer: function renderContainer() {
-    var html = "\n    <div id=\"".concat(props.resource, "-data-table\" class=\"container py-2\">\n        <div class=\"card-header\">\n        <div class=\"flex-sp-between\">\n            <h4 class=\"bold uc-first\">").concat(props.resource, "</h4>\n            ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](props.actions.includes(resourceAction.create), "<span>\n                    <a class=\"btn btn-success btn-sm\" href=\"/admin/".concat(props.resource, "/create\">\n                        <i class=\"fa fa-plus\" aria-hidden=\"true\"></i> \n                        Create\n                    </a>\n                </span>")), "\n        </div>\n        ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](props.searchBy, "<div class=\"mt-1\">\n                <input\n                    type=\"text\"\n                    class=\"resource-table-search form-control\"\n                    placeholder=\"Search\"\n                    data-resource-search\n                >\n            </div>"), "\n        </div>\n        <table class=\"table resource-table\" data-resource-table>\n        </table>\n        <div data-resource-pagination></div>\n    ");
+    var html = "\n    <div id=\"".concat(props.resource, "-data-table\" class=\"container py-2\">\n        <div class=\"card-header\">\n        <div class=\"flex-sp-between\">\n            <h4 class=\"bold uc-first\">").concat(props.resource, "</h4>\n            ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](props.crudActions.includes(resourceAction.create), "<span>\n                    <a class=\"btn btn-success btn-sm\" href=\"/admin/".concat(props.resource, "/create\">\n                        <i class=\"fa fa-plus\" aria-hidden=\"true\"></i> \n                        Create\n                    </a>\n                </span>")), "\n        </div>\n        ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](props.searchBy, "<div class=\"mt-1\">\n                <input\n                    type=\"text\"\n                    class=\"resource-table-search form-control\"\n                    placeholder=\"Search\"\n                    data-resource-search\n                >\n            </div>"), "\n        </div>\n        <table class=\"table resource-table\" data-resource-table>\n        </table>\n        <div data-resource-pagination></div>\n    ");
     $('body main').html(html);
     return $("#".concat(props.resource, "-data-table"));
   },
@@ -64625,8 +64653,8 @@ var view = {
         content = _ref$content === void 0 ? [] : _ref$content,
         _ref$pagination = _ref.pagination,
         pagination = _ref$pagination === void 0 ? {} : _ref$pagination;
-    var showEdit = props.actions.includes(resourceAction.edit);
-    var showDelete = props.actions.includes(resourceAction["delete"]);
+    var showEdit = props.crudActions.includes(resourceAction.edit);
+    var showDelete = props.crudActions.includes(resourceAction["delete"]);
     var tableHtml = "\n    <thead>\n        <tr>\n        <th>#</th>\n        ".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"].list(props.columns, function (_ref2) {
       var name = _ref2.name,
           _ref2$displayName = _ref2.displayName,
@@ -64642,7 +64670,9 @@ var view = {
           "default": "<td data-name=\"".concat(name, "\">").concat(item[name], "</td>"),
           photo: "\n                            <td data-name=\"main_photo\">\n                                <img src=\"".concat(item[name], "\" alt=\"Photo not found\" class=\"table-img\">\n                            </td>")
         });
-      }), "\n                ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showEdit || showDelete, "<td class=\"flex resource-actions\">\n                        ".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showEdit, "\n                            <a class=\"btn btn-primary white-txt mr-2 btn-sm\"\n                                href=\"/admin/".concat(props.resource, "/").concat(item.id, "/edit\" \n                            >\n                                <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                            </a>\n                            ")), "\n                        ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showDelete, "\n                            <a class=\"btn btn-danger white-txt btn-sm\"\n                                data-delete=\"/admin/".concat(props.resource, "/").concat(item.id, "\"\n                            >\n                                <i class=\"fa fa-trash-o text-white\" aria-hidden=\"true\"></i>\n                            </a>\n                            ")), "\n                    </td>")), "\n            </tr>");
+      }), "\n                ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showEdit || showDelete || props.actions.length > 0, "<td class=\"flex resource-actions\">\n                        ".concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"].list(props.actions, function (action) {
+        return "\n                            <a class=\"btn btn-".concat(action.type, " mr-2 btn-sm\"\n                                href=\"").concat(action.link(item), "\" \n                            >\n                                <i class=\"fa fa-").concat(action.icon, "\" aria-hidden=\"true\"></i>\n                                ").concat(action.title || '', "\n                            </a>\n                        ");
+      }), "\n                        ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showEdit, "\n                            <a class=\"btn btn-primary white-txt mr-2 btn-sm\"\n                                href=\"/admin/".concat(props.resource, "/").concat(item.id, "/edit\" \n                            >\n                                <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n                            </a>\n                            ")), "\n                        ").concat(_shared_template_render__WEBPACK_IMPORTED_MODULE_1__["default"]["if"](showDelete, "\n                            <a class=\"btn btn-danger white-txt btn-sm\"\n                                data-delete=\"/admin/".concat(props.resource, "/").concat(item.id, "\"\n                            >\n                                <i class=\"fa fa-trash-o text-white\" aria-hidden=\"true\"></i>\n                            </a>\n                            ")), "\n                    </td>")), "\n            </tr>");
     }), "\n    </tbody>\n    ");
     $dom.table.html(tableHtml);
     _shared_data_pagination__WEBPACK_IMPORTED_MODULE_3__["default"].init($dom.pagination, {

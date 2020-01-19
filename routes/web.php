@@ -11,6 +11,14 @@
 |
 */
 
+Route::namespace('Auth')->group(function () {
+	Route::get('login', 'LoginController@showLoginForm')->name('login');
+	Route::post('login', 'LoginController@login');
+	Route::post('logout', 'LoginController@logout')->name('logout');
+	Route::get('register', 'RegisterController@showRegistrationForm')->name('register');
+	Route::post('register', 'RegisterController@register');
+});
+
 // Pages
 Route::get('', 'PageController@index')->name('home');
 Route::get('/posts/category/{category}', 'PostController@categoryPosts')->name('posts.category');
@@ -48,7 +56,6 @@ Route::middleware('auth')->group(function () {
 	
 });
 
-Auth::routes();
 
 // Admin routes
 Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
@@ -62,14 +69,17 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
 	Route::middleware('auth:admin')->group(function () {
 		Route::get('', 'PageController@index')->name('home');
 
-		Route::resource('users', 'UserController');
 		Route::get('users/{user}/activity', 'UserController@activity')->name('users.activity');
+		Route::get('users/all', 'UserController@indexView')->name('users.index-view');
+		Route::resource('users', 'UserController');
 
-		Route::get('posts/show-all', 'PostController@showAll')->name('posts.show-all');
+		Route::get('posts/all', 'PostController@indexView')->name('posts.index-view');
 		Route::resource('posts', 'PostController');
 
+		Route::get('categories/all', 'CategoryController@indexView')->name('categories.index-view');
 		Route::resource('categories', 'CategoryController');
 
+		Route::get('comments/all', 'CommentController@indexView')->name('comments.index-view');
 		Route::resource('comments', 'CommentController');
 
 	});

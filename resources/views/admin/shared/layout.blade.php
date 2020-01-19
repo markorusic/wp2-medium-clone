@@ -9,16 +9,16 @@
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
-                    <a href="{{ route('admin.users.index') }}" class="text-light d-block">Users</a>
+                    <a href="{{ route('admin.users.index-view') }}" class="text-light d-block">Users</a>
                 </li>
                 <li class="list-group-item">
-                    <a href="{{ route('admin.posts.index') }}" class="text-light d-block">Posts</a>
+                    <a href="{{ route('admin.posts.index-view') }}" class="text-light d-block">Posts</a>
                 </li>
                 <li class="list-group-item">
-                    <a href="{{ route('admin.comments.index') }}" class="text-light d-block">Comments</a>
+                    <a href="{{ route('admin.comments.index-view') }}" class="text-light d-block">Comments</a>
                 </li>
                 <li class="list-group-item">
-                    <a href="{{ route('admin.categories.index') }}" class="text-light d-block">Categories</a>
+                    <a href="{{ route('admin.categories.index-view') }}" class="text-light d-block">Categories</a>
                 </li>
             </ul>
         </div>

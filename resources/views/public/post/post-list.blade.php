@@ -1,5 +1,9 @@
 @if (isset($title))
-    <h2 class="pb-3 mb-3 border-bottom">{{ __($title) }}</h2>
+    @if ($posts->count() === 0)
+        <h3>No posts yet.</h3>
+    @else
+        <h2 class="pb-3 mb-3 border-bottom">{{ __($title) }}</h2>
+    @endif
 @endif
 <div class="d-flex justify-content-center flex-column">
     @foreach ($posts as $post)

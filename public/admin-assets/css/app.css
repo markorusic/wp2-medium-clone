@@ -14728,6 +14728,10 @@ button.toast-close-button {
   text-transform: uppercase;
 }
 
+.uc-first {
+  text-transform: capitalize;
+}
+
 .pointer {
   cursor: pointer;
 }

@@ -12,7 +12,8 @@ const resourceAction = {
 let props = {
     resource: null,
     searchBy: null,
-    actions: Object.values(resourceAction),
+    crudActions: Object.values(resourceAction),
+    actions: [],
     columns: []
 }
 
@@ -36,7 +37,7 @@ const view = {
         <div class="flex-sp-between">
             <h4 class="bold uc-first">${props.resource}</h4>
             ${templateRender.if(
-                props.actions.includes(resourceAction.create),
+                props.crudActions.includes(resourceAction.create),
                 `<span>
                     <a class="btn btn-success btn-sm" href="/admin/${props.resource}/create">
                         <i class="fa fa-plus" aria-hidden="true"></i> 
@@ -75,8 +76,8 @@ const view = {
         `)
     },
     renderTable({ content = [], pagination = {} }) {
-        const showEdit = props.actions.includes(resourceAction.edit)
-        const showDelete = props.actions.includes(resourceAction.delete)
+        const showEdit = props.crudActions.includes(resourceAction.edit)
+        const showDelete = props.crudActions.includes(resourceAction.delete)
 
         const tableHtml = `
     <thead>
@@ -115,8 +116,21 @@ const view = {
                     })
                 )}
                 ${templateRender.if(
-                    showEdit || showDelete,
+                    showEdit || showDelete || props.actions.length > 0,
                     `<td class="flex resource-actions">
+                        ${templateRender.list(
+                            props.actions,
+                            action => `
+                            <a class="btn btn-${action.type} mr-2 btn-sm"
+                                href="${action.link(item)}" 
+                            >
+                                <i class="fa fa-${
+                                    action.icon
+                                }" aria-hidden="true"></i>
+                                ${action.title || ''}
+                            </a>
+                        `
+                        )}
                         ${templateRender.if(
                             showEdit,
                             `

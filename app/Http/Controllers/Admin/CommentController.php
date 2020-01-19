@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    public function indexView()
+    {
+        return view('admin.post.index');
+    }
     /**
      * Display a listing of the resource.
      *

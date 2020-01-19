@@ -7,11 +7,15 @@ window.Popper = require('popper.js').default
 window.$ = window.jQuery = require('jquery')
 require('bootstrap')
 
-router.match('/admin/posts/show-all', () => {
+document.addEventListener('DOMContentLoaded', () => {
+    dataForm.init()
+})
+
+router.match('/admin/posts/all', () => {
     dataTable.init({
         resource: 'posts',
         searchBy: 'title',
-        actions: [
+        allowedActions: [
             dataTable.resourceAction.edit,
             dataTable.resourceAction.delete
         ],
@@ -31,5 +35,37 @@ router.match('/admin/posts/show-all', () => {
 
 router.match('/admin/posts/:id/edit', () => {
     markdownEditor.init('[name="content"]')
-    dataForm.init()
+})
+
+router.match('/admin/users/all', () => {
+    dataTable.init({
+        resource: 'users',
+        searchBy: 'name',
+        crudActions: [
+            dataTable.resourceAction.edit,
+            dataTable.resourceAction.delete
+        ],
+        actions: [
+            {
+                type: 'success',
+                icon: 'user',
+                title: 'Activity',
+                link: user => `/admin/users/${user.id}/activity`
+            }
+        ],
+        columns: [
+            {
+                name: 'avatar',
+                displayName: 'Avatar',
+                type: 'photo'
+            },
+            {
+                name: 'name',
+                sortable: true
+            },
+            {
+                name: 'email'
+            }
+        ]
+    })
 })
