@@ -28,6 +28,9 @@ router.match('/posts/:id', ({ id }) => {
 router.match('/posts/create/_', () => {
     markdownEditor.init('[name="content"]')
     dataForm.init({
+        photoUploadProps: {
+            landscapeImg: true
+        },
         onCreateSuccess: ({ response }) => {
             router.redirect(`/posts/${response.data.id}`)
         }

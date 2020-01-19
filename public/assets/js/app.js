@@ -67188,6 +67188,9 @@ _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/:id', funct
 _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].match('/posts/create/_', function () {
   _shared_markdown_editor__WEBPACK_IMPORTED_MODULE_1__["default"].init('[name="content"]');
   _shared_data_form__WEBPACK_IMPORTED_MODULE_2__["default"].init({
+    photoUploadProps: {
+      landscapeImg: true
+    },
     onCreateSuccess: function onCreateSuccess(_ref2) {
       var response = _ref2.response;
       _shared_router__WEBPACK_IMPORTED_MODULE_0__["default"].redirect("/posts/".concat(response.data.id));
