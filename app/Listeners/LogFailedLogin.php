@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Models\User;
 use App\Enums\UserActivityType;
 
 use Illuminate\Auth\Events\Failed;
@@ -29,7 +30,13 @@ class LogFailedLogin
     public function handle(Failed $event)
     {
         if ($event->guard !== 'admin') {
-            $event->user->track(UserActivityType::LOGIN_FAIL);
+            $email = $event->credentials['email'];
+            if ($email !== null) {
+                $user = User::where(compact('email'))->first();
+                if ($user !== null) {
+                    $user->track(UserActivityType::LOGIN_FAIL);
+                }
+            }
         }
     }
 }
