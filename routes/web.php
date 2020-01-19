@@ -71,16 +71,19 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
 
 		Route::get('users/{user}/activity', 'UserController@activity')->name('users.activity');
 		Route::get('users/all', 'UserController@indexView')->name('users.index-view');
+		Route::get('users/{user}/comments/all', 'UserController@commentsView')->name('users.comments-view');
+		Route::get('users/{user}/comments', 'UserController@comments')->name('users.comments-view');
 		Route::resource('users', 'UserController');
+
+		Route::get('users/{user}/comments/{comment}/edit', 'CommentController@edit')->name('comments.edit');
+		Route::put('comments/{comment}', 'CommentController@update')->name('comments.update');
+		Route::delete('users/{id}/comments/{comment}', 'CommentController@destroy')->name('comments.destroy');
 
 		Route::get('posts/all', 'PostController@indexView')->name('posts.index-view');
 		Route::resource('posts', 'PostController');
 
 		Route::get('categories/all', 'CategoryController@indexView')->name('categories.index-view');
 		Route::resource('categories', 'CategoryController');
-
-		Route::get('comments/all', 'CommentController@indexView')->name('comments.index-view');
-		Route::resource('comments', 'CommentController');
 
 	});
 

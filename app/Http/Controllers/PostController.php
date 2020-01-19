@@ -66,7 +66,7 @@ class PostController extends Controller
     public function comment(StoreCommentRequest $request, Post $post) {
         $comment = $post->comment(request()->input('content'));
         auth()->user()->track(UserActivityType::POST_COMMENT, $post->title);
-        return $post->comment(request()->input('content'));
+        return $comment;
     }
 
     public function removeComment(Post $post, Comment $comment) {

@@ -94,6 +94,14 @@ class UserController extends Controller
         return response('Success', 200);
     }
 
+    public function commentsView() {
+        return view('admin.user.comments');
+    }
+
+    public function comments(User $user) {
+        return $user->comments()->paginate(10);
+    }
+
     public function activity(User $user) {
         $activities = $user->activities()->paginate(10);
         return view('admin.user.activity', compact('user', 'activities'));

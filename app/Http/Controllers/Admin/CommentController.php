@@ -2,67 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\StoreCommentRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
-    public function indexView()
-    {
-        return view('admin.post.index');
-    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Comment $comment)
-    {
-        //
-    }
-
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function edit(Comment $comment)
+    public function edit($_, Comment $comment)
     {
-        //
+        return view('admin.comment.edit', compact('comment'));
     }
 
     /**
@@ -72,9 +27,10 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comment $comment)
+    public function update(StoreCommentRequest $request, Comment $comment)
     {
-        //
+        $comment->update($request->all());
+        return $comment;
     }
 
     /**
@@ -83,8 +39,9 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comment $comment)
+    public function destroy($_, Comment $comment)
     {
-        //
+        abort_unless($comment->delete(), 404);
+        return response('Success', 200);
     }
 }

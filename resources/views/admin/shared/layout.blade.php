@@ -15,9 +15,6 @@
                     <a href="{{ route('admin.posts.index-view') }}" class="text-light d-block">Posts</a>
                 </li>
                 <li class="list-group-item">
-                    <a href="{{ route('admin.comments.index-view') }}" class="text-light d-block">Comments</a>
-                </li>
-                <li class="list-group-item">
                     <a href="{{ route('admin.categories.index-view') }}" class="text-light d-block">Categories</a>
                 </li>
             </ul>

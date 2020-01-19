@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Utils\OrderScope;
+use App\Utils\{OrderScope, FilterableModel};
 
 class Comment extends Model
 {
+
+    use FilterableModel;
 
     protected $fillable = ['content', 'user_id', 'post_id'];
 

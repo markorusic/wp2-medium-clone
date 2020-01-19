@@ -13,11 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 router.match('/admin/posts/all', () => {
     dataTable.init({
-        resource: 'posts',
+        title: 'Posts',
+        baseUrl: '/admin/posts',
         searchBy: 'title',
         allowedActions: [
-            dataTable.resourceAction.edit,
-            dataTable.resourceAction.delete
+            dataTable.crudAction.edit,
+            dataTable.crudAction.delete
         ],
         columns: [
             {
@@ -39,18 +40,22 @@ router.match('/admin/posts/:id/edit', () => {
 
 router.match('/admin/users/all', () => {
     dataTable.init({
-        resource: 'users',
+        title: 'Users',
+        baseUrl: '/admin/users',
         searchBy: 'name',
-        crudActions: [
-            dataTable.resourceAction.edit,
-            dataTable.resourceAction.delete
-        ],
+        crudActions: [dataTable.crudAction.edit, dataTable.crudAction.delete],
         actions: [
             {
                 type: 'success',
                 icon: 'user',
                 title: 'Activity',
                 link: user => `/admin/users/${user.id}/activity`
+            },
+            {
+                type: 'success',
+                icon: 'user',
+                title: 'Comments',
+                link: user => `/admin/users/${user.id}/comments/all`
             }
         ],
         columns: [
@@ -65,6 +70,20 @@ router.match('/admin/users/all', () => {
             },
             {
                 name: 'email'
+            }
+        ]
+    })
+})
+
+router.match('/admin/users/:id/comments/all', ({ id }) => {
+    dataTable.init({
+        title: 'Comments',
+        baseUrl: `/admin/users/${id}/comments`,
+        crudActions: [dataTable.crudAction.edit, dataTable.crudAction.delete],
+        columns: [
+            {
+                name: 'content',
+                displayName: 'Comment'
             }
         ]
     })
