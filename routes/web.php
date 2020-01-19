@@ -11,6 +11,14 @@
 |
 */
 
+Route::namespace('Auth')->group(function () {
+	Route::get('login', 'LoginController@showLoginForm')->name('login');
+	Route::post('login', 'LoginController@login');
+	Route::post('logout', 'LoginController@logout')->name('logout');
+	Route::get('register', 'RegisterController@showRegistrationForm')->name('register');
+	Route::post('register', 'RegisterController@register');
+});
+
 // Pages
 Route::get('', 'PageController@index')->name('home');
 Route::get('/posts/category/{category}', 'PostController@categoryPosts')->name('posts.category');
@@ -48,7 +56,6 @@ Route::middleware('auth')->group(function () {
 	
 });
 
-Auth::routes();
 
 // Admin routes
 Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
@@ -62,11 +69,22 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
 	Route::middleware('auth:admin')->group(function () {
 		Route::get('', 'PageController@index')->name('home');
 
-		Route::get('posts/show-all', 'PostController@showAll')->name('posts.show-all');
+		Route::get('users/{user}/activity', 'UserController@activity')->name('users.activity');
+		Route::get('users/all', 'PageController@layoutView')->name('users.index-view');
+		Route::get('users/{user}/comments/all', 'PageController@layoutView')->name('users.comments-view');
+		Route::get('users/{user}/comments', 'UserController@comments')->name('users.comments-view');
+		Route::resource('users', 'UserController');
+
+		Route::get('users/{user}/comments/{comment}/edit', 'CommentController@edit')->name('comments.edit');
+		Route::put('comments/{comment}', 'CommentController@update')->name('comments.update');
+		Route::delete('users/{id}/comments/{comment}', 'CommentController@destroy')->name('comments.destroy');
+
+		Route::get('posts/all', 'PageController@layoutView')->name('posts.index-view');
 		Route::resource('posts', 'PostController');
 
-		Route::resource('users', 'UserController');
-		Route::get('users/{user}/activity', 'UserController@activity')->name('users.activity');
+		Route::get('categories/all', 'PageController@layoutView')->name('categories.index-view');
+		Route::resource('categories', 'CategoryController');
+
 	});
 
 });

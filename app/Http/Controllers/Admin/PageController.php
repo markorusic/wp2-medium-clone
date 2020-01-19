@@ -12,4 +12,8 @@ class PageController extends Controller
     {
         return view('admin.home');
     }
+
+    public function layoutView() {
+        return view('admin.shared.layout');
+    }
 }

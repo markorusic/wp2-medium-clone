@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,9 +14,12 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return User::paginate();
+        $size = $request->get('size', 10);
+        return User::filter($request->all())
+            ->orderBy('created_at', 'desc')
+            ->paginate($size);
     }
 
     /**
@@ -25,7 +29,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        abort(404);
     }
 
     /**
@@ -36,7 +40,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        return User::create($request->all());
+        abort(404);
     }
 
     /**
@@ -58,7 +62,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        return view('admin.user.edit', compact('user'));
     }
 
     /**
@@ -68,9 +72,10 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        return $user->update($request->all());
+        $user->update($request->all());
+        return $user;
     }
 
     /**
@@ -81,7 +86,12 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        return $user->delete();
+        abort_unless($user->delete(), 404);
+        return response('Success', 200);
+    }
+
+    public function comments(User $user) {
+        return $user->comments()->paginate(10);
     }
 
     public function activity(User $user) {

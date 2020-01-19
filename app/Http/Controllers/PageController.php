@@ -11,8 +11,8 @@ class PageController extends Controller
 {
     public function index() {
         $categories = Category::take(6)->get();
-        $posts = Post::with('user')->paginate(10);
-        $popular_posts = Post::popular()->with('user')->take(6)->get();
+        $posts = Post::with('user')->paginate(6);
+        $popular_posts = Post::popular()->with('user')->paginate(10);
         return view('public.pages.home', compact('categories', 'posts', 'popular_posts'));
     }
 }

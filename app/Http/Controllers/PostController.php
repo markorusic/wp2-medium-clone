@@ -66,7 +66,7 @@ class PostController extends Controller
     public function comment(StoreCommentRequest $request, Post $post) {
         $comment = $post->comment(request()->input('content'));
         auth()->user()->track(UserActivityType::POST_COMMENT, $post->title);
-        return $post->comment(request()->input('content'));
+        return $comment;
     }
 
     public function removeComment(Post $post, Comment $comment) {
@@ -101,10 +101,8 @@ class PostController extends Controller
     public function update(StorePostRequest $request, Post $post) {
         $user = auth()->user();
         abort_if($post->user_id !== $user->id, 403);
-        $data = collect($request->all());
-        $categories = $data->get('categories', []);
-        $post->update($data->except('categories')->toArray());
-        $post->categories()->sync($categories);
+        $post->update($request->all());
+        $post->categories()->sync($request->get('categories'));
         $user->track(UserActivityType::POST_UPDATE, $post->title);
         return $post;
     }

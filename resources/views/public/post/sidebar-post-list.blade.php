@@ -1,7 +1,7 @@
 @if (isset($title))
     <h2 class="pb-3 mb-3 border-bottom">{{ __($title) }}</h2>
 @endif
-@foreach ($popular_posts as $post)
+@foreach ($posts as $post)
     <div class="d-flex flex-column justify-content-between">
         <h3>
             <a class="text-black pointer" href="{{ route('posts.show', ['post' => $post->id]) }}">{{ $post->title }}</a>

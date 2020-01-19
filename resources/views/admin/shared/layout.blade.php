@@ -1,25 +1,27 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Styles -->
-    <link href="{{ asset('admin-assets/css/app.css') }}" rel="stylesheet">
-</head>
+@include('admin.shared.head')
 <body>
-    <div id="app">
-        @auth('admin')
-            <nav class="navbar navbar-expand-md navbar-light">
+    <div id="app" class="d-flex">
+        <div class="sidebar py-3">
+            <div class="container">
+                <a class="navbar-brand text-light font-weight-bold" href="{{ route('admin.home') }}">
+                    {{ config('app.name', 'Laravel') }}
+                </a>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <a href="{{ route('admin.users.index-view') }}" class="text-light d-block">Users</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="{{ route('admin.posts.index-view') }}" class="text-light d-block">Posts</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="{{ route('admin.categories.index-view') }}" class="text-light d-block">Categories</a>
+                </li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <nav class="navbar navbar-expand-md navbar-light border-bottom">
                 <div class="container">
-                    <a class="navbar-brand" href="{{ route('admin.home') }}">
-                        {{ config('app.name', 'Laravel') }}
-                    </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -33,7 +35,7 @@
                         <!-- Right Side Of Navbar -->
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="navbarDropdown" class="nav-link text-light dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ auth('admin')->user()->name }} <span class="caret"></span>
                                 </a>
 
@@ -53,15 +55,13 @@
                     </div>
                 </div>
             </nav>
-        @endauth
-        <main>
-            @yield('content')
-        </main>
+            <main class="py-3">
+                @yield('content')
+            </main>
+        </div>
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('admin-assets/js/app.js') }}"></script>
-
-    @yield('scripts')
+    @include('admin.shared.scripts')
 </body>
 </html>

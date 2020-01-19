@@ -9,7 +9,12 @@
     <tbody>
       @foreach ($activities as $activity)
         <tr>
-          <td>{{ $activity->type . ' ' . $activity->description ?? '' }}</td>
+          <td>
+            {{ $activity->type }}
+            @if ($activity->description)
+                <span class="text-success"> {{ $activity->description }}</span>
+            @endif
+          </td>
           <td>{{ $activity->created_at->format('M d, Y H:i:s')  }}</td>
         </tr>
       @endforeach

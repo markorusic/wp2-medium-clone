@@ -4,17 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\{StorePostRequest};
 use App\Http\Controllers\Controller;
-use App\Models\Post;
+use App\Models\{Post, Category};
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-
-    public function showAll()
-    {
-        return view('admin.post.index');
-    }
-    
     /**
      * Display a listing of the resource.
      *
@@ -42,9 +36,9 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePostRequest $request)
+    public function store(Request $request)
     {
-        return Post::create($request->all());
+        abort(404);
     }
 
     /**
@@ -55,7 +49,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return $post->load(['user', 'comments.user', 'likes.user', 'categories']);
+        abort(404);
     }
 
     /**
@@ -66,7 +60,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('admin.post.edit', compact('post'));
+        $categories = Category::all();
+        $post->load('categories');
+        return view('admin.post.edit', compact('post', 'categories'));
     }
 
     /**
@@ -79,6 +75,7 @@ class PostController extends Controller
     public function update(StorePostRequest $request, Post $post)
     {
         $post->update($request->all());
+        $post->categories()->sync($request->get('categories'));
         return response('Success', 200);
     }
 
