@@ -28,6 +28,8 @@ class LogSuccessfulLogout
      */
     public function handle(Logout $event)
     {
-        $event->user->track(UserActivityType::LOGOUT_SUCCESS);
+        if ($event->guard !== 'admin') {
+            $event->user->track(UserActivityType::LOGOUT_SUCCESS);
+        }
     }
 }

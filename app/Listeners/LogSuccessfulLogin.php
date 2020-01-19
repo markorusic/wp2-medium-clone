@@ -28,6 +28,8 @@ class LogSuccessfulLogin
      */
     public function handle(Login $event)
     {
-        $event->user->track(UserActivityType::LOGIN_SUCCESS);
+        if ($event->guard !== 'admin') {
+            $event->user->track(UserActivityType::LOGIN_SUCCESS);
+        }
     }
 }

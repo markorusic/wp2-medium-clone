@@ -28,6 +28,8 @@ class LogFailedLogin
      */
     public function handle(Failed $event)
     {
-        $event->user->track(UserActivityType::LOGIN_FAIL);
+        if ($event->guard !== 'admin') {
+            $event->user->track(UserActivityType::LOGIN_FAIL);
+        }
     }
 }

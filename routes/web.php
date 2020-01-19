@@ -62,11 +62,16 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
 	Route::middleware('auth:admin')->group(function () {
 		Route::get('', 'PageController@index')->name('home');
 
+		Route::resource('users', 'UserController');
+		Route::get('users/{user}/activity', 'UserController@activity')->name('users.activity');
+
 		Route::get('posts/show-all', 'PostController@showAll')->name('posts.show-all');
 		Route::resource('posts', 'PostController');
 
-		Route::resource('users', 'UserController');
-		Route::get('users/{user}/activity', 'UserController@activity')->name('users.activity');
+		Route::resource('categories', 'CategoryController');
+
+		Route::resource('comments', 'CommentController');
+
 	});
 
 });

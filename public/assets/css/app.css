@@ -14667,6 +14667,10 @@ button.toast-close-button {
   }
 }
 
+.bg-transparent {
+  background-color: transparent;
+}
+
 .photo-upload-control {
   min-height: 200px;
 }
