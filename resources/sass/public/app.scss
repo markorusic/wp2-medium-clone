@@ -2,6 +2,10 @@
 
 $primary-color: #28a745;
 
+main {
+    min-height: calc(100vh - 135px);
+}
+
 a:hover {
     text-decoration: none;
 }
@@ -156,29 +160,4 @@ footer .copyright p {
 
 footer .copyright a {
     color: #cfcfcf;
-}
-
-footer .heading-wrap:before {
-    background-color: #fff;
-    z-index: 0;
-}
-
-footer .heading-wrap {
-    margin-bottom: 35px;
-}
-
-footer .heading-wrap h5 {
-    margin: 0;
-    background-color: #838088 !important;
-    color: #fff;
-    font-size: 14px;
-    padding: 0 20px;
-    position: relative;
-    text-transform: none !important;
-}
-
-footer .heading-wrap span {
-    background: #838088;
-    position: relative;
-    padding: 0 20px;
 }
