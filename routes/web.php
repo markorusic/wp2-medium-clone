@@ -26,6 +26,7 @@ Route::get('/popular-posts', 'PostController@popularPosts')->name('posts.popular
 Route::get('/posts/{post}', 'PostController@show')->name('posts.show');
 Route::get('/users/{user}', 'UserController@show')->name('users.show');
 Route::view('/contact', 'public.pages.contact')->name('contact');
+Route::view('/about', 'public.pages.about')->name('about');
 
 // API
 Route::get('/content/search', 'SearchController@contentSearch')->name('content.search');
