@@ -86,7 +86,7 @@
                         <a href="#" target="_blank">Docs</a>.
                         <a href="{{ route('contact') }}">Contact</a>.
                     </small>
-                    <p class="text-center">Author <a href="/about">Marko Rusić</a></p>
+                    <p class="text-center">Author <a href="{{ route('about') }} ">Marko Rusić</a></p>
                 </div>
             </div>
         </footer>
