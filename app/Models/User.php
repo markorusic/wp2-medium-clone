@@ -23,6 +23,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected static function boot() {
+        parent::boot();
+        static::creating(function ($query) {
+            $query->avatar = $query->avatar ?? 'https://www.pngkey.com/png/full/230-2301779_best-classified-apps-default-user-profile.png';
+        });
+    }
+
     public function posts() {
         return $this->hasMany('App\Models\Post');
     }
