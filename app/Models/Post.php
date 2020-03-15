@@ -21,7 +21,7 @@ class Post extends Model
         $query
             ->withCount('likes')
             ->orderBy('likes_count', 'desc')
-            ->where('created_at', '>=', now()->subDays(15)->toDateTimeString());
+            ->where('created_at', '>=', now()->subDays(45)->toDateTimeString());
     }
 
     public function user() {
