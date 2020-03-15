@@ -18,6 +18,23 @@ class PageController extends Controller
     }
 
     public function contact(ContactRequest $request) {
+        $data = $request->all();
+        $recipient = env('CONTACT_MAIL_RECIPIENT', null);
+        $sender = env('CONTACT_MAIL_SENDER', null);
 
+        try {
+            \Mail::send(
+                'public.email.contact',
+                compact('data'),
+                function ($message) use ($data, $sender, $recipient) {
+                    $message->from($sender, 'Contact');
+                    $message->to($recipient);
+                    $message->subject($data['subject']);
+                }
+            );
+        } catch (\Throwable $th) {}
+
+
+        return response('Success', 200);
     }
 }
