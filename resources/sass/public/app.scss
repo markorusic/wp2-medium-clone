@@ -128,3 +128,57 @@ input[type='number'],
         width: 0;
     }
 }
+
+footer {
+    background-color: #838088;
+    color: #fff;
+}
+
+footer .row {
+    padding: 45px 0;
+}
+
+footer .copyright {
+    background-color: #000000;
+    padding: 10px 0;
+}
+
+footer .copyright small {
+    margin-bottom: 5px;
+    display: block;
+}
+
+footer .copyright small,
+footer .copyright p {
+    color: #808080;
+    font-size: 12px;
+}
+
+footer .copyright a {
+    color: #cfcfcf;
+}
+
+footer .heading-wrap:before {
+    background-color: #fff;
+    z-index: 0;
+}
+
+footer .heading-wrap {
+    margin-bottom: 35px;
+}
+
+footer .heading-wrap h5 {
+    margin: 0;
+    background-color: #838088 !important;
+    color: #fff;
+    font-size: 14px;
+    padding: 0 20px;
+    position: relative;
+    text-transform: none !important;
+}
+
+footer .heading-wrap span {
+    background: #838088;
+    position: relative;
+    padding: 0 20px;
+}
