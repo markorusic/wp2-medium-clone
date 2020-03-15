@@ -9,7 +9,9 @@ require('jquery-serializejson')
 let props = {
     onCreateSuccess: null,
     onUpdateSuccess: null,
-    onError: null
+    onError: null,
+    successMessage: 'Successfully saved.',
+    errorMessage: 'Error occured during this action.'
 }
 
 const onFormSubmit = asyncEventHandler(event => {
@@ -37,7 +39,7 @@ const onFormSubmit = asyncEventHandler(event => {
                 validator.renderErrors(errors)
                 toastr.error(message)
             } else {
-                toastr.error('Error occured during this action!')
+                toastr.error(props.errorMessage)
             }
             if (typeof props.onError === 'function') {
                 props.onError({ $form, error })
@@ -50,7 +52,7 @@ const onFormSubmit = asyncEventHandler(event => {
 
 const responseHandlers = {
     post($form, response) {
-        toastr.success('Successfully created!')
+        toastr.success(props.successMessage)
         $form.find('button[type="submit"]').hide()
         if (typeof props.onCreateSuccess === 'function') {
             props.onCreateSuccess({
@@ -60,7 +62,7 @@ const responseHandlers = {
         }
     },
     put($form, response) {
-        toastr.success('Successfully updated!')
+        toastr.success(props.successMessage)
         $form
             .on('submit', event => event.preventDefault())
             .find('button[type="submit"]')
@@ -74,12 +76,12 @@ const responseHandlers = {
     }
 }
 
-const dataFrom = {
+const dataForm = {
     init({ photoUploadProps, ..._props } = {}) {
         props = { ...props, ..._props }
         photoUpload.init(photoUploadProps)
-        $('[data-from]').on('submit', onFormSubmit)
+        $('[data-form]').on('submit', onFormSubmit)
     }
 }
 
-export default dataFrom
+export default dataForm

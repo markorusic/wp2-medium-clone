@@ -64,3 +64,7 @@ router.match('/users/:id', ({ id }) => {
 router.match('/user/profile', () => {
     dataForm.init()
 })
+
+router.match('/contact', () => {
+    dataForm.init({ successMessage: 'Successfully sent.' })
+})

@@ -12,7 +12,7 @@
 			}, '');
 	}
 @endphp
-<form action="{{ $config['endpoint'] }}" data-from>
+<form action="{{ $config['endpoint'] }}" data-form>
 	<input class="config" type="hidden"
 		@foreach($config as $key => $value)	
 			data-{{$key}}="{{ $value }}"

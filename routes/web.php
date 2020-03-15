@@ -25,6 +25,7 @@ Route::get('/posts/category/{category}', 'PostController@categoryPosts')->name('
 Route::get('/popular-posts', 'PostController@popularPosts')->name('posts.popular');
 Route::get('/posts/{post}', 'PostController@show')->name('posts.show');
 Route::get('/users/{user}', 'UserController@show')->name('users.show');
+Route::view('/contact', 'public.pages.contact')->name('contact');
 
 // API
 Route::get('/content/search', 'SearchController@contentSearch')->name('content.search');
@@ -32,6 +33,7 @@ Route::get('/users/{user}/followers', 'UserController@followers')->name('users.f
 Route::get('/users/{user}/following', 'UserController@following')->name('users.following.index');
 Route::get('/posts/{post}/likes', 'PostController@likes')->name('posts.likes.index');
 Route::get('/posts/{post}/comments', 'PostController@comments')->name('posts.comments.index');
+Route::post('/contact', 'PageController@contact')->name('api.contact');
 
 Route::middleware('auth')->group(function () {
 

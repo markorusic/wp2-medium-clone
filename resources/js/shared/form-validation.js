@@ -29,7 +29,7 @@ export default class FormValidation {
         })
     }
 
-    constructor({ $form, validateOnChange = true }) {
+    constructor({ $form }) {
         if (!$form) {
             throw new Error('FormValidation constructor - Invalid $form')
         }
@@ -38,13 +38,6 @@ export default class FormValidation {
             .find(selector.field)
             .toArray()
             .map(extractField)
-        if (validateOnChange) {
-            this.fields.forEach(field => {
-                field.$el.on('change', () => {
-                    this.validateField(field)
-                })
-            })
-        }
     }
 
     validate() {
