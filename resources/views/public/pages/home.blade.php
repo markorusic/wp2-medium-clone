@@ -11,14 +11,14 @@
         <div class="row">
             <div class="col-8">
                 @include('public.post.post-list', [
-                    'title' => 'Popular posts',
-                    'posts' => $popular_posts
+                    'title' => 'New Posts',
+                    'posts' => $posts
                 ])
             </div>
             <div class="col-3 offset-1 align-self-start sticky-top">
                 @include('public.post.sidebar-post-list', [
-                    'title' => 'New Posts',
-                    'posts' => $posts
+                    'title' => 'Popular posts',
+                    'posts' => $popular_posts
                 ])
             </div>
         </div>
