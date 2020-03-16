@@ -34,7 +34,7 @@
                     <a class="pointer" href="{{ $postEntryUrl }}">
                         <img
                             class="rounded"
-                            style="height: 200px;"
+                            style="width: 300px;"
                             src="{{ $post->main_photo }}"
                             alt="{{ $post->title }}"
                         >
