@@ -44,4 +44,6 @@
         </div>
     @endforeach
 </div>
+@if(method_exists($posts, 'links'))
 {{ $posts->links() }}
+@endif
