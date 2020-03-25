@@ -55,7 +55,7 @@ Route::middleware('auth')->group(function () {
 	Route::post('/users/{user}/follow', 'UserController@follow')->name('user.follow');
 	Route::put('/users/profile/update', 'UserController@update')->name('user-profile.update');
 
-	Route::post('upload/photo', 'FileController@uploadPhoto')->name('upload.photo');
+	Route::post('upload/photo', 'FileController@uploadPhoto')->name('public.upload.photo');
 	
 });
 
@@ -70,6 +70,8 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
 	});
 
 	Route::middleware('auth:admin')->group(function () {
+		Route::post('upload/photo', 'FileController@uploadPhoto')->name('admin.upload.photo');
+
 		Route::get('', 'PageController@index')->name('home');
 
 		Route::get('users/{user}/activity', 'UserController@activity')->name('users.activity');

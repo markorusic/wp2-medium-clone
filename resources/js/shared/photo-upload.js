@@ -67,9 +67,14 @@ const photoUpload = {
         }
         const data = new FormData()
         const config = { headers: { 'content-type': 'multipart/form-data' } }
+        const url = location.pathname.startsWith('/admin')
+            ? '/admin/upload/photo'
+            : '/upload/photo'
+
         data.append('photo', state.file, state.file.name)
+
         return http
-            .post('/upload/photo', data, config)
+            .post(url, data, config)
             .then(({ data }) => {
                 $upload.input.val(data.url)
                 state.file = null
