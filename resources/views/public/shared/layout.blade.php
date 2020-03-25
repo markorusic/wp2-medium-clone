@@ -83,7 +83,7 @@
                 <div class="container text-center">
                     <small class="text-center">
                         Medium Clone © {{ now()->year }}.
-                        <a href="#" target="_blank">Docs</a>.
+                        <a href="https://docs.google.com/document/d/1Y9iblAwX_If4tmT9iFkIsbQQS055SwR7BPreNCk4PyY/edit?usp=sharing" target="_blank">Docs</a>.
                         <a href="{{ route('contact') }}">Contact</a>.
                     </small>
                     <p class="text-center">Author <a href="{{ route('about') }} ">Marko Rusić</a></p>
