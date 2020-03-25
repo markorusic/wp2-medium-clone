@@ -32,7 +32,7 @@
                 <a class="repo black" href="https://github.com/markorusic/wp2-medium-clone" target="_blank">Repozitorijum ovog sajta</a>
             </p>
             <p>
-                <a href="#" target="_blank">Dokumentacija sajta</a>
+                <a href="https://docs.google.com/document/d/1Y9iblAwX_If4tmT9iFkIsbQQS055SwR7BPreNCk4PyY/edit?usp=sharing" target="_blank">Dokumentacija sajta</a>
             </p>
         </div>
     </div>	        
